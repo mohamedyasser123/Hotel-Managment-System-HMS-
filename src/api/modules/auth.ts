@@ -4,6 +4,7 @@ export type AuthFormData = {
   email: string;
   password: string;
   confirmPassword: string;
+  
 };
 
 export type SignUpFormData = AuthFormData;
@@ -18,4 +19,11 @@ export type ResetPasswordFormData = Pick<AuthFormData, 'email' | 'password' | 'c
 
 export type ChangePasswordFormData = Pick<AuthFormData, 'password' | 'confirmPassword'> & {
   oldPassword: string;
+};
+
+export type VerifyAccountFormData = Pick<
+  AuthFormData,
+  "email"
+> & {
+  otp: string;
 };
