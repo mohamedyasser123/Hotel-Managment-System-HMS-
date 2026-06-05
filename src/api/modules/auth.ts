@@ -12,7 +12,7 @@ export type LoginFormData = Pick<AuthFormData, 'email' | 'password'>;
 
 export type ForgotPasswordFormData = Pick<AuthFormData, 'email'>;
 
-export type ResetPasswordFormData = Pick<AuthFormData, 'password' | 'confirmPassword'> & {
+export type ResetPasswordFormData = Pick<AuthFormData, 'email' | 'password' | 'confirmPassword'> & {
   seed: string;
 };
 
