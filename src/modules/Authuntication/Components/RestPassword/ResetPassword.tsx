@@ -3,6 +3,7 @@ import type { ResetPasswordFormData } from '../../../../api/modules/auth';
 import AuthHeader from '../../../Shared/Components/AuthHeader/AuthHeader';
 import { Box, Button, FormLabel, IconButton, InputAdornment, TextField } from '@mui/material';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import { useState } from 'react';
 
 export default function ResetPassword() {
   const {
