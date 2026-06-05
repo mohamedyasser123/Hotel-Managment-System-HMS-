@@ -6,34 +6,37 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
+import type { SignUpFormData } from "../../../../api/modules/auth";
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import AuthHeader from "../../../Shared/Components/AuthHeader/AuthHeader";
-
-type FormData = {
-  userName: string;
-  phone: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
+import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 export default function RegisterForm() {
+  const [loading, setLoading] = useState(false);
+  const navigate  = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<FormData>();
+  } = useForm<SignUpFormData>();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpFormData) => {
+    setLoading(true);
+
+    try {
+      console.log(data);
+      navigate("/login")
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,7 +53,7 @@ export default function RegisterForm() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 2.5, // مسافة عمودية متناسقة وموحدة بين كل الحقول
+          gap: 2.5,
           width: "100%",
         }}>
         {/* 1. USER NAME */}
@@ -58,8 +61,10 @@ export default function RegisterForm() {
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight:"bold"
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             User Name
           </FormLabel>
@@ -82,11 +87,13 @@ export default function RegisterForm() {
           }}>
           <Box sx={{ flex: 1 }}>
             <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "12px",
-              fontWeight:"bold"
-            }}>
+              sx={{
+                color: "#152C5B",
+                fontSize: "14px",
+                fontWeight: "500",
+                mb: 1,
+                display: "block",
+              }}>
               Phone
             </FormLabel>
             <TextField
@@ -107,8 +114,10 @@ export default function RegisterForm() {
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight:"bold"
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Email Address
           </FormLabel>
@@ -133,8 +142,10 @@ export default function RegisterForm() {
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight:"bold"
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Password
           </FormLabel>
@@ -153,7 +164,11 @@ export default function RegisterForm() {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end">
-                      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                      {showPassword ? (
+                        <MdVisibilityOff size={18} color="#152C5B" />
+                      ) : (
+                        <MdVisibility size={18} color="#152C5B" />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -167,9 +182,10 @@ export default function RegisterForm() {
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight: "bold",
-               
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Confirm Password
           </FormLabel>
@@ -195,9 +211,9 @@ export default function RegisterForm() {
                       }
                       edge="end">
                       {showConfirmPassword ? (
-                        <MdVisibilityOff />
+                        <MdVisibilityOff size={18} color="#152C5B" />
                       ) : (
-                        <MdVisibility />
+                        <MdVisibility size={18} color="#152C5B" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -211,19 +227,30 @@ export default function RegisterForm() {
         <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             backgroundColor: "#3252DF",
             height: 46,
             borderRadius: "4px",
             textTransform: "none",
             fontSize: "16px",
-            fontWeight: 600,
+            fontWeight: 500,
             marginTop: "8px",
+
             "&:hover": {
               backgroundColor: "#2441c7",
             },
           }}>
-          Sign up
+          {loading ? (
+            <CircularProgress
+              size={22}
+              sx={{
+                color: "#fff",
+              }}
+            />
+          ) : (
+            "Sign up"
+          )}
         </Button>
       </Box>
     </>
@@ -242,14 +269,13 @@ const textFieldStyle = {
 
     "& input": {
       padding: "8px 12px",
-      fontSize: "11px",
-      
+      fontSize: "14px",
     },
 
     "& input::placeholder": {
       color: "#D3D6DC",
       opacity: 1,
-      fontSize: "11px",
+      fontSize: "14px",
     },
   },
 };
