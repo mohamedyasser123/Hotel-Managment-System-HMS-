@@ -2,16 +2,25 @@ import { Box, Button, FormLabel, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import AuthHeader from "../../../Shared/Components/AuthHeader/AuthHeader";
 import type { VerifyAccountFormData } from "../../../../api/modules/auth";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import { useState } from "react";
 export default function VerifyForm() {
+    const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<VerifyAccountFormData>();
 
-  const onSubmit = (data: VerifyAccountFormData) => {
-    console.log(data);
+  const onSubmit = async (data: VerifyAccountFormData) => {
+    setLoading(true);
+
+    try {
+      console.log(data);
+
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,20 +99,30 @@ export default function VerifyForm() {
         <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             backgroundColor: "#3252DF",
             height: 46,
             borderRadius: "4px",
             textTransform: "none",
             fontSize: "16px",
-            fontWeight: 600,
+            fontWeight: 500,
             marginTop: "8px",
 
             "&:hover": {
               backgroundColor: "#2441c7",
             },
           }}>
-          Verify Account
+          {loading ? (
+            <CircularProgress
+              size={22}
+              sx={{
+                color: "#fff",
+              }}
+            />
+          ) : (
+            "Verify Account"
+          )}
         </Button>
       </Box>
     </>
