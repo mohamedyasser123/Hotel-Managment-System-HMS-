@@ -13,9 +13,16 @@ import Dashboard from "./modules/Admin/Components/Dashboard/Dashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
 import LandingPage from "./modules/User/Compoments/Home/LandingPage";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function App() {
-    const routes = createBrowserRouter([
+  const { i18n } = useTranslation();
+    useEffect(() => {
+      document.documentElement.dir =
+        i18n.language === "ar" ? "rtl" : "ltr";
+    }, [i18n.language]);
+  const routes = createBrowserRouter([
     {
       path: "/",
       element: <AuthLayout />,
@@ -30,38 +37,31 @@ function App() {
         { path: "change-password", element: <ChangePassword /> },
       ],
     },
-{
-  path: "admin",
-  element: (
-    <ProtectedRoute>
-      <AdminLayout />
-    </ProtectedRoute>
-  ),
-  errorElement: <NotFound />,
-  children: [
-    { index: true, element: <Dashboard /> }, 
-    { path: "dashboard", element: <Dashboard /> }, 
+    {
+      path: "admin",
+      element: (
+        <ProtectedRoute>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Dashboard /> },
+        { path: "dashboard", element: <Dashboard /> },
       ],
-},
-  {
-  path: "home", 
-  element: (
-    <UserLayout /> 
-  ),
-  errorElement: <NotFound />,
-  children: [
-    { index: true, element: <LandingPage /> }, 
-    
-  ],
-}
+    },
+    {
+      path: "home",
+      element: <UserLayout />,
+      errorElement: <NotFound />,
+      children: [{ index: true, element: <LandingPage /> }],
+    },
   ]);
   return (
     <>
-
       <RouterProvider router={routes} />
-  
     </>
-  )
+  );
 }
 
 export default App
