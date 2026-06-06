@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form';
 import type { ResetPasswordFormData } from '../../../../api/modules/auth';
 import AuthHeader from '../../../Shared/Components/AuthHeader/AuthHeader';
-import { Box, Button, FormLabel, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, FormLabel, IconButton, InputAdornment, TextField } from '@mui/material';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
   const {
@@ -12,11 +13,20 @@ export default function ResetPassword() {
     formState: { errors },
     watch,
   } = useForm<ResetPasswordFormData>();
+  const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const onSubmit = (data: ResetPasswordFormData) => {
-    console.log(data);
+    setLoading(true);
+
+    try {
+      console.log(data);
+      navigate("/login")
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -32,15 +42,17 @@ export default function ResetPassword() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 2.5, 
+          gap: 2.5,
           width: "100%",
         }}>
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight: "bold"
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Email Address
           </FormLabel>
@@ -71,10 +83,10 @@ export default function ResetPassword() {
           </FormLabel>
           <TextField
             fullWidth
-            placeholder="Enter your code" 
-            type="text" 
+            placeholder="Enter your code"
+            type="text"
             {...register("seed", {
-              required: "Verification code is required", 
+              required: "Verification code is required",
             })}
             error={!!errors.seed}
             helperText={errors.seed?.message}
@@ -85,8 +97,10 @@ export default function ResetPassword() {
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight: "bold"
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Password
           </FormLabel>
@@ -105,7 +119,11 @@ export default function ResetPassword() {
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
                       edge="end">
-                      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                      {showPassword ? (
+                        <MdVisibilityOff size={18} color="#152C5B" />
+                      ) : (
+                        <MdVisibility size={18} color="#152C5B" />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -113,13 +131,15 @@ export default function ResetPassword() {
             }}
           />
         </Box>
+
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
-              fontSize: "12px",
-              fontWeight: "bold",
-
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}>
             Confirm Password
           </FormLabel>
@@ -145,9 +165,9 @@ export default function ResetPassword() {
                       }
                       edge="end">
                       {showConfirmPassword ? (
-                        <MdVisibilityOff />
+                        <MdVisibilityOff size={18} color="#152C5B" />
                       ) : (
-                        <MdVisibility />
+                        <MdVisibility size={18} color="#152C5B" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -156,22 +176,33 @@ export default function ResetPassword() {
             }}
           />
         </Box>
-         <Button
+        <Button
           type="submit"
           variant="contained"
+          disabled={loading}
           sx={{
             backgroundColor: "#3252DF",
             height: 46,
             borderRadius: "4px",
             textTransform: "none",
             fontSize: "16px",
-            fontWeight: 600,
+            fontWeight: 500,
             marginTop: "8px",
+
             "&:hover": {
               backgroundColor: "#2441c7",
             },
           }}>
-          submit
+          {loading ? (
+            <CircularProgress
+              size={22}
+              sx={{
+                color: "#fff",
+              }}
+            />
+          ) : (
+            "Reset"
+          )}
         </Button>
 
 
@@ -192,14 +223,13 @@ const textFieldStyle = {
 
     "& input": {
       padding: "8px 12px",
-      fontSize: "11px",
-      
+      fontSize: "14px",
     },
 
     "& input::placeholder": {
       color: "#D3D6DC",
       opacity: 1,
-      fontSize: "11px",
+      fontSize: "14px",
     },
   },
 };
