@@ -6,8 +6,8 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import type { SignUpFormData } from "../../../../api/modules/auth";
 
+import type { SignUpFormData } from "../../../../api/modules/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -15,9 +15,15 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import AuthHeader from "../../../Shared/Components/AuthHeader/AuthHeader";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+
+import { useTranslation } from "react-i18next";
+
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
-  const navigate  = useNavigate()
+  const navigate = useNavigate();
+
+  const { t } = useTranslation("auth");
+
   const {
     register,
     handleSubmit,
@@ -33,7 +39,7 @@ export default function RegisterForm() {
 
     try {
       console.log(data);
-      navigate("/login")
+      navigate("/login");
     } finally {
       setLoading(false);
     }
@@ -42,11 +48,12 @@ export default function RegisterForm() {
   return (
     <>
       <AuthHeader
-        title="Sign up"
-        text="If you already have an account register"
-        actionText="Login here!"
+        title={t("register.title")}
+        text={t("register.subtitle")}
+        actionText={t("register.action")}
         actionPath="/login"
       />
+
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -56,52 +63,47 @@ export default function RegisterForm() {
           gap: 2.5,
           width: "100%",
         }}>
-        {/* 1. USER NAME */}
+        {/* USER NAME */}
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
               fontSize: "14px",
-              fontWeight: "500",
+              fontWeight: 500,
               mb: 1,
               display: "block",
             }}>
-            User Name
+            {t("register.userName")}
           </FormLabel>
+
           <TextField
             fullWidth
-            placeholder="Enter your username"
-            {...register("userName", { required: "User Name is required" })}
+            placeholder={t("register.userNamePlaceholder")}
+            {...register("userName", { required: t("validation.requiredUserName") })}
             error={!!errors.userName}
             helperText={errors.userName?.message}
             sx={textFieldStyle}
           />
         </Box>
 
-        {/* Phone & Country  */}
-
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-          }}>
+        {/* PHONE */}
+        <Box sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1 }}>
             <FormLabel
               sx={{
                 color: "#152C5B",
                 fontSize: "14px",
-                fontWeight: "500",
+                fontWeight: 500,
                 mb: 1,
                 display: "block",
               }}>
-              Phone
+              {t("register.phone")}
             </FormLabel>
+
             <TextField
               fullWidth
-              placeholder="Enter phone"
-              {...register("phone", {
-                required: "Phone is required",
-              })}
+              placeholder={t("register.phonePlaceholder")}
+              {...register("phone", { required: t("validation.requiredPhone") })}
               error={!!errors.phone}
               helperText={errors.phone?.message}
               sx={textFieldStyle}
@@ -109,26 +111,27 @@ export default function RegisterForm() {
           </Box>
         </Box>
 
-        {/* 3. EMAIL ADDRESS */}
+        {/* EMAIL */}
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
               fontSize: "14px",
-              fontWeight: "500",
+              fontWeight: 500,
               mb: 1,
               display: "block",
             }}>
-            Email Address
+            {t("register.email")}
           </FormLabel>
+
           <TextField
             fullWidth
-            placeholder="Enter your email"
+            placeholder={t("register.emailPlaceholder")}
             {...register("email", {
-              required: "Email is required",
+              required: t("validation.requiredEmail"),
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Invalid email address",
+                message: t("validation.invalidEmail"),
               },
             })}
             error={!!errors.email}
@@ -137,23 +140,24 @@ export default function RegisterForm() {
           />
         </Box>
 
-        {/* 4. PASSWORD */}
+        {/* PASSWORD */}
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
               fontSize: "14px",
-              fontWeight: "500",
+              fontWeight: 500,
               mb: 1,
               display: "block",
             }}>
-            Password
+            {t("register.password")}
           </FormLabel>
+
           <TextField
             fullWidth
-            placeholder="Enter your password"
+            placeholder={t("register.passwordPlaceholder")}
             type={showPassword ? "text" : "password"}
-            {...register("password", { required: "Password is required" })}
+            {...register("password", { required: t("validation.requiredPassword")})}
             error={!!errors.password}
             helperText={errors.password?.message}
             sx={textFieldStyle}
@@ -177,26 +181,27 @@ export default function RegisterForm() {
           />
         </Box>
 
-        {/* 5. CONFIRM PASSWORD */}
+        {/* CONFIRM PASSWORD */}
         <Box>
           <FormLabel
             sx={{
               color: "#152C5B",
               fontSize: "14px",
-              fontWeight: "500",
+              fontWeight: 500,
               mb: 1,
               display: "block",
             }}>
-            Confirm Password
+            {t("register.confirmPassword")}
           </FormLabel>
+
           <TextField
             fullWidth
-            placeholder="Confirm your password"
+            placeholder={t("register.confirmPasswordPlaceholder")}
             type={showConfirmPassword ? "text" : "password"}
             {...register("confirmPassword", {
-              required: "Confirm Password is required",
+              required: t("validation.requiredConfirmPassword"),
               validate: (value) =>
-                value === watch("password") || "Passwords do not match",
+                value === watch("password") ||  t("validation.passwordsNotMatch"),
             })}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
@@ -236,20 +241,14 @@ export default function RegisterForm() {
             fontSize: "16px",
             fontWeight: 500,
             marginTop: "8px",
-
             "&:hover": {
               backgroundColor: "#2441c7",
             },
           }}>
           {loading ? (
-            <CircularProgress
-              size={22}
-              sx={{
-                color: "#fff",
-              }}
-            />
+            <CircularProgress size={22} sx={{ color: "#fff" }} />
           ) : (
-            "Sign up"
+            t("register.button")
           )}
         </Button>
       </Box>
@@ -278,4 +277,11 @@ const textFieldStyle = {
       fontSize: "14px",
     },
   },
+
+  "& .MuiFormHelperText-root": {
+    textAlign: "start",
+    marginRight: 0,
+    marginLeft: 0,
+  },
 };
+
