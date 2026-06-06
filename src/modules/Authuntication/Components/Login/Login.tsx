@@ -47,13 +47,17 @@ export default function Login() {
       >
         <Box>
           <FormLabel
-            sx={{
-              color: '#152C5B',
-              fontSize: '12px',
-              fontWeight: 'bold',
+<<
+             sx={{
+              color: "#152C5B",
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
             }}
           >
-            Email Address
+            Email 
+
           </FormLabel>
 
           <TextField
@@ -75,11 +79,14 @@ export default function Login() {
 
         <Box>
           <FormLabel
-            sx={{
-              color: '#152C5B',
-              fontSize: '12px',
-              fontWeight: 'bold',
-            }}
+
+             sx={{
+              color: "#152C5B",
+              fontSize: "14px",
+              fontWeight: "500",
+              mb: 1,
+              display: "block",
+
           >
             Password
           </FormLabel>
@@ -103,9 +110,13 @@ export default function Login() {
                       edge="end"
                     >
                       {showPassword ? (
-                        <MdVisibilityOff />
+
+                        <MdVisibilityOff size={18} color="#152C5B" />
                       ) : (
-                        <MdVisibility />
+                        <MdVisibility size={18} color="#152C5B" />
+
+
+
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -121,16 +132,19 @@ export default function Login() {
           }}
          >
         <Link
-        to="/forget-password"
+        to="/forgot-password"
+
         style={{
         textDecoration: "none",
         color: "#3252DF",
         fontSize: "14px",
          }}
-         >
-        Forgot Password ?
-        </Link>
-        </Box>
+
+          >
+       Forgot Password ?
+       </Link>
+      </Box>
+
         <Button
           type="submit"
           variant="contained"
@@ -166,13 +180,16 @@ const textFieldStyle = {
 
     '& input': {
       padding: '8px 12px',
-      fontSize: '11px',
+
+      fontSize: '14px',
+
     },
 
     '& input::placeholder': {
       color: '#D3D6DC',
       opacity: 1,
-      fontSize: '11px',
+      fontSize: '14px',
     },
   },
 };
+
