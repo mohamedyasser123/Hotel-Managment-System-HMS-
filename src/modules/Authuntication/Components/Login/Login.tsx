@@ -39,36 +39,31 @@ export default function Login() {
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           gap: 2.5,
-          width: '100%',
-        }}
-      >
+          width: "100%",
+        }}>
         <Box>
           <FormLabel
-<<
-             sx={{
+            sx={{
               color: "#152C5B",
               fontSize: "14px",
               fontWeight: "500",
               mb: 1,
               display: "block",
-            }}
-          >
-            Email 
-
+            }}>
+            Email
           </FormLabel>
 
           <TextField
             fullWidth
             placeholder="Enter your email"
-            {...register('email', {
-              required: 'Email is required',
+            {...register("email", {
+              required: "Email is required",
               pattern: {
-                value:
-                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: 'Invalid email address',
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
               },
             })}
             error={!!errors.email}
@@ -79,24 +74,22 @@ export default function Login() {
 
         <Box>
           <FormLabel
-
-             sx={{
+            sx={{
               color: "#152C5B",
               fontSize: "14px",
               fontWeight: "500",
               mb: 1,
               display: "block",
-
-          >
+            }}>
             Password
           </FormLabel>
 
           <TextField
             fullWidth
             placeholder="Enter your password"
-            type={showPassword ? 'text' : 'password'}
-            {...register('password', {
-              required: 'Password is required',
+            type={showPassword ? "text" : "password"}
+            {...register("password", {
+              required: "Password is required",
             })}
             error={!!errors.password}
             helperText={errors.password?.message}
@@ -107,16 +100,11 @@ export default function Login() {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
+                      edge="end">
                       {showPassword ? (
-
                         <MdVisibilityOff size={18} color="#152C5B" />
                       ) : (
                         <MdVisibility size={18} color="#152C5B" />
-
-
-
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -126,41 +114,36 @@ export default function Login() {
           />
         </Box>
         <Box
-         sx={{
-         display: "flex",
-         justifyContent: "flex-end",
-          }}
-         >
-        <Link
-        to="/forgot-password"
-
-        style={{
-        textDecoration: "none",
-        color: "#3252DF",
-        fontSize: "14px",
-         }}
-
-          >
-       Forgot Password ?
-       </Link>
-      </Box>
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}>
+          <Link
+            to="/forgot-password"
+            style={{
+              textDecoration: "none",
+              color: "#3252DF",
+              fontSize: "14px",
+            }}>
+            Forgot Password ?
+          </Link>
+        </Box>
 
         <Button
           type="submit"
           variant="contained"
           sx={{
-            backgroundColor: '#3252DF',
+            backgroundColor: "#3252DF",
             height: 46,
-            borderRadius: '4px',
-            textTransform: 'none',
-            fontSize: '16px',
+            borderRadius: "4px",
+            textTransform: "none",
+            fontSize: "16px",
             fontWeight: 600,
-            marginTop: '8px',
-            '&:hover': {
-              backgroundColor: '#2441c7',
+            marginTop: "8px",
+            "&:hover": {
+              backgroundColor: "#2441c7",
             },
-          }}
-        >
+          }}>
           Login
         </Button>
       </Box>
