@@ -47,6 +47,7 @@ export default function Login() {
       >
         <Box>
           <FormLabel
+<<
              sx={{
               color: "#152C5B",
               fontSize: "14px",
@@ -56,6 +57,7 @@ export default function Login() {
             }}
           >
             Email 
+
           </FormLabel>
 
           <TextField
@@ -77,13 +79,14 @@ export default function Login() {
 
         <Box>
           <FormLabel
+
              sx={{
               color: "#152C5B",
               fontSize: "14px",
               fontWeight: "500",
               mb: 1,
               display: "block",
-            }}
+
           >
             Password
           </FormLabel>
@@ -107,9 +110,13 @@ export default function Login() {
                       edge="end"
                     >
                       {showPassword ? (
+
                         <MdVisibilityOff size={18} color="#152C5B" />
                       ) : (
                         <MdVisibility size={18} color="#152C5B" />
+
+
+
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -126,15 +133,18 @@ export default function Login() {
          >
         <Link
         to="/forgot-password"
+
         style={{
         textDecoration: "none",
         color: "#3252DF",
         fontSize: "14px",
          }}
+
           >
        Forgot Password ?
        </Link>
       </Box>
+
         <Button
           type="submit"
           variant="contained"
@@ -170,7 +180,9 @@ const textFieldStyle = {
 
     '& input': {
       padding: '8px 12px',
+
       fontSize: '14px',
+
     },
 
     '& input::placeholder': {
@@ -180,3 +192,4 @@ const textFieldStyle = {
     },
   },
 };
+
