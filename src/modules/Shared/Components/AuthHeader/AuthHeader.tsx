@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   title: string;
@@ -14,12 +15,14 @@ export default function AuthHeader({
   actionText,
   actionPath,
 }: Props) {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const navigate = useNavigate();
 
   return (
     <Box
       sx={{
-        textAlign: "left",
+         textAlign: isArabic ? "right" : "left",
         mb: 8,
       }}>
       <Box
@@ -46,7 +49,6 @@ export default function AuthHeader({
           fontSize: 14,
           color: "#000",
         }}>
-        You can{" "}
         <Box
           component="span"
           onClick={() => navigate(actionPath)}
