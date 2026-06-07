@@ -2,8 +2,11 @@ export type AuthFormData = {
   userName: string;
   phone: string;
   email: string;
+  country: string;
   password: string;
   confirmPassword: string;
+  profileImage: FileList;
+
   
 };
 

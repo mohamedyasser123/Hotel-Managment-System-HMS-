@@ -23,7 +23,7 @@ export default function AuthHeader({
     <Box
       sx={{
          textAlign: isArabic ? "right" : "left",
-        mb: 8,
+        mb: 6,
       }}>
       <Box
         sx={{
