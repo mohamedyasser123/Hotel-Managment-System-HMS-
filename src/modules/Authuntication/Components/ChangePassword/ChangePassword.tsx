@@ -12,8 +12,11 @@ import {
 } from "@mui/material";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import CircularProgress from "@mui/material/CircularProgress";
+import useAuth from "../../../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 export default function ChangePassword() {
-  const [loading, setLoading] = useState(false);
+    const { t } = useTranslation("auth");
+  
   const {
     register,
     handleSubmit,
@@ -24,204 +27,169 @@ export default function ChangePassword() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const savedRole = (localStorage.getItem("role") as "admin" | "user") || "user";
+ const { isLoading, handleChangePassword } = useAuth(savedRole);
 
-   const onSubmit = async (data: ChangePasswordFormData) => {
-      setLoading(true);
-  
-      try {
-        console.log(data);
-        
-      } finally {
-        setLoading(false);
-      }
-    };
+ return (
+  <>
+    <AuthHeader
+      title={t('changePassword.title')} 
+      text={t('changePassword.subtitle')} 
+      actionText={t('changePassword.action')} 
+      actionPath="/login"
+    />
 
-  return (
-    <>
-      <AuthHeader
-        title="Change Password"
-        text="If you already have an account"
-        actionText="Login here!"
-        actionPath="/login"
-      />
+    <Box
+      component="form"
+      onSubmit={handleSubmit(handleChangePassword)}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2.5,
+        width: "100%",
+      }}
+    >
+      <Box>
+        <FormLabel sx={labelStyle}>
+          {t('changePassword.oldPassword')}
+        </FormLabel>
 
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2.5,
-          width: "100%",
-        }}
-      >
-        <Box>
-          <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "14px",
-              fontWeight: "500",
-              mb: 1,
-              display: "block",
-            }}
-          >
-            Old Password
-          </FormLabel>
-
-          <TextField
-            fullWidth
-            placeholder="Enter your old password"
-            type={showOldPassword ? "text" : "password"}
-            {...register("oldPassword", {
-              required: "Old Password is required",
-            })}
-            error={!!errors.oldPassword}
-            helperText={errors.oldPassword?.message}
-            sx={textFieldStyle}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowOldPassword(!showOldPassword)}
-                      edge="end"
-                    >
-                      {showOldPassword ? (
-                        <MdVisibilityOff size={18} color="#152C5B" />
-                      ) : (
-                        <MdVisibility size={18} color="#152C5B" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Box>
-
-        <Box>
-          <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "14px",
-              fontWeight: "500",
-              mb: 1,
-              display: "block",
-            }}
-          >
-            Password
-          </FormLabel>
-
-          <TextField
-            fullWidth
-            placeholder="Enter your password"
-            type={showPassword ? "text" : "password"}
-            {...register("password", {
-              required: "Password is required",
-            })}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            sx={textFieldStyle}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? (
-                        <MdVisibilityOff size={18} color="#152C5B" />
-                      ) : (
-                        <MdVisibility size={18} color="#152C5B" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Box>
-
-        <Box>
-          <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "14px",
-              fontWeight: "500",
-              mb: 1,
-              display: "block",
-            }}
-          >
-            Confirm Password
-          </FormLabel>
-
-          <TextField
-            fullWidth
-            placeholder="Confirm your password"
-            type={showConfirmPassword ? "text" : "password"}
-            {...register("confirmPassword", {
-              required: "Confirm Password is required",
-              validate: (value) =>
-                value === watch("password") || "Passwords do not match",
-            })}
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword?.message}
-            sx={textFieldStyle}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                      edge="end"
-                    >
-                      {showConfirmPassword ? (
-                        <MdVisibilityOff size={18} color="#152C5B" />
-                      ) : (
-                        <MdVisibility size={18} color="#152C5B" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Box>
-
-       <Button
-                 type="submit"
-                 variant="contained"
-                 disabled={loading}
-                 sx={{
-                   backgroundColor: "#3252DF",
-                   height: 46,
-                   borderRadius: "4px",
-                   textTransform: "none",
-                   fontSize: "16px",
-                   fontWeight: 500,
-                   marginTop: "8px",
-       
-                   "&:hover": {
-                     backgroundColor: "#2441c7",
-                   },
-                 }}>
-                 {loading ? (
-                   <CircularProgress
-                     size={22}
-                     sx={{
-                       color: "#fff",
-                     }}
-                   />
-                 ) : (
-                   "Change Password"
-                 )}
-               </Button>
+        <TextField
+          fullWidth
+          placeholder={t('changePassword.oldPasswordPlaceholder')}
+          type={showOldPassword ? "text" : "password"}
+          {...register("oldPassword", {
+            required: t('validation.requiredOldPassword'),
+          })}
+          error={!!errors.oldPassword}
+          helperText={errors.oldPassword?.message}
+          sx={textFieldStyle}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowOldPassword(!showOldPassword)}
+                    edge="end"
+                  >
+                    {showOldPassword ? (
+                      <MdVisibilityOff size={18} color="#152C5B" />
+                    ) : (
+                      <MdVisibility size={18} color="#152C5B" />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
       </Box>
-    </>
-  );
+
+      <Box>
+        <FormLabel sx={labelStyle}>
+          {t('changePassword.password')}
+        </FormLabel>
+
+        <TextField
+          fullWidth
+          placeholder={t('changePassword.passwordPlaceholder')}
+          type={showPassword ? "text" : "password"}
+          {...register("password", {
+            required: t('validation.requiredPassword'),
+          })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          sx={textFieldStyle}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <MdVisibilityOff size={18} color="#152C5B" />
+                    ) : (
+                      <MdVisibility size={18} color="#152C5B" />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
+
+      <Box>
+        <FormLabel sx={labelStyle}>
+          {t('changePassword.confirmPassword')}
+        </FormLabel>
+
+        <TextField
+          fullWidth
+          placeholder={t('changePassword.confirmpasswordPlaceholder')}
+          type={showConfirmPassword ? "text" : "password"}
+          {...register("confirmPassword", {
+            required: t('validation.requiredConfirmPassword'),
+            validate: (value) =>
+              value === watch("password") || t('validation.passwordsNotMatch'),
+          })}
+          error={!!errors.confirmPassword}
+          helperText={errors.confirmPassword?.message}
+          sx={textFieldStyle}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? (
+                      <MdVisibilityOff size={18} color="#152C5B" />
+                    ) : (
+                      <MdVisibility size={18} color="#152C5B" />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
+
+        <Button
+               type="submit"
+               variant="contained"
+               disabled={isLoading}
+               sx={{
+                 backgroundColor: "#3252DF",
+                 height: 46,
+                 borderRadius: "4px",
+                 textTransform: "none",
+                 fontSize: "16px",
+                 fontWeight: 500,
+                 marginTop: "8px",
+     
+                 "&:hover": {
+                   backgroundColor: "#2441c7",
+                 },
+     
+                 "&.Mui-disabled": {
+                   backgroundColor: "#3252DF",
+                   color: "#fff",
+                 },
+               }}>
+               {isLoading ? (
+                 <CircularProgress size={22} sx={{ color: "#fff" }} />
+               ) : (
+                 t("changePassword.button")
+               )}
+             </Button>
+    </Box>
+  </>
+);
 }
 
 const textFieldStyle = {
@@ -245,4 +213,11 @@ const textFieldStyle = {
       fontSize: "14px",
     },
   },
+};
+const labelStyle = {
+  color: "#152C5B",
+  fontSize: "14px",
+  fontWeight: 500,
+  mb: 1,
+  display: "block",
 };

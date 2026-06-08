@@ -90,10 +90,12 @@ const handleLogin = async (data: LoginFormData) => {
   const handleChangePassword = async (data: ChangePasswordFormData) => {
     setIsLoading(true);
     try {
-      await authApi.changePassword(data);
-      toast.success("تم تغيير كلمة المرور بنجاح");
+     const response= await authApi.changePassword(data,role);
+      toast.success(response.message);
+     navigate("/login");
+
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "فشل تغيير كلمة المرور");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
