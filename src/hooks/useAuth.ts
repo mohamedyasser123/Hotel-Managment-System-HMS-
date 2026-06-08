@@ -32,11 +32,26 @@ export default function useAuth(role: "admin" | "users" = "users") {
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {
-      await authApi.signUp(data, role);
-      toast.success("تم إنشاء الحساب بنجاح!");
-      navigate("/verify-account"); 
+       const response = await authApi.signUp(data);
+       toast.success(response.message);
+       navigate("/login");
+       
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "حدث خطأ أثناء التسجيل");
+      const errors = error?.response?.data?.additionalInfo?.errors;
+
+      if (errors) {
+        Object.values(errors).forEach((messages: any) => {
+          if (Array.isArray(messages)) {
+            messages.forEach((msg: string) => {
+              toast.error(msg);
+            });
+          }
+        });
+      } else {
+        toast.error(
+          error?.response?.data?.message || "Something went wrong"
+        );
+      }
     } finally {
       setIsLoading(false);
     }
