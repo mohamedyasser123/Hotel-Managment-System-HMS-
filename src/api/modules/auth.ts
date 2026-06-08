@@ -17,7 +17,7 @@ export type ResetPasswordFormData = Pick<AuthFormData, 'email' | 'password' | 'c
 export type ChangePasswordFormData = Pick<AuthFormData, 'password' | 'confirmPassword'> & { oldPassword: string; };
 
 export const authApi = {
-  login: async (data: LoginFormData, role: "admin" | "users") => {
+  login: async (data: LoginFormData, role: "admin" | "user") => {
     const path = role === "admin" ? "/admin/users/login" : "/users/login"; 
     const response = await axiosClient.post(path, data);
     return response.data;
@@ -63,13 +63,13 @@ signUp: async (data: SignUpFormData) => {
   return response.data;
 },
 
-  forgotPassword: async (data: ForgotPasswordFormData, role: "admin" | "users") => {
+  forgotPassword: async (data: ForgotPasswordFormData, role: "admin" | "user") => {
     const path = role === "admin" ? "/admin/users/forgot-password" : "/portal/users/forgot-password"; 
     const response = await axiosClient.post(path, data);
     return response.data;
   },
 
-  resetPassword: async (data: ResetPasswordFormData,role: "admin" | "users") => {
+  resetPassword: async (data: ResetPasswordFormData,role: "admin" | "user") => {
         const path = role === "admin" ? "/admin/users/reset-password" : "/portal/users/reset-password"; 
     const response = await axiosClient.post(path, data);
     return response.data;

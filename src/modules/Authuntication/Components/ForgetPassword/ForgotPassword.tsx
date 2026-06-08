@@ -14,7 +14,7 @@ export default function ForgotPassword() {
       formState: { errors },
     } = useForm<ForgotPasswordFormData>();
 
-  const { isLoading, handleForgotPassword } = useAuth("users");
+  const { isLoading, handleForgotPassword } = useAuth("user");
   return (
     <>
     <AuthHeader
@@ -35,13 +35,7 @@ export default function ForgotPassword() {
           >
            <Box>
                     <FormLabel
-                      sx={{
-                        color: "#152C5B",
-                        fontSize: "14px",
-                        fontWeight: "500",
-                        mb: 1,
-                        display: "block",
-                      }}>
+                     sx={labelStyle}>
                       {t('forgotPassword.email')}
                     </FormLabel>
                     <TextField
@@ -60,33 +54,33 @@ export default function ForgotPassword() {
                     />
                   </Box>
             <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={isLoading}
-                    sx={{
-                      backgroundColor: "#3252DF",
-                      height: 46,
-                      borderRadius: "4px",
-                      textTransform: "none",
-                      fontSize: "16px",
-                      fontWeight: 500,
-                      marginTop: "8px",
-          
-                      "&:hover": {
-                        backgroundColor: "#2441c7",
-                      },
-                    }}>
-                    {isLoading ? (
-                      <CircularProgress
-                        size={22}
-                        sx={{
-                          color: "#fff",
-                        }}
-                      />
-                    ) : (
-                      t('forgotPassword.button')
-                    )}
-                  </Button>
+          type="submit"
+          variant="contained"
+          disabled={isLoading}
+          sx={{
+            backgroundColor: "#3252DF",
+            height: 46,
+            borderRadius: "4px",
+            textTransform: "none",
+            fontSize: "16px",
+            fontWeight: 500,
+            marginTop: "8px",
+
+            "&:hover": {
+              backgroundColor: "#2441c7",
+            },
+
+            "&.Mui-disabled": {
+              backgroundColor: "#3252DF",
+              color: "#fff",
+            },
+          }}>
+          {isLoading ? (
+            <CircularProgress size={22} sx={{ color: "#fff" }} />
+          ) : (
+            t("forgotPassword.button")
+          )}
+        </Button>
 
           </Box>
     </>
@@ -113,4 +107,11 @@ const textFieldStyle = {
       fontSize: "14px",
     },
   },
+};
+const labelStyle = {
+  color: "#152C5B",
+  fontSize: "14px",
+  fontWeight: 500,
+  mb: 1,
+  display: "block",
 };

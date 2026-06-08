@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { authApi, type ChangePasswordFormData, type ForgotPasswordFormData, type LoginFormData, type ResetPasswordFormData, type SignUpFormData } from "../api/modules/auth";
 
 
-export default function useAuth(role: "admin" | "users" = "users") {
+export default function useAuth(role: "admin" | "user" = "user") {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 

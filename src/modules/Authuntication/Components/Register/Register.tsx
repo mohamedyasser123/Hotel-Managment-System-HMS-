@@ -18,7 +18,7 @@ import useAuth from "../../../../hooks/useAuth";
 import type { AuthFormData } from "../../../../api/modules/auth";
 
 export default function RegisterForm() {
-  const { isLoading, handleSignUp } = useAuth("users");
+  const { isLoading, handleSignUp } = useAuth("user");
 
   const { t } = useTranslation("auth");
 
