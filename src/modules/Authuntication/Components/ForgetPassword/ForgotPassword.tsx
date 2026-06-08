@@ -2,39 +2,30 @@ import { useForm } from 'react-hook-form';
 import AuthHeader from '../../../Shared/Components/AuthHeader/AuthHeader';
 import { Box, Button, CircularProgress, FormLabel, TextField } from '@mui/material';
 import type { ForgotPasswordFormData } from '../../../../api/modules/auth';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import useAuth from '../../../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 
 export default function ForgotPassword() {
+  const { t } = useTranslation("auth");
+
     const {
       register,
       handleSubmit,
       formState: { errors },
     } = useForm<ForgotPasswordFormData>();
-     const navigate = useNavigate()
 
-  const [loading, setLoading] = useState(false);
-    const onSubmit = (data: ForgotPasswordFormData) => {
-      setLoading(true);
-
-    try {
-      console.log(data);
-      navigate("/reset-password")
-    } finally {
-      setLoading(false);
-    }
-    };
+  const { isLoading, handleForgotPassword } = useAuth("users");
   return (
     <>
     <AuthHeader
-            title="Forgot password"
-            text="If you already have an account register You can"
-            actionText="Login here!"
-            actionPath="/login"
+           title={t('forgotPassword.title')} 
+        text={t('forgotPassword.subtitle')} 
+        actionText={t('forgotPassword.action')} 
+        actionPath="/login"
           />
           <Box
            component="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleForgotPassword)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -51,16 +42,16 @@ export default function ForgotPassword() {
                         mb: 1,
                         display: "block",
                       }}>
-                      Email Address
+                      {t('forgotPassword.email')}
                     </FormLabel>
                     <TextField
                       fullWidth
-                      placeholder="Enter your email"
+                      placeholder={t('forgotPassword.emailPlaceholder')}
                       {...register("email", {
-                        required: "Email is required",
+                        required:t('validation.requiredEmail'),
                         pattern: {
                           value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                          message: "Invalid email address",
+                          message: t('validation.invalidEmail'),
                         },
                       })}
                       error={!!errors.email}
@@ -71,7 +62,7 @@ export default function ForgotPassword() {
             <Button
                     type="submit"
                     variant="contained"
-                    disabled={loading}
+                    disabled={isLoading}
                     sx={{
                       backgroundColor: "#3252DF",
                       height: 46,
@@ -85,7 +76,7 @@ export default function ForgotPassword() {
                         backgroundColor: "#2441c7",
                       },
                     }}>
-                    {loading ? (
+                    {isLoading ? (
                       <CircularProgress
                         size={22}
                         sx={{
@@ -93,7 +84,7 @@ export default function ForgotPassword() {
                         }}
                       />
                     ) : (
-                      "Send mail"
+                      t('forgotPassword.button')
                     )}
                   </Button>
 
