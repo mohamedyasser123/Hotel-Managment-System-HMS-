@@ -2,7 +2,7 @@ import axiosClient from "../axoisClient";
 
 export type AuthFormData = {
   userName: string;
-  phone: string;
+  phoneNumber: string;
   email: string;
   country: string;
   password: string;
@@ -23,28 +23,45 @@ export const authApi = {
     return response.data;
   },
 
-  signUp: async (data: SignUpFormData, role: "admin" | "users") => {
-    const path = role === "admin" ? "/admin/users" : "/users"; 
-    
-    const formData = new FormData();
-    formData.append("userName", data.userName);
-    formData.append("phone", data.phone);
-    formData.append("email", data.email);
-    formData.append("country", data.country);
-    formData.append("password", data.password);
-    formData.append("confirmPassword", data.confirmPassword);
-    
-    if (data.profileImage && data.profileImage.length > 0) {
-      formData.append("profileImage", data.profileImage[0]);
-    }
+signUp: async (data: SignUpFormData) => {
 
-    const response = await axiosClient.post(path, formData, {
+  const formData = new FormData();
+
+  formData.append("userName", data.userName);
+  formData.append("phoneNumber", data.phoneNumber);
+  formData.append("email", data.email);
+  formData.append("country", data.country);
+  formData.append("password", data.password);
+  formData.append(
+    "confirmPassword",
+    data.confirmPassword
+  );
+
+  formData.append("role", "user");
+
+  if (
+    data.profileImage &&
+    data.profileImage.length > 0
+  ) {
+    formData.append(
+      "profileImage",
+      data.profileImage[0]
+    );
+  }
+
+  const response = await axiosClient.post(
+    "/portal/users",
+    formData,
+    {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type":
+          "multipart/form-data",
       },
-    });
-    return response.data;
-  },
+    }
+  );
+
+  return response.data;
+},
 
   forgotPassword: async (data: ForgotPasswordFormData, role: "admin" | "users") => {
     const path = role === "admin" ? "/admin/users/forgot-password" : "/users/forgot-password"; 

@@ -7,24 +7,18 @@ import {
   TextField,
   Avatar,
 } from "@mui/material";
-
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FiUploadCloud } from "react-icons/fi";
-
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
 import AuthHeader from "../../../Shared/Components/AuthHeader/AuthHeader";
-
+import useAuth from "../../../../hooks/useAuth";
 import type { AuthFormData } from "../../../../api/modules/auth";
 
 export default function RegisterForm() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { isLoading, handleSignUp } = useAuth("users");
 
   const { t } = useTranslation("auth");
 
@@ -42,28 +36,6 @@ export default function RegisterForm() {
 
   const imagePreview =
     imageFile && imageFile[0] ? URL.createObjectURL(imageFile[0]) : null;
-
-  const onSubmit = async (data: AuthFormData) => {
-    setLoading(true);
-
-    try {
-      const formData = new FormData();
-
-      formData.append("userName", data.userName);
-      formData.append("phone", data.phone);
-      formData.append("email", data.email);
-      formData.append("password", data.password);
-
-      if (data.profileImage?.[0]) {
-        formData.append("profileImage", data.profileImage[0]);
-      }
-
-      console.log(data);
-      navigate("/login");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <>
@@ -148,7 +120,7 @@ export default function RegisterForm() {
       </Box>
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleSignUp)}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -200,11 +172,11 @@ export default function RegisterForm() {
             <TextField
               fullWidth
               placeholder={t("register.phonePlaceholder")}
-              {...register("phone", {
+              {...register("phoneNumber", {
                 required: t("validation.requiredPhone"),
               })}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
+              error={!!errors.phoneNumber}
+              helperText={errors.phoneNumber?.message}
               sx={textFieldStyle}
             />
           </Box>
@@ -307,7 +279,7 @@ export default function RegisterForm() {
         <Button
           type="submit"
           variant="contained"
-          disabled={loading}
+          disabled={isLoading}
           sx={{
             backgroundColor: "#3252DF",
             height: 46,
@@ -320,8 +292,13 @@ export default function RegisterForm() {
             "&:hover": {
               backgroundColor: "#2441c7",
             },
+
+            "&.Mui-disabled": {
+              backgroundColor: "#3252DF",
+              color: "#fff",
+            },
           }}>
-          {loading ? (
+          {isLoading ? (
             <CircularProgress size={22} sx={{ color: "#fff" }} />
           ) : (
             t("register.button")
