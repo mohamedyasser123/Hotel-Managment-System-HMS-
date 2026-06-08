@@ -75,8 +75,10 @@ signUp: async (data: SignUpFormData) => {
     return response.data;
   },
 
-  changePassword: async (data: ChangePasswordFormData) => {
-    const response = await axiosClient.put("/Users/ChangePassword", data, {
+  changePassword: async (data: ChangePasswordFormData ,role: "admin" | "user") => {
+        const path = role === "admin" ? "/admin/users/change-password" : "/portal/users/change-password"; 
+
+    const response = await axiosClient.put(path, data, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data;
