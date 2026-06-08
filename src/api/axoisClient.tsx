@@ -8,11 +8,9 @@ const axiosClient = axios.create({
 // Request Interceptor
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
   return config;
 });
 
@@ -21,8 +19,9 @@ axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     const token = localStorage.getItem("token");
+    const currentPath = window.location.pathname;
 
-    if (error.response?.status === 401 && token) {
+    if (error.response?.status === 401 && token && currentPath !== "/login" && currentPath !== "/") {
       localStorage.clear();
       window.location.href = "/login";
     }
