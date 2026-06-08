@@ -2,33 +2,37 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { authApi, type ChangePasswordFormData, type ForgotPasswordFormData, type LoginFormData, type ResetPasswordFormData, type SignUpFormData } from "../api/modules/auth";
+import { useAuthContext } from "../context/AuthContext";
 
 
 export default function useAuth(role: "admin" | "user" = "user") {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { saveLoginData } = useAuthContext();
 
-  const handleLogin = async (data: LoginFormData) => {
+const handleLogin = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
       const res = await authApi.login(data, role);
-      if (res.token) {
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("role", role);
-      }
-      toast.success("تم تسجيل الدخول بنجاح");
-      if (role === "admin") {
-        navigate("/dashboard/admin");
-      } else {
-        navigate("/dashboard/user");
+      if (res?.data?.token) {
+        const cleanToken = res.data.token.replace("Bearer ", "");
+        const serverRole = res.data.user.role as "admin" | "user";
+        localStorage.setItem("token", cleanToken);
+        localStorage.setItem("role", serverRole);
+        saveLoginData(cleanToken); 
+        toast.success(res.message || "User logged in successfully");
+        if (serverRole === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/home");
+        }
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "فشل تسجيل الدخول");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {

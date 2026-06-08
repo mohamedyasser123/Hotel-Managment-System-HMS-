@@ -1,18 +1,20 @@
-import type { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const token = localStorage.getItem('token'); 
-  
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
-};
+  if (role !== "admin") {
+    return <Navigate to="/home" replace />;
+  }
 
-export default ProtectedRoute;
+  return <>{children}</>;
+}

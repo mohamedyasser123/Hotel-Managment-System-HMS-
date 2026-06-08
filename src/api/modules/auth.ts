@@ -18,7 +18,7 @@ export type ChangePasswordFormData = Pick<AuthFormData, 'password' | 'confirmPas
 
 export const authApi = {
   login: async (data: LoginFormData, role: "admin" | "user") => {
-    const path = role === "admin" ? "/admin/users/login" : "/users/login"; 
+    const path = role === "admin" ? "/admin/users/login" : "/portal/users/login"; 
     const response = await axiosClient.post(path, data);
     return response.data;
   },
