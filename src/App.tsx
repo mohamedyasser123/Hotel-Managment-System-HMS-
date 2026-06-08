@@ -55,7 +55,9 @@ function App() {
       path: "home",
       element: <UserLayout />,
       errorElement: <NotFound />,
-      children: [{ index: true, element: <LandingPage /> }],
+      children: [{ index: true, element: <LandingPage /> },
+        {path: "home", element: <LandingPage /> }
+      ],
     },
   ]);
   return (

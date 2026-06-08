@@ -12,6 +12,7 @@ import createCache from "@emotion/cache";
 
 import { useTranslation } from "react-i18next";
 import { getTheme } from "./theme/theme";
+import AuthContextProvider from "./context/AuthContext.tsx";
 
 const cacheRtl = createCache({
   key: "muirtl",
@@ -24,7 +25,9 @@ function Root() {
   return (
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={getTheme(i18n.language)}>
-        <App />
+        <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
       </ThemeProvider>
     </CacheProvider>
   );

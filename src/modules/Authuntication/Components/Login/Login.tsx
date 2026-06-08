@@ -5,6 +5,7 @@ import AuthHeader from '../../../Shared/Components/AuthHeader/AuthHeader';
 import {
   Box,
   Button,
+  CircularProgress,
   FormLabel,
   IconButton,
   InputAdornment,
@@ -12,143 +13,144 @@ import {
 } from '@mui/material';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { useState } from 'react';
+import useAuth from '../../../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
+      const { t } = useTranslation("auth");
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
+  const currentRole = window.location.pathname.includes("admin") ? "admin" : "user";
+  const { isLoading, handleLogin } = useAuth(currentRole);
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
-  };
+ 
 
-  return (
-    <>
-      <AuthHeader
-        title="Sign In"
-        text="If you don't have an account register"
-        actionText="Register here !"
-        actionPath="/register"
-      />
+ return (
+  <>
+    <AuthHeader
+      title={t('login.title')} 
+      text={t('login.subtitle')} 
+      actionText={t('login.action')} 
+      actionPath="/register"
+    />
 
+    <Box
+      component="form"
+      onSubmit={handleSubmit(handleLogin)}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2.5,
+        width: "100%",
+      }}
+    >
+      <Box>
+        <FormLabel sx={labelStyle}>
+          {t('login.email')}
+        </FormLabel>
+
+        <TextField
+          fullWidth
+          placeholder={t('login.emailPlaceholder')}
+          {...register("email", {
+            required: t('validation.requiredEmail'),
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: t('validation.invalidEmail'),
+            },
+          })}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          sx={textFieldStyle}
+        />
+      </Box>
+
+      <Box>
+        <FormLabel sx={labelStyle}>
+          {t('login.password')}
+        </FormLabel>
+
+        <TextField
+          fullWidth
+          placeholder={t('login.passwordPlaceholder')}
+          type={showPassword ? "text" : "password"}
+          {...register("password", {
+            required: t('validation.requiredPassword'),
+          })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          sx={textFieldStyle}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? (
+                      <MdVisibilityOff size={18} color="#152C5B" />
+                    ) : (
+                      <MdVisibility size={18} color="#152C5B" />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
+      
       <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
         sx={{
           display: "flex",
-          flexDirection: "column",
-          gap: 2.5,
-          width: "100%",
-        }}>
-        <Box>
-          <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "14px",
-              fontWeight: "500",
-              mb: 1,
-              display: "block",
-            }}>
-            Email
-          </FormLabel>
-
-          <TextField
-            fullWidth
-            placeholder="Enter your email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                message: "Invalid email address",
-              },
-            })}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            sx={textFieldStyle}
-          />
-        </Box>
-
-        <Box>
-          <FormLabel
-            sx={{
-              color: "#152C5B",
-              fontSize: "14px",
-              fontWeight: "500",
-              mb: 1,
-              display: "block",
-            }}>
-            Password
-          </FormLabel>
-
-          <TextField
-            fullWidth
-            placeholder="Enter your password"
-            type={showPassword ? "text" : "password"}
-            {...register("password", {
-              required: "Password is required",
-            })}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            sx={textFieldStyle}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end">
-                      {showPassword ? (
-                        <MdVisibilityOff size={18} color="#152C5B" />
-                      ) : (
-                        <MdVisibility size={18} color="#152C5B" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}>
-          <Link
-            to="/forgot-password"
-            style={{
-              textDecoration: "none",
-              color: "#3252DF",
-              fontSize: "14px",
-            }}>
-            Forgot Password ?
-          </Link>
-        </Box>
-
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            backgroundColor: "#3252DF",
-            height: 46,
-            borderRadius: "4px",
-            textTransform: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            marginTop: "8px",
-            "&:hover": {
-              backgroundColor: "#2441c7",
-            },
-          }}>
-          Login
-        </Button>
+          justifyContent: "flex-end",
+        }}
+      >
+        <Link
+          to="/forget-password"
+          style={{
+            textDecoration: "none",
+            color: "#3252DF",
+            fontSize: "14px",
+          }}
+        >
+          {t('forgotPassword.title')} ؟
+        </Link>
       </Box>
-    </>
-  );
+
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={isLoading}
+        sx={{
+          backgroundColor: "#3252DF",
+          height: 46,
+          borderRadius: "4px",
+          textTransform: "none",
+          fontSize: "16px",
+          fontWeight: 600,
+          marginTop: "8px",
+          "&:hover": {
+            backgroundColor: "#2441c7",
+          },
+        }}
+      >
+        {isLoading ? (
+          <CircularProgress size={22} sx={{ color: "#fff" }} />
+        ) : (
+          t('login.button')
+        )}
+      </Button>
+    </Box>
+  </>
+);
 }
 
 const textFieldStyle = {
@@ -176,3 +178,10 @@ const textFieldStyle = {
   },
 };
 
+const labelStyle = {
+  color: "#152C5B",
+  fontSize: "14px",
+  fontWeight: 500,
+  mb: 1,
+  display: "block",
+};
