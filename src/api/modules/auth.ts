@@ -1,3 +1,5 @@
+import axiosClient from "../axoisClient";
+
 export type AuthFormData = {
   userName: string;
   phone: string;
@@ -6,27 +8,59 @@ export type AuthFormData = {
   password: string;
   confirmPassword: string;
   profileImage: FileList;
-
-  
 };
 
 export type SignUpFormData = AuthFormData;
-
 export type LoginFormData = Pick<AuthFormData, 'email' | 'password'>;
-
 export type ForgotPasswordFormData = Pick<AuthFormData, 'email'>;
+export type ResetPasswordFormData = Pick<AuthFormData, 'email' | 'password' | 'confirmPassword'> & { seed: string; };
+export type ChangePasswordFormData = Pick<AuthFormData, 'password' | 'confirmPassword'> & { oldPassword: string; };
 
-export type ResetPasswordFormData = Pick<AuthFormData, 'email' | 'password' | 'confirmPassword'> & {
-  seed: string;
-};
+export const authApi = {
+  login: async (data: LoginFormData, role: "admin" | "users") => {
+    const path = role === "admin" ? "/admin/users/login" : "/users/login"; 
+    const response = await axiosClient.post(path, data);
+    return response.data;
+  },
 
-export type ChangePasswordFormData = Pick<AuthFormData, 'password' | 'confirmPassword'> & {
-  oldPassword: string;
-};
+  signUp: async (data: SignUpFormData, role: "admin" | "users") => {
+    const path = role === "admin" ? "/admin/users" : "/users"; 
+    
+    const formData = new FormData();
+    formData.append("userName", data.userName);
+    formData.append("phone", data.phone);
+    formData.append("email", data.email);
+    formData.append("country", data.country);
+    formData.append("password", data.password);
+    formData.append("confirmPassword", data.confirmPassword);
+    
+    if (data.profileImage && data.profileImage.length > 0) {
+      formData.append("profileImage", data.profileImage[0]);
+    }
 
-export type VerifyAccountFormData = Pick<
-  AuthFormData,
-  "email"
-> & {
-  otp: string;
+    const response = await axiosClient.post(path, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  },
+
+  forgotPassword: async (data: ForgotPasswordFormData, role: "admin" | "users") => {
+    const path = role === "admin" ? "/admin/users/forgot-password" : "/users/forgot-password"; 
+    const response = await axiosClient.post(path, data);
+    return response.data;
+  },
+
+  resetPassword: async (data: ResetPasswordFormData) => {
+    const response = await axiosClient.post("/Users/Reset", data);
+    return response.data;
+  },
+
+  changePassword: async (data: ChangePasswordFormData) => {
+    const response = await axiosClient.put("/Users/ChangePassword", data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+    return response.data;
+  }
 };

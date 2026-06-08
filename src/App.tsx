@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import AuthLayout from './layouts/AuthLayout';
+import { ToastContainer } from 'react-toastify';
 import Login from './modules/Authuntication/Components/Login/Login';
 import Register from './modules/Authuntication/Components/Register/Register';
 import ForgotPassword from './modules/Authuntication/Components/ForgetPassword/ForgotPassword';
@@ -59,6 +60,7 @@ function App() {
   ]);
   return (
     <>
+    <ToastContainer/>
       <RouterProvider router={routes} />
     </>
   );
