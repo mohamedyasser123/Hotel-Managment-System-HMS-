@@ -64,13 +64,14 @@ signUp: async (data: SignUpFormData) => {
 },
 
   forgotPassword: async (data: ForgotPasswordFormData, role: "admin" | "users") => {
-    const path = role === "admin" ? "/admin/users/forgot-password" : "/users/forgot-password"; 
+    const path = role === "admin" ? "/admin/users/forgot-password" : "/portal/users/forgot-password"; 
     const response = await axiosClient.post(path, data);
     return response.data;
   },
 
-  resetPassword: async (data: ResetPasswordFormData) => {
-    const response = await axiosClient.post("/Users/Reset", data);
+  resetPassword: async (data: ResetPasswordFormData,role: "admin" | "users") => {
+        const path = role === "admin" ? "/admin/users/reset-password" : "/portal/users/reset-password"; 
+    const response = await axiosClient.post(path, data);
     return response.data;
   },
 

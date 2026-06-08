@@ -60,11 +60,11 @@ export default function useAuth(role: "admin" | "users" = "users") {
   const handleForgotPassword = async (data: ForgotPasswordFormData) => {
     setIsLoading(true);
     try {
-      await authApi.forgotPassword(data, role);
-      toast.success("تم إرسال كود الاستعادة إلى إيميلك");
+     const response= await authApi.forgotPassword(data, role);
+      toast.success(response.message);
       navigate("/reset-password");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "فشل إرسال الطلب");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -73,11 +73,11 @@ export default function useAuth(role: "admin" | "users" = "users") {
   const handleResetPassword = async (data: ResetPasswordFormData) => {
     setIsLoading(true);
     try {
-      await authApi.resetPassword(data);
-      toast.success("تم إعادة تعيين كلمة المرور بنجاح");
+     const response= await authApi.resetPassword(data,role);
+      toast.success(response.message);
       navigate("/login");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "فشل إعادة التعيين");
+      toast.error(error.response?.data?.message ||" Something went wrong");
     } finally {
       setIsLoading(false);
     }
