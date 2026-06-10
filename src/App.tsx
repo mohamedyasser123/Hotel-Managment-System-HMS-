@@ -16,6 +16,12 @@ import UserLayout from "./layouts/UserLayout";
 import LandingPage from "./modules/User/Compoments/Home/LandingPage";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import UsersList from "./modules/Admin/Components/Users/UsersList";
+import RoomsList from "./modules/Admin/Components/Rooms/RoomsList";
+import RoomsData from "./modules/Admin/Components/Rooms/RoomsData";
+import FacilitiesList from "./modules/Admin/Components/Facilities/FacilitiesList";
+import BookingList from "./modules/Admin/Components/Booking/BookingList";
+import AdsList from "./modules/Admin/Components/ADS/AdsList";
 
 function App() {
   const { i18n } = useTranslation();
@@ -49,6 +55,12 @@ function App() {
       children: [
         { index: true, element: <Dashboard /> },
         { path: "dashboard", element: <Dashboard /> },
+         { path: "user-list", element: <UsersList /> },
+          { path: "room-list", element: <RoomsList /> },
+           { path: "room-data", element: <RoomsData /> },
+           { path: "booking-list", element: <BookingList /> },
+           { path: "ads-list", element: <AdsList /> },
+            { path: "facilities-list", element: <FacilitiesList /> },
       ],
     },
     {
