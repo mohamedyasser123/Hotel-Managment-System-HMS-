@@ -13,6 +13,7 @@ export default function AuthLayout() {
   const location = useLocation();
 
   const images: Record<string, string> = {
+    "/": loginImage,
     "/login": loginImage,
     "/register": registerImage,
     "/forget-password": forgotImage,
