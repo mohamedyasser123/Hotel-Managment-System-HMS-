@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './App.css'
 import AuthLayout from './layouts/AuthLayout';
+import { ToastContainer } from 'react-toastify';
 import Login from './modules/Authuntication/Components/Login/Login';
 import Register from './modules/Authuntication/Components/Register/Register';
 import ForgotPassword from './modules/Authuntication/Components/ForgetPassword/ForgotPassword';
@@ -13,9 +14,22 @@ import Dashboard from "./modules/Admin/Components/Dashboard/Dashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
 import LandingPage from "./modules/User/Compoments/Home/LandingPage";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import UsersList from "./modules/Admin/Components/Users/UsersList";
+import RoomsList from "./modules/Admin/Components/Rooms/RoomsList";
+import RoomsData from "./modules/Admin/Components/Rooms/RoomsData";
+import FacilitiesList from "./modules/Admin/Components/Facilities/FacilitiesList";
+import BookingList from "./modules/Admin/Components/Booking/BookingList";
+import AdsList from "./modules/Admin/Components/ADS/AdsList";
 
 function App() {
-    const routes = createBrowserRouter([
+  const { i18n } = useTranslation();
+    useEffect(() => {
+      document.documentElement.dir =
+        i18n.language === "ar" ? "rtl" : "ltr";
+    }, [i18n.language]);
+  const routes = createBrowserRouter([
     {
       path: "/",
       element: <AuthLayout />,
@@ -30,38 +44,45 @@ function App() {
         { path: "change-password", element: <ChangePassword /> },
       ],
     },
-{
-  path: "admin",
-  element: (
-    <ProtectedRoute>
-      <AdminLayout />
-    </ProtectedRoute>
-  ),
-  errorElement: <NotFound />,
-  children: [
-    { index: true, element: <Dashboard /> }, 
-    { path: "dashboard", element: <Dashboard /> }, 
+    {
+      path: "admin",
+      element: (
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Dashboard /> },
+        { path: "dashboard", element: <Dashboard /> },
+         { path: "user-list", element: <UsersList /> },
+          { path: "room-list", element: <RoomsList /> },
+           { path: "room-data", element: <RoomsData /> },
+           { path: "booking-list", element: <BookingList /> },
+           { path: "ads-list", element: <AdsList /> },
+            { path: "facilities-list", element: <FacilitiesList /> },
       ],
-},
-  {
-  path: "home", 
-  element: (
-    <UserLayout /> 
-  ),
-  errorElement: <NotFound />,
-  children: [
-    { index: true, element: <LandingPage /> }, 
-    
-  ],
-}
+    },
+    {
+      path: "home",
+      element: (
+           <ProtectedRoute allowedRoles={["user"]}>
+   <UserLayout />
+           </ProtectedRoute>
+      ),
+   
+      errorElement: <NotFound />,
+      children: [{ index: true, element: <LandingPage /> },
+        {path: "home", element: <LandingPage /> }
+      ],
+    },
   ]);
   return (
     <>
-
+    <ToastContainer/>
       <RouterProvider router={routes} />
-  
     </>
-  )
+  );
 }
 
 export default App
