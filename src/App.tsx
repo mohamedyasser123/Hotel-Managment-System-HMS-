@@ -41,7 +41,7 @@ function App() {
     {
       path: "admin",
       element: (
-        <ProtectedRoute>
+        <ProtectedRoute allowedRoles={["admin"]}>
           <AdminLayout />
         </ProtectedRoute>
       ),
@@ -53,7 +53,12 @@ function App() {
     },
     {
       path: "home",
-      element: <UserLayout />,
+      element: (
+           <ProtectedRoute allowedRoles={["user"]}>
+   <UserLayout />
+           </ProtectedRoute>
+      ),
+   
       errorElement: <NotFound />,
       children: [{ index: true, element: <LandingPage /> },
         {path: "home", element: <LandingPage /> }
