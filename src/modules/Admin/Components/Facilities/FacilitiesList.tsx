@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { useFacilities } from "../../../../hooks/useFacilities";
-import type { Facility } from "../../../../types/Facilities";
+import type { Facility } from "../../../../types/facilitiesTyepes";
 import SharedTable from "../../../Shared/Components/CustomTable/CustomTable";
 import SharedPageHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
-import { IconButton} from "@mui/material";
+import { IconButton } from "@mui/material";
 import ActionsMenu from "../../../Shared/Components/CrudMenu/CrudMenu";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 export default function FacilitiesList() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -46,7 +48,7 @@ export default function FacilitiesList() {
       <SharedTable
         rows={rows}
         columns={columns}
-        renderActions={(row) => (
+        renderActions={() => (
           <>
             <IconButton onClick={handleOpen}>
               <MoreHorizOutlinedIcon />
@@ -56,6 +58,23 @@ export default function FacilitiesList() {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              actions={[
+                {
+                  label: "View",
+                  icon: <VisibilityOutlinedIcon fontSize="small" />,
+                },
+
+                {
+                  label: "Edit",
+                  icon: <EditOutlinedIcon fontSize="small" />,
+                },
+
+                {
+                  label: "Delete",
+                  icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
+                  danger: true,
+                },
+              ]}
             />
           </>
         )}
