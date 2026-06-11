@@ -13,6 +13,8 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^9.0.1",
+    "@mui/x-data-grid": "^9.4.0",
+    "@mui/x-data-grid-generator": "^9.4.0",
     "apexcharts": "^5.13.0",
     "axios": "^1.17.0",
     "i18next": "^26.3.1",
