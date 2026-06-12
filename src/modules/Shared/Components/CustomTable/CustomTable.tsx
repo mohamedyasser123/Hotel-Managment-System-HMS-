@@ -22,7 +22,7 @@ export default function SharedTable<T>({
             headerName: "",
             sortable: false,
             width: 80,
-            renderCell: (params: any) => renderActions(params.row),
+            renderCell: (params: any) => renderActions?.(params.row as T),
           },
         ]
       : []),
