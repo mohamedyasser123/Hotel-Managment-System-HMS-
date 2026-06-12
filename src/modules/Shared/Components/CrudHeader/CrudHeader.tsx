@@ -1,18 +1,18 @@
 import { Box, Typography, Button } from "@mui/material";
 
-interface SharedPageHeaderProps {
+interface CrudHeaderProps {
   title: string;
   subtitle?: string;
   buttonText?: string;
-  onButtonClick?: () => void;
+  onClick?: () => void;
 }
 
-export default function SharedPageHeader({
+export default function CrudHeader({
   title,
   subtitle,
   buttonText,
-  onButtonClick,
-}: SharedPageHeaderProps) {
+  onClick,
+}: CrudHeaderProps) {
   return (
     <Box
       sx={{
@@ -49,7 +49,7 @@ export default function SharedPageHeader({
       {/*   BUTTON */}
       {buttonText && (
         <Button
-          onClick={onButtonClick}
+          onClick={onClick}
           sx={{
             backgroundColor: "#203FC7",
             color: "#fff",
