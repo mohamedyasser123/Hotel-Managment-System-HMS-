@@ -66,6 +66,7 @@ const currentPath = location.pathname;
     icon: <LockResetIcon />,
     path: "/change-password",
   },
+  
     {
       title: "LogOut",
       icon: <LockResetIcon />,
