@@ -34,8 +34,6 @@ export default function SharedTable<T>({
         border: "1px solid #E2E5EB",
         borderRadius: "10px",
         overflow: "hidden",
-        width: "90%",
-        mx: "auto",
       }}>
       <DataGrid
         rows={rows}
