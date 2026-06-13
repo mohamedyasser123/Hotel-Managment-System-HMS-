@@ -19,8 +19,6 @@ export default function CrudHeader({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "90%",
-        mx: "auto",
         mb: 3,
       }}>
       <Box>
