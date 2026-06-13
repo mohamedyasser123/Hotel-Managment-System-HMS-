@@ -24,6 +24,9 @@ export default function FacilitiesList() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<Facility | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [facilityToDelete, setFacilityToDelete] = useState<Facility | null>(
+    null,
+  );
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, row: Facility) => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +40,7 @@ export default function FacilitiesList() {
 
   const {
     data,
+    loading,
     register,
     handleSubmit,
     onSubmit,
@@ -91,6 +95,7 @@ export default function FacilitiesList() {
       <SharedTable
         rows={rows}
         columns={columns}
+        loading={loading}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row as any)}>
@@ -99,7 +104,7 @@ export default function FacilitiesList() {
 
             <ActionsMenu
               anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
+              open={Boolean(anchorEl) && selectedRow?._id === row._id}
               onClose={handleClose}
               actions={[
                 {
@@ -126,8 +131,12 @@ export default function FacilitiesList() {
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
                   danger: true,
                   onClick: () => {
-                    setSelectedFacility(row as any);
+                    if (!selectedRow) return;
+
+                    setFacilityToDelete(selectedRow);
+
                     setOpenDeleteModal(true);
+
                     handleClose();
                   },
                 },
@@ -196,8 +205,12 @@ export default function FacilitiesList() {
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={() => {
-          if (!selectedFacility) return;
-          handleDelete(selectedFacility._id);
+          if (!facilityToDelete) return;
+
+          handleDelete(facilityToDelete._id);
+
+          setFacilityToDelete(null);
+
           setOpenDeleteModal(false);
         }}
         itemName="Facility"
