@@ -17,7 +17,7 @@ import ActionsMenu from "../../../Shared/Components/CrudMenu/CrudMenu";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 export default function BookingList() {
-  const { data } = useBooking();
+  const { data,loading } = useBooking();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
@@ -91,6 +91,7 @@ export default function BookingList() {
       <SharedTable
         rows={rows}
         columns={columns}
+        loading={loading}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row.id)}>

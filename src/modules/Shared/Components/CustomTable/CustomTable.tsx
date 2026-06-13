@@ -1,17 +1,19 @@
 import Box from "@mui/material/Box";
+import { HighlightedScatterMark } from "@mui/x-charts";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-
 
 interface SharedTableProps<T = any> {
   rows: T[];
   columns: GridColDef[];
   renderActions?: (row: T) => React.ReactNode;
+  loading?: boolean;
 }
 
 export default function SharedTable<T>({
   rows,
   columns,
   renderActions,
+  loading,
 }: SharedTableProps<T>) {
   const finalColumns: GridColDef[] = [
     ...columns,
@@ -40,10 +42,26 @@ export default function SharedTable<T>({
         columns={finalColumns}
         autoHeight
         hideFooter
+        loading={loading}
+        slotProps={{
+          loadingOverlay: {
+            variant: "circular-progress",
+            noRowsVariant: "circular-progress",
+          },
+        }}
         disableRowSelectionOnClick
         rowHeight={65}
         sx={{
+          minHeight: 400,
           border: "none",
+          "& .MuiCircularProgress-root": {
+            marginTop: "150px",
+          },
+          "& .MuiDataGrid-loadingOverlay": {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
 
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "#E2E5EB !important",
