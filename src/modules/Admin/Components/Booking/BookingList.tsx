@@ -6,6 +6,9 @@ import {
   Button,
   Typography,
   IconButton,
+  Chip,
+  Box,
+  Avatar,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SharedTable from "../../../Shared/Components/CustomTable/CustomTable";
@@ -119,133 +122,124 @@ export default function BookingList() {
           </>
         )}
       />
-      <Dialog
-        open={openViewModal}
-        onClose={() => setOpenViewModal(false)}
-        fullWidth
-        maxWidth="sm"
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: "12px",
-            },
-          },
-        }}>
-        <DialogTitle
-          sx={{
-            fontWeight: 600,
-            color: "#1F263E",
-            fontSize: "18px",
-            pb: 2,
-            borderBottom: "1px solid #E2E5EB", 
-          }}>
-          Booking Details
-        </DialogTitle>
+ <Dialog
+  open={openViewModal}
+  onClose={() => setOpenViewModal(false)}
+  fullWidth
+  maxWidth="sm"
+  slotProps={{
+    paper: {
+      sx: {
+        borderRadius: "16px",
+        p: 1,
+      },
+    },
+  }}
+>
+  <DialogTitle
+    sx={{
+      fontWeight: 600,
+      color: "#1F263E",
+      fontSize: "18px",
+      pb: 2,
+      borderBottom: "1px solid #E2E5EB", 
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+    }}
+  >
+    Booking Details
+    
+    <Chip
+      label={selectedBooking?.status || "Pending"}
+      color={
+        selectedBooking?.status === "Completed" || selectedBooking?.status === "Confirmed"
+          ? "success"
+          : selectedBooking?.status === "Cancelled"
+          ? "error"
+          : "warning"
+      }
+      size="small"
+      sx={{ fontWeight: 600, borderRadius: "6px" }}
+    />
+  </DialogTitle>
 
-        <DialogContent sx={{ mt: 3, pb: 2 }}>
-          <Grid container spacing={3}>
-            <Grid size={6}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                User Name
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, color: "#1F263E" }}>
-                {selectedBooking?.user || "Unknown User"}
-              </Typography>
-            </Grid>
+  <DialogContent sx={{ mt: 3, pb: 2 }}>
+    
+    <Box
+      sx={{ 
+        display: "flex", 
+        alignItems: "center", 
+        gap: 2, 
+        mb: 4, 
+        backgroundColor: "#F8F9FB", 
+        p: 2, 
+        borderRadius: "12px" 
+      }}
+    >
+      
+      <Box>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: "#1F263E", mb: 0.5, lineHeight: 1.2 }}>
+          Room: {selectedBooking?.roomNumber || "No Room"}
+        </Typography>
+        <Typography variant="body2" sx={{ color: "#718096", fontWeight: 500 }}>
+          Booked By: {selectedBooking?.user || "Unknown User"}
+        </Typography>
+      </Box>
+    </Box>
 
-            <Grid size={6}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Room Number
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, color: "#1F263E" }}>
-                {selectedBooking?.roomNumber || "No Room"}
-              </Typography>
-            </Grid>
-            
+    <Grid container spacing={3}>
+      
+      <Grid size={6}>
+        <Typography variant="body2" sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
+          Start Date
+        </Typography>
+        <Typography variant="body1" sx={{ fontWeight: 600, color: "#1F263E" }}>
+          {selectedBooking?.startDate || "N/A"}
+        </Typography>
+      </Grid>
 
-            <Grid size={6}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Start Date
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, color: "#1F263E" }}>
-                {selectedBooking?.startDate}
-              </Typography>
-            </Grid>
-                        <Grid size={6}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Status
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, color: "#203FC7" }}>
-                {selectedBooking?.status || "No Room"}
-              </Typography>
-            </Grid>
-            <Grid size={6}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                End Date
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, color: "#1F263E" }}>
-                {selectedBooking?.endDate}
-              </Typography>
-            </Grid>
-            
-            
+      <Grid size={6}>
+        <Typography variant="body2" sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
+          End Date
+        </Typography>
+        <Typography variant="body1" sx={{ fontWeight: 600, color: "#1F263E" }}>
+          {selectedBooking?.endDate || "N/A"}
+        </Typography>
+      </Grid>
 
+      <Grid size={12} sx={{ mt: 1 }}>
+        <Typography variant="body2" sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
+          Total Price
+        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: "#203FC7" }}>
+          {selectedBooking?.totalPrice} EGP
+        </Typography>
+      </Grid>
 
-            <Grid size={12} sx={{ mt: 1 }}>
-              <Typography
-                variant="body2"
-                sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Total Price
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: 700, color: "#203FC7" }}>
-                {selectedBooking?.totalPrice} EGP
-              </Typography>
-            </Grid>
-          </Grid>
-          
-        </DialogContent>
+    </Grid>
+  </DialogContent>
 
-        <DialogActions sx={{ p: 2, borderTop: "1px solid #F0F2F5" }}>
-          <Button
-            onClick={() => setOpenViewModal(false)}
-            variant="outlined"
-            sx={{
-              color: "#4A5568",
-              borderColor: "#E2E5EB",
-              textTransform: "none",
-              borderRadius: "6px",
-              px: 3,
-              "&:hover": {
-                borderColor: "#CBD5E1",
-                backgroundColor: "#F8F9FB",
-              },
-            }}>
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+  <DialogActions sx={{ p: 2, borderTop: "1px solid #F0F2F5", mt: 2 }}>
+    <Button
+      onClick={() => setOpenViewModal(false)}
+      variant="contained"
+      sx={{
+        backgroundColor: "#203FC7",
+        color: "#fff",
+        textTransform: "none",
+        borderRadius: "8px",
+        px: 4,
+        fontWeight: 500,
+        "&:hover": {
+          backgroundColor: "#1730A3",
+        },
+      }}
+    >
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
     </>
   );
 }
