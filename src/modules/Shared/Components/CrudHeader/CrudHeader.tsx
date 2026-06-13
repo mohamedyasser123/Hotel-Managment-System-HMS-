@@ -19,17 +19,17 @@ export default function CrudHeader({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        width: "90%",
+        mx: "auto",
         mb: 3,
-      }}
-    >
+      }}>
       <Box>
         <Typography
           sx={{
             color: "#1F263E",
             fontSize: "20px",
             fontWeight: 600,
-          }}
-        >
+          }}>
           {title}
         </Typography>
 
@@ -39,8 +39,7 @@ export default function CrudHeader({
               color: "#323C47",
               fontSize: "14px",
               mt: 0,
-            }}
-          >
+            }}>
             {subtitle}
           </Typography>
         )}
@@ -60,8 +59,7 @@ export default function CrudHeader({
             "&:hover": {
               backgroundColor: "#1a33a3",
             },
-          }}
-        >
+          }}>
           {buttonText}
         </Button>
       )}
