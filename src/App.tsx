@@ -57,7 +57,7 @@ function App() {
         { path: "dashboard", element: <Dashboard /> },
          { path: "user-list", element: <UsersList /> },
           { path: "room-list", element: <RoomsList /> },
-           { path: "room-data", element: <RoomsData /> },
+           { path: "room-data/:id", element: <RoomsData /> },
            { path: "booking-list", element: <BookingList /> },
            { path: "ads-list", element: <AdsList /> },
             { path: "facilities-list", element: <FacilitiesList /> },

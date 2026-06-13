@@ -101,6 +101,7 @@ const handleDelete = async (id: string) => {
   selectedFacility,
   setSelectedFacility,
   setValue,
-  handleDelete
+  handleDelete,
+  getFacilitiesList
 };
 }
