@@ -12,6 +12,10 @@ interface DeleteConfirmationProps {
   onClose: () => void;
   onConfirm: () => void;
   itemName: string;
+  image?: string;
+  title?: string;        
+  description?: string;  
+  confirmText?: string;
 }
 
 export default function DeleteConfirmation({
@@ -19,6 +23,10 @@ export default function DeleteConfirmation({
   onClose,
   onConfirm,
   itemName,
+  image,
+  title,
+  description,
+  confirmText = "Delete",
 }: DeleteConfirmationProps) {
   return (
     <Dialog
@@ -42,7 +50,7 @@ export default function DeleteConfirmation({
         {/* IMAGE */}
         <Box
           component="img"
-          src={deleteImg}
+          src={image || deleteImg}
           alt="delete"
           sx={{
             width: 120,
@@ -59,7 +67,7 @@ export default function DeleteConfirmation({
             color: "#1F263E",
             mb: 1,
           }}>
-          Delete This {itemName} ?
+         {title || `Delete This ${itemName} ?`}
         </Typography>
 
         {/* DESCRIPTION */}
@@ -71,8 +79,7 @@ export default function DeleteConfirmation({
             maxWidth: "320px",
             mx: "auto",
           }}>
-          Are you sure you want to delete this item ? If you are sure just click
-          on delete it.
+          {description || `Are you sure you want to delete this item ? If you are sure just click on delete it.`}
         </Typography>
       </DialogContent>
 
@@ -113,7 +120,7 @@ export default function DeleteConfirmation({
               boxShadow: "none",
             },
           }}>
-          Delete
+          {confirmText}
         </Button>
       </DialogActions>
     </Dialog>
