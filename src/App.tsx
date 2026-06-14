@@ -22,6 +22,10 @@ import RoomsData from "./modules/Admin/Components/Rooms/RoomsData";
 import FacilitiesList from "./modules/Admin/Components/Facilities/FacilitiesList";
 import BookingList from "./modules/Admin/Components/Booking/BookingList";
 import AdsList from "./modules/Admin/Components/ADS/AdsList";
+import DetailsPage from "./modules/User/Compoments/DetailsPage/DetailsPage";
+import Explore from "./modules/User/Compoments/Explore/Explore";
+import Favorites from "./modules/User/Compoments/Favorites/Favorites";
+import Payment from "./modules/User/Compoments/Payment/Payment";
 
 function App() {
   const { i18n } = useTranslation();
@@ -73,7 +77,10 @@ function App() {
    
       errorElement: <NotFound />,
       children: [{ index: true, element: <LandingPage /> },
-        {path: "home", element: <LandingPage /> }
+        {path: "detailes", element: <DetailsPage /> },
+        {path: "explpore", element: <Explore /> },
+        {path: "favorites", element: <Favorites /> },
+        {path: "payment", element: <Payment /> },
       ],
     },
   ]);
