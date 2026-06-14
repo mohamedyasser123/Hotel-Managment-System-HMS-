@@ -67,6 +67,8 @@ useEffect(() => {
   getFacilitiesList();
 }, [id, data]);
 const onSubmitHandler = (data: RoomForm) => {
+    console.log("files", data.imgs);
+
   const formData = new FormData();
 
   formData.append("roomNumber", data.roomNumber);

@@ -23,7 +23,6 @@ export function useRooms() {
     setLoading(true);
     try {
       const response = await getRooms();
-      console.log(response);
       setData(response.data.rooms);
     } catch (error: any) {
       toast.error(
