@@ -199,6 +199,7 @@ export default function RoomsList() {
         key={data.length}
         rows={rows}
         columns={columns}
+        loading={loading}
         renderActions={(row) => (
           <>
             <IconButton
