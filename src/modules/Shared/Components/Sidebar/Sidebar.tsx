@@ -8,7 +8,6 @@ import {
   ListItemText,
   IconButton,
   Toolbar,
-  Box,
 } from "@mui/material";
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom'; 
 import CampaignIcon from '@mui/icons-material/Campaign'; 
@@ -18,9 +17,11 @@ import LockResetIcon from '@mui/icons-material/LockReset';
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
-
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import DeleteConfirmation from "../DeleteConfirmation/DeleteConfirmation";
+import { toast } from "react-toastify";
 
 const DRAWER_WIDTH = 240;
 const MINI_WIDTH = 70;
@@ -31,7 +32,27 @@ const currentPath = location.pathname;
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const [openLogout, setOpenLogout] = useState(false);
+const handleLogoutConfirm = () => {
+  localStorage.removeItem("token"); 
+  
+  
+   localStorage.clear();
 
+  console.log("Logged out successfully and token cleared!");
+  
+  setOpenLogout(false);
+  toast.success("logOut success")
+  navigate("/login"); 
+};
+
+const handleItemClick = (item: any) => {
+  if (item.action === "logout") {
+    setOpenLogout(true); 
+  } else if (item.path) {
+    navigate(item.path); 
+  }
+};
   const menuItems = [
     {
       title: "Dashboard",
@@ -70,10 +91,11 @@ const currentPath = location.pathname;
   },
   
     {
-      title: "LogOut",
-      icon: <LockResetIcon />,
-      path: "/admin/settings",
-    },
+  title: "LogOut",
+  icon:<LogoutIcon />,
+  path:"#",
+  action: "logout",
+}
   ];
 
   return (
@@ -119,7 +141,7 @@ const currentPath = location.pathname;
   sx={{ display: "block" }}
 >
   <ListItemButton
-    onClick={() => navigate(item.path)}
+    onClick={() => handleItemClick(item)}
     sx={{
       minHeight: 56,
       justifyContent: open ? "initial" : "center",
@@ -159,6 +181,15 @@ const currentPath = location.pathname;
 </ListItem>
         ))}
       </List>
+      <DeleteConfirmation
+        open={openLogout}
+        onClose={() => setOpenLogout(false)}
+        onConfirm={handleLogoutConfirm}
+        itemName="Session"
+        title="Log Out ?" 
+  description="Are you sure you want to log out of your account?" 
+  confirmText="Log Out"
+      />
     </Drawer>
   );
 }
