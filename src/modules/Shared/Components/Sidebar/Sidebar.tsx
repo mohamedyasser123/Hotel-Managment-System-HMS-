@@ -20,6 +20,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const DRAWER_WIDTH = 240;
 const MINI_WIDTH = 70;
@@ -29,6 +30,7 @@ export default function Sidebar() {
 const currentPath = location.pathname;
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   const menuItems = [
     {
@@ -76,6 +78,8 @@ const currentPath = location.pathname;
 
   return (
     <Drawer
+          anchor={i18n.language === "ar" ? "right" : "left"}
+
       variant="permanent"
       sx={{
         width: open ? DRAWER_WIDTH : MINI_WIDTH,
