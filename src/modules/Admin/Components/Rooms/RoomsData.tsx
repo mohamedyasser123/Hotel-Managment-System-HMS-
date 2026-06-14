@@ -38,36 +38,16 @@ const { id } = useParams();
     capacity: "",
     discount: "0",
     facilities: [],
-    imgs: null,
+    images: null,
   },
 });
 
   const watchedFacilities = watch("facilities");
-  const watchedImgs = watch("imgs");
+  const watchedImgs = watch("images");
 const filesLength = watchedImgs ? (watchedImgs as FileList).length : 0;
-useEffect(() => {
-  if (!id || !data) return;
-
-  const room = data.find((r) => r._id === id);
-
-  if (!room) return;
-
-  setSelectedRoom(room);
-
-  reset({
-    roomNumber: room.roomNumber,
-    price: String(room.price),
-    capacity: String(room.capacity),
-    discount: String(room.discount),
-    facilities: room.facilities.map((f: any) => f._id),
-    imgs: null,
-  });
-
-  setPreviewImages(room.images || []);
-  getFacilitiesList();
-}, [id, data]);
-const onSubmitHandler = (data: RoomForm) => {
-    console.log("files", data.imgs);
+ const [oldImages, setOldImages] = useState<string[]>([]);
+const onSubmitHandler = async(data: RoomForm) => {
+    console.log("files", data.images);
 
   const formData = new FormData();
 
@@ -81,17 +61,56 @@ const onSubmitHandler = (data: RoomForm) => {
   });
 
 
-  const files = data.imgs as any; 
+  const files = data.images as any;
+
+  // 1. لو المستخدم رفع صور جديدة من جهازه
   if (files && files.length > 0) {
     Array.from(files).forEach((file: any) => {
-      formData.append("imgs", file);
+      formData.append("images", file);
     });
+  } 
+  else if (id && oldImages && oldImages.length > 0) {
+    for (const [index, url] of oldImages.entries()) {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const file = new File([blob], `old_image_${index}.jpg`, { type: blob.type });
+        formData.append("images", file);
+      } catch (err) {
+        console.error("Failed to fetch and convert old image: ", url, err);
+      }
+    }
   }
 
   onSubmit(formData, () => {
     navigate("/admin/room-list");
   }, id);
 };
+useEffect(() => {
+  if (!id || !data) return;
+
+  const room = data.find((r) => r._id === id);
+  if (!room) return;
+
+  setSelectedRoom(room);
+
+  reset({
+    roomNumber: room.roomNumber,
+    price: String(room.price),
+    capacity: String(room.capacity),
+    discount: String(room.discount),
+    facilities: room.facilities.map((f: any) => f._id || f), 
+    images: null,
+  });
+
+  setPreviewImages(room.images || []);
+
+  setOldImages(room.images || []); 
+
+  getFacilitiesList();
+
+}, [id, data, reset, setSelectedRoom, getFacilitiesList]); 
+
 
   return (
     <Box
@@ -212,7 +231,7 @@ const onSubmitHandler = (data: RoomForm) => {
           multiple
           accept="image/*"
           onChange={(e) =>
-            setValue("imgs", e.target.files as any)
+            setValue("images", e.target.files as any)
           }
         />
 

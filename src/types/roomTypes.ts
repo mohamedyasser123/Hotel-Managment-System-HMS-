@@ -27,7 +27,7 @@ export type RoomForm = {
   capacity: string;
   discount: string;
   facilities: string[];
-  imgs: FileList | null;
+  images: FileList | null;
 };
 
 export interface GetRoomsResponse {
