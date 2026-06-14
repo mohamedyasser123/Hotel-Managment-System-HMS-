@@ -12,7 +12,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import DeleteConfirmation from '../../../Shared/Components/DeleteConfirmation/DeleteConfirmation';
 import { useNavigate } from 'react-router-dom';
 export default function RoomsList() {
-  const { reset, data, setSelectedRoom, selectedRoom, handleDelete } = useRooms();
+  const { reset, data, setSelectedRoom, selectedRoom, handleDelete,loading } = useRooms();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -30,18 +30,40 @@ export default function RoomsList() {
       createdAt: new Date(room.createdAt).toLocaleDateString("en-GB"),
       updatedAt: new Date(room.updatedAt).toLocaleDateString("en-GB"),
       createdBy: room.createdBy?.userName || "Unknown",
+      image: room.images && room.images.length > 0 ? room.images[0] : "",
     }));
   }, [data]);
-  const columns = [
-    { field: "roomNumber", headerName: "Room Number", flex: 1 },
-    { field: "price", headerName: "Price", flex: 1 },
-    { field: "capacity", headerName: "Capacity", flex: 1 },
-    { field: "discount", headerName: "Discount", flex: 1 },
-    { field: "facilities", headerName: "Facilities", flex: 1.5 },
-    { field: "createdBy", headerName: "Created By", flex: 1 },
-    { field: "createdAt", headerName: "Created At", flex: 1 },
-    { field: "updatedAt", headerName: "Updated At", flex: 1 },
-  ];
+ const columns = [
+  { field: "roomNumber", headerName: "Room Number", flex: 1 },
+  { 
+    field: "image", 
+    headerName: "Image", 
+    flex: 1,
+    renderCell: (params: any) => {
+      return params.value ? (
+        <Box
+          component="img"
+          src={params.value}
+          alt="Room"
+          sx={{
+            width: 50,      
+            height: 50,   
+            borderRadius: "8px", 
+            objectFit: "cover",  
+            display: "block",
+            my: "5px"     
+          }}
+        />
+      ) : (
+        <span style={{ color: "#7E8299", fontSize: "12px" }}>No Image</span> 
+      );
+    }
+  },
+  { field: "price", headerName: "Price", flex: 1 },
+  { field: "discount", headerName: "Discount", flex: 1 },
+  { field: "capacity", headerName: "Capacity", flex: 1 },
+  { field: "facilities", headerName: "Facilities", flex: 1.5 },
+];
   const handleOpen = (event: React.MouseEvent<HTMLElement>, row: Room) => {
     setAnchorEl(event.currentTarget);
 
