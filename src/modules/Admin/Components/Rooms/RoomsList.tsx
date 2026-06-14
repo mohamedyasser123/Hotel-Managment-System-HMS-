@@ -11,6 +11,8 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import DeleteConfirmation from '../../../Shared/Components/DeleteConfirmation/DeleteConfirmation';
 import { useNavigate } from 'react-router-dom';
+import SharedFilter from '../../../Shared/Components/filter/filter';
+import { useFacilities } from '../../../../hooks/useFacilities';
 export default function RoomsList() {
   const { reset, data, setSelectedRoom, selectedRoom, handleDelete,loading } = useRooms();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -18,6 +20,13 @@ export default function RoomsList() {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openViewDialog, setOpenViewDialog] = useState(false);
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
+const [filters, setFilters] = useState({
+   price: "",
+  facility: "",
+});
+const { data: facilities } = useFacilities();
   const rows = useMemo(() => {
     return (data ?? []).map((room: Room) => ({
       id: room._id,
@@ -73,7 +82,30 @@ export default function RoomsList() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(selectedRoom);
+  const filteredRows = rows.filter((room) => {
+  const matchesSearch =
+    !search ||
+    room.roomNumber
+      .toString()
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+  const matchesPrice =
+    !filters.price ||
+    room.price <= Number(filters.price);
+
+  const matchesFacility =
+    !filters.facility ||
+    room.facilities
+      .toLowerCase()
+      .includes(filters.facility.toLowerCase());
+
+  return (
+    matchesSearch &&
+    matchesPrice&&
+    matchesFacility
+  );
+});
   return (
     <>
       <Dialog
@@ -195,9 +227,39 @@ export default function RoomsList() {
           navigate("/admin/room-data");
         }}
       />
+      <SharedFilter
+  searchValue={search}
+  onSearchChange={setSearch}
+  values={filters}
+  onFilterChange={(key, value) =>
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
+  }
+  filters={[
+    {
+  key: "price",
+  placeholder: "Price",
+  options: [
+    { label: "Less than 1000", value: "1000" },
+    { label: "Less than 2000", value: "2000" },
+    { label: "Less than 3000", value: "3000" },
+  ],
+},
+    {
+      key: "facility",
+      placeholder: "Facilities",
+      options: facilities.map((f) => ({
+  label: f.name,
+  value: f.name,
+}))
+    },
+  ]}
+/>
       <SharedTable
         key={data.length}
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         loading={loading}
         renderActions={(row) => (
