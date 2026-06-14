@@ -35,17 +35,25 @@ export default function SharedFilter({
   return (
     <Box sx={{
         display:"flex",
-        gap:"2"
+        gap:2,
+         px: 2,      
+    mb: 3, 
     }}>
       <TextField
         placeholder="Search..."
         value={searchValue}
+        sx={{
+             ...textFieldStyle,
+    flex: 2,
+        }}
         onChange={(e) => onSearchChange(e.target.value)}
-        sx={{ flex: 1 }}
       />
 
       {filters.map((filter) => (
-        <FormControl key={filter.key} sx={{ minWidth: 180 }}>
+        <FormControl key={filter.key}  sx={{
+             ...textFieldStyle,
+    flex: 1,
+        }}>
           <Select
             displayEmpty
             value={values[filter.key] || ""}
@@ -71,3 +79,28 @@ export default function SharedFilter({
     </Box>
   );
 }
+
+const textFieldStyle = {
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: '#F5F6F8',
+    borderRadius: '4px',
+    height: '44px',
+
+    '& fieldset': {
+      border: 'none',
+    },
+
+    '& input': {
+      padding: '8px 12px',
+
+      fontSize: '14px',
+
+    },
+
+    '& input::placeholder': {
+      color: '#D3D6DC',
+      opacity: 1,
+      fontSize: '14px',
+    },
+  },
+};
