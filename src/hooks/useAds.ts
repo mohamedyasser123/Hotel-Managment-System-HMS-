@@ -27,6 +27,12 @@ export function useAds() {
   const [selectedAd, setSelectedAd] =
     useState<Ads | null>(null);
 
+    const [paginationModel, setPaginationModel] = useState({
+  page: 0,
+  pageSize: 5,
+});
+ const [totalCount, setTotalCount] = useState(0);
+
   const {
     register,
     handleSubmit,
@@ -40,11 +46,16 @@ export function useAds() {
     setLoading(true);
 
     try {
-      const response = await getAds();
+      const response = await getAds(
+                  paginationModel.page + 1,
+        paginationModel.pageSize
+      );
 
       console.log(response);
 
       setData(response.data.ads);
+            setTotalCount(response.data.totalCount);
+
     } finally {
       setLoading(false);
     }
@@ -53,11 +64,10 @@ export function useAds() {
   // GET ROOMS
   const getRoomsList = async () => {
     try {
-      const response = await getRooms();
-
-      console.log(response);
-
+      const response = await getRooms(                  paginationModel.page + 1,
+        paginationModel.pageSize);
       setRooms(response.data.rooms);
+      setTotalCount(response.data.totalCount);
     } catch (error) {
       console.log(error);
     }
@@ -122,7 +132,7 @@ console.log("DELETE RESPONSE =>", response);
   useEffect(() => {
     getAdsList();
     getRoomsList();
-  }, []);
+  }, [paginationModel]);
 
   return {
     data,
@@ -137,5 +147,8 @@ console.log("DELETE RESPONSE =>", response);
     setSelectedAd,
     setValue,
     handleDelete,
+    paginationModel,
+    setPaginationModel,
+    totalCount
   };
 }

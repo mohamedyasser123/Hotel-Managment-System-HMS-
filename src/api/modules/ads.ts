@@ -11,8 +11,8 @@ import type {
 
 
 // GET ALL
-export const getAds = async (): Promise<GetAdsResponse> => {
-  const response = await axiosClient.get("/admin/ads");
+export const getAds = async (page:number , size:number): Promise<GetAdsResponse> => {
+  const response = await axiosClient.get(`/admin/ads?page=${page}&size=${size}`);
   return response.data;
 };
 
