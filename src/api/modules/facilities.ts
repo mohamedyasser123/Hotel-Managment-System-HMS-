@@ -4,8 +4,9 @@ import axiosClient from "../axoisClient";
 
 
 // GET
-export const getFacilities = async (): Promise<GetFacilitiesResponse> => {
-  const response = await axiosClient.get("/admin/room-facilities");
+export const getFacilities = async (  page: number,
+  size: number): Promise<GetFacilitiesResponse> => {
+  const response = await axiosClient.get( `/admin/room-facilities?page=${page}&size=${size}`);
   return response.data;
 };
 

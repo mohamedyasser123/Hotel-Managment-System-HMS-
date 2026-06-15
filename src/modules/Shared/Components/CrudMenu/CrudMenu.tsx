@@ -60,12 +60,12 @@ export default function ActionsMenu({
             mb: index === actions.length - 1 ? 0 : 0.2,
             transition: "all 0.15s ease",
 
-            color: "#000000",
+            color: "#203FC7",
 
             "& .MuiListItemIcon-root": {
               minWidth: 28,
               
-              color: "#000000",
+              color: "#203FC7",
               transition: "color 0.15s ease",
               "& svg": {
                 fontSize: "18px",

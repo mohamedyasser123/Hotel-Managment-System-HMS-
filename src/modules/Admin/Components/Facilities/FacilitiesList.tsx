@@ -18,12 +18,17 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CrudHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
+import SharedFilter from "../../../Shared/Components/filter/filter";
 
 export default function FacilitiesList() {
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<Facility | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [facilityToDelete, setFacilityToDelete] = useState<Facility | null>(
+    null,
+  );
+  const [searchValue, setSearchValue] = useState("");
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, row: Facility) => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +42,7 @@ export default function FacilitiesList() {
 
   const {
     data,
+    loading,
     register,
     handleSubmit,
     onSubmit,
@@ -45,6 +51,9 @@ export default function FacilitiesList() {
     setSelectedFacility,
     setValue,
     handleDelete,
+    paginationModel,
+    totalCount,
+    setPaginationModel,
   } = useFacilities();
 
   const rows = useMemo(() => {
@@ -64,6 +73,14 @@ export default function FacilitiesList() {
     { field: "updatedAt", headerName: "Updated At", flex: 1 },
   ];
 
+  const filteredRows = rows.filter((facility: any) => {
+    const matchesSearch =
+      !searchValue ||
+      facility.name.toLowerCase().includes(searchValue.toLowerCase());
+
+    return matchesSearch;
+  });
+
   useEffect(() => {
     if (!openModal) {
       setSelectedFacility(null);
@@ -79,7 +96,6 @@ export default function FacilitiesList() {
         buttonText="Add New Facilities"
         onClick={() => {
           setSelectedFacility(null);
-
           reset({
             name: "",
           });
@@ -88,9 +104,21 @@ export default function FacilitiesList() {
         }}
       />
 
+      <SharedFilter
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        filters={[]}
+        values={{}}
+        onFilterChange={() => {}}
+      />
+
       <SharedTable
-        rows={rows}
+        rows={filteredRows}
+        loading={loading}
         columns={columns}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        totalCount={totalCount}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row as any)}>
@@ -99,7 +127,7 @@ export default function FacilitiesList() {
 
             <ActionsMenu
               anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
+              open={Boolean(anchorEl) && selectedRow?._id === row._id}
               onClose={handleClose}
               actions={[
                 {
@@ -126,8 +154,12 @@ export default function FacilitiesList() {
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
                   danger: true,
                   onClick: () => {
-                    setSelectedFacility(row as any);
+                    if (!selectedRow) return;
+
+                    setFacilityToDelete(selectedRow);
+
                     setOpenDeleteModal(true);
+
                     handleClose();
                   },
                 },
@@ -196,8 +228,12 @@ export default function FacilitiesList() {
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={() => {
-          if (!selectedFacility) return;
-          handleDelete(selectedFacility._id);
+          if (!facilityToDelete) return;
+
+          handleDelete(facilityToDelete._id);
+
+          setFacilityToDelete(null);
+
           setOpenDeleteModal(false);
         }}
         itemName="Facility"

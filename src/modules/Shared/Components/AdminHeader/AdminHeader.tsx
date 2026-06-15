@@ -3,6 +3,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import useAuth from '../../../../hooks/useAuth';
 import { useEffect } from 'react';
+import LanguageToggle from '../LangToggleBtn/LangToggleBtn';
 export default function AdminHeader() {
     const { data,fetchProfile  } = useAuth();
     const user = data?.user;
@@ -14,6 +15,8 @@ export default function AdminHeader() {
   return (
     <Box
   sx={{
+    background:"#F8F9FB",
+    color:"#F8F9FB",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between", 
@@ -33,11 +36,13 @@ export default function AdminHeader() {
             sx={{ 
               display: "flex", 
               alignItems: "center", 
-              gap: 1, 
+              gap: 3, 
               cursor: "pointer",
               "&:hover": { opacity: 0.8 } 
             }}
           >
+                    <LanguageToggle/>
+            
             <Avatar 
               src={user.profileImage} 
               alt={user.userName} 
