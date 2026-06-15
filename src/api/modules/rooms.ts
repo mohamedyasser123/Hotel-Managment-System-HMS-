@@ -1,3 +1,4 @@
+
 import type {  DeleteRoomResponse, GetRoomsResponse, } from "../../types/roomTypes";
 import axiosClient from "../axoisClient";
 
@@ -36,4 +37,5 @@ export const deleteRoom = async (
         `/admin/rooms/${id}`
     );
     return response.data;
+
 };

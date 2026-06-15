@@ -8,6 +8,11 @@ export function useFacilities() {
 const [data, setData] = useState<Facility[]>([]);
 const [loading, setLoading] = useState(false);
 const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
+const [paginationModel, setPaginationModel] = useState({
+  page: 0,
+  pageSize: 5,
+});
+ const [totalCount, setTotalCount] = useState(0);
 
     const {
     register,
@@ -23,9 +28,13 @@ const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const getFacilitiesList = async () => {
     setLoading(true);
     try {
-      const resposne = await getFacilities();
-      console.log(resposne);
-      setData(resposne.data.facilities);
+      const response = await getFacilities(
+        paginationModel.page + 1,
+        paginationModel.pageSize
+      );
+      
+      setData(response.data.facilities);
+      setTotalCount(response.data.totalCount);
     } finally {
       setLoading(false);
     }
@@ -84,11 +93,10 @@ const handleDelete = async (id: string) => {
   }
 };
 
-
   
   useEffect(() => {
     getFacilitiesList();
-  }, []);
+  }, [paginationModel]);
 
   return {
   data,
@@ -102,6 +110,9 @@ const handleDelete = async (id: string) => {
   setSelectedFacility,
   setValue,
   handleDelete,
-  getFacilitiesList
+  getFacilitiesList,
+  paginationModel,
+  setPaginationModel,
+  totalCount
 };
 }
