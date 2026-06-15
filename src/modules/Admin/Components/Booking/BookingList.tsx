@@ -114,7 +114,7 @@ export default function BookingList() {
         filters={[
           {
             key: "price",
-            placeholder: "Filter By Price",
+            placeholder: "Price",
             options: [
               { label: "Less than 1000", value: "1000" },
               { label: "Less than 2000", value: "2000" },

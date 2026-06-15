@@ -16,5 +16,6 @@ export interface GetUsersResponse {
   message: string;
   data: {
     users: User[];
+    totalCount: number;
   };
 }

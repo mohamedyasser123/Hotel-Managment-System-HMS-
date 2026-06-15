@@ -37,7 +37,6 @@ export default function SharedFilter({
       sx={{
         display: "flex",
         gap: 2,
-        px: 2,
         mb: 2,
       }}>
       <TextField

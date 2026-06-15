@@ -18,13 +18,16 @@ import {
 import ActionsMenu from "../../../Shared/Components/CrudMenu/CrudMenu";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import SharedFilter from "../../../Shared/Components/filter/filter";
 
 export default function UsersList() {
-  const { data, loading } = useUsers();
+  const { data, loading, paginationModel, setPaginationModel, totalCount } =
+    useUsers();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [openViewModal, setOpenViewModal] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, rowId: string) => {
     setAnchorEl(event.currentTarget);
@@ -75,16 +78,36 @@ export default function UsersList() {
       flex: 1,
     },
   ];
+
+  const filteredRows = useMemo(() => {
+    return rows.filter((user: any) => {
+      const matchesSearch =
+        !searchValue ||
+        user.userName.toLowerCase().includes(searchValue.toLowerCase());
+
+      return matchesSearch;
+    });
+  }, [rows, searchValue]);
   return (
     <>
       <CrudHeader
         title="Booking Table Details"
         subtitle="You can check all details"
       />
+      <SharedFilter
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        filters={[]}
+        values={{}}
+        onFilterChange={() => {}}
+      />
       <SharedTable
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         loading={loading}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        totalCount={totalCount}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row.id)}>
