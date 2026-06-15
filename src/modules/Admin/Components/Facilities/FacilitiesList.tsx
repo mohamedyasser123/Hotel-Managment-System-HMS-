@@ -94,8 +94,8 @@ export default function FacilitiesList() {
 
       <SharedTable
         rows={rows}
-        columns={columns}
         loading={loading}
+        columns={columns}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row as any)}>
