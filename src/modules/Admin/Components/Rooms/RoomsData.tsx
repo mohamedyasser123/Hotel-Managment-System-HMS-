@@ -21,7 +21,6 @@ export default function RoomsData() {
   const navigate = useNavigate();
   const { data: facilitiesList, getFacilitiesList } = useFacilities();
 
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
 const { id } = useParams();
   const {
@@ -38,17 +37,15 @@ const { id } = useParams();
     capacity: "",
     discount: "0",
     facilities: [],
-    images: null,
   },
 });
 
   const watchedFacilities = watch("facilities");
-  const watchedImgs = watch("images");
-const filesLength = watchedImgs ? (watchedImgs as FileList).length : 0;
- const [oldImages, setOldImages] = useState<string[]>([]);
-const onSubmitHandler = async(data: RoomForm) => {
-    console.log("files", data.images);
-
+const [previewImages, setPreviewImages] = useState<string[]>([]);
+const [newImages, setNewImages] = useState<File[]>([]);
+const [oldImages, setOldImages] = useState<string[]>([]);
+const filesLength = newImages.length;
+const onSubmitHandler = async (data: RoomForm) => {
   const formData = new FormData();
 
   formData.append("roomNumber", data.roomNumber);
@@ -60,31 +57,34 @@ const onSubmitHandler = async(data: RoomForm) => {
     formData.append("facilities[]", id);
   });
 
-
-  const files = data.images as any;
-
-  // 1. لو المستخدم رفع صور جديدة من جهازه
-  if (files && files.length > 0) {
-    Array.from(files).forEach((file: any) => {
-      formData.append("images", file);
+  if (newImages.length > 0) {
+    newImages.forEach((img) => {
+      formData.append("imgs", img);
     });
-  } 
-  else if (id && oldImages && oldImages.length > 0) {
-    for (const [index, url] of oldImages.entries()) {
-      try {
-        const response = await fetch(url);
+  } else {
+    try {
+      const filePromises = previewImages.map(async (imgUrl) => {
+        const response = await fetch(imgUrl);
         const blob = await response.blob();
-        const file = new File([blob], `old_image_${index}.jpg`, { type: blob.type });
-        formData.append("images", file);
-      } catch (err) {
-        console.error("Failed to fetch and convert old image: ", url, err);
-      }
+        const fileName = imgUrl.split('/').pop() || 'old_image.jpg';
+        return new File([blob], fileName, { type: blob.type });
+      });
+
+      const files = await Promise.all(filePromises);
+
+      files.forEach((file) => {
+        formData.append("imgs", file);
+      });
+    } catch (error) {
+      console.error("Error converting URLs to Files in parallel:", error);
     }
   }
 
-  onSubmit(formData, () => {
-    navigate("/admin/room-list");
-  }, id);
+  onSubmit(
+    formData,
+    () => navigate("/admin/room-list"),
+    id
+  );
 };
 useEffect(() => {
   if (!id || !data) return;
@@ -99,19 +99,16 @@ useEffect(() => {
     price: String(room.price),
     capacity: String(room.capacity),
     discount: String(room.discount),
-    facilities: room.facilities.map((f: any) => f._id || f), 
-    images: null,
+    facilities: room.facilities.map((f: any) => f._id || f),
   });
 
   setPreviewImages(room.images || []);
+  setOldImages(room.images || []);
+}, [id, data]);
 
-  setOldImages(room.images || []); 
-
+useEffect(() => {
   getFacilitiesList();
-
-}, [id, data, reset, setSelectedRoom, getFacilitiesList]); 
-
-
+}, []);
   return (
     <Box
       component="form"
@@ -230,9 +227,16 @@ useEffect(() => {
           hidden
           multiple
           accept="image/*"
-          onChange={(e) =>
-            setValue("images", e.target.files as any)
-          }
+onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = e.target.files;
+
+  if (!files) return;
+
+  setNewImages((prev) => [
+    ...prev,
+    ...Array.from(files),
+  ]);
+}}
         />
 
         <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
