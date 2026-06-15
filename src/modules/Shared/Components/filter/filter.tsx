@@ -33,43 +33,38 @@ export default function SharedFilter({
   onFilterChange,
 }: SharedFilterProps) {
   return (
-    <Box sx={{
-        display:"flex",
-        gap:2,
-         px: 2,      
-    mb: 3, 
-    }}>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 2,
+        px: 2,
+        mb: 2,
+      }}>
       <TextField
-        placeholder="Search..."
+        placeholder="Search here..."
         value={searchValue}
         sx={{
-             ...textFieldStyle,
-    flex: 2,
+          ...textFieldStyle,
+          flex: 2,
         }}
         onChange={(e) => onSearchChange(e.target.value)}
       />
 
       {filters.map((filter) => (
-        <FormControl key={filter.key}  sx={{
-             ...textFieldStyle,
-    flex: 1,
-        }}>
+        <FormControl
+          key={filter.key}
+          sx={{
+            ...textFieldStyle,
+            flex: 1,
+          }}>
           <Select
             displayEmpty
             value={values[filter.key] || ""}
-            onChange={(e) =>
-              onFilterChange(filter.key, e.target.value)
-            }
-          >
-            <MenuItem value="">
-              {filter.placeholder}
-            </MenuItem>
+            onChange={(e) => onFilterChange(filter.key, e.target.value)}>
+            <MenuItem value="">{filter.placeholder}</MenuItem>
 
             {filter.options.map((option) => (
-              <MenuItem
-                key={option.value}
-                value={option.value}
-              >
+              <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
