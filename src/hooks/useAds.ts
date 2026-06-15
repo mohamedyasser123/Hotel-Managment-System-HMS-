@@ -23,6 +23,8 @@ export function useAds() {
   const [data, setData] = useState<Ads[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
+  const [adsTotalCount, setAdsTotalCount] = useState(0);
+const [roomsTotalCount, setRoomsTotalCount] = useState(0);
 
   const [selectedAd, setSelectedAd] =
     useState<Ads | null>(null);
@@ -129,11 +131,10 @@ console.log("DELETE RESPONSE =>", response);
     }
   };
 
-  useEffect(() => {
-    getAdsList();
-    getRoomsList();
-  }, [paginationModel]);
-
+useEffect(() => {
+  getAdsList();
+  getRoomsList();
+}, [paginationModel.page, paginationModel.pageSize]);
   return {
     data,
     rooms,
