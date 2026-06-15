@@ -12,6 +12,8 @@ interface SharedTableProps<T = any> {
     pageSize: number;
   };
   onPaginationModelChange?: (model: any) => void;
+    totalCount?: number;
+
 }
 
 export default function SharedTable<T>({
@@ -19,8 +21,10 @@ export default function SharedTable<T>({
   columns,
   renderActions,
   loading,
-  paginationModel,
-  onPaginationModelChange
+  paginationModel = { page: 0, pageSize: 5 },
+  onPaginationModelChange,
+    totalCount = 0,
+
 }: SharedTableProps<T>) {
   const finalColumns: GridColDef[] = [
     ...columns,
@@ -48,12 +52,14 @@ export default function SharedTable<T>({
         rows={rows}
         columns={finalColumns}
         autoHeight
-        hideFooter
+        rowCount={totalCount}
         loading={loading}
          paginationMode="server"
   paginationModel={paginationModel}
   onPaginationModelChange={onPaginationModelChange}
   pageSizeOptions={[10, 20, 50]}
+    hideFooter={totalCount <= paginationModel.pageSize}
+
         slotProps={{
           loadingOverlay: {
             variant: "circular-progress",

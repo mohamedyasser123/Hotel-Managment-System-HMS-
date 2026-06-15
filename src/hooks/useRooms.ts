@@ -8,8 +8,11 @@ export function useRooms() {
   const [data, setData] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
-
-  
+const [paginationModel, setPaginationModel] = useState({
+  page: 0,
+  pageSize: 5,
+});
+  const [totalCount, setTotalCount] = useState(0);
 
   const {
     register,
@@ -19,20 +22,26 @@ export function useRooms() {
     formState: { errors },
   } = useForm<CreateRoomData>();
 
-  const getRoomsList = async () => {
-    setLoading(true);
-    try {
-      const response = await getRooms();
-      setData(response.data.rooms);
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.message || 
-        "Failed to fetch rooms"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+ const getRoomsList = async () => {
+  setLoading(true);
+
+  try {
+    const response = await getRooms(
+      paginationModel.page + 1,
+      paginationModel.pageSize
+    );
+
+    setData(response.data.rooms);
+setTotalCount(response.data.totalCount);
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.message ||
+      "Failed to fetch rooms"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
 const onSubmit = async (
   formData: FormData,
@@ -76,9 +85,10 @@ const onSubmit = async (
 
   useEffect(() => {
     getRoomsList();
-  }, []);
+  }, [paginationModel.page, paginationModel.pageSize]);
 
   return {
+    
     data,
     loading,
     register,
@@ -88,7 +98,10 @@ const onSubmit = async (
     reset,
     selectedRoom,
     setSelectedRoom,
+    setPaginationModel,
     setValue,
-    handleDelete
+    handleDelete,
+    paginationModel,
+    totalCount
   };
 }

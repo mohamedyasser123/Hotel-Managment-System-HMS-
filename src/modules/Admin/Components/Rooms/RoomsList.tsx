@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import SharedFilter from '../../../Shared/Components/filter/filter';
 import { useFacilities } from '../../../../hooks/useFacilities';
 export default function RoomsList() {
-  const { reset, data, setSelectedRoom, selectedRoom, handleDelete,loading } = useRooms();
+  const { reset, data, setSelectedRoom, selectedRoom, handleDelete,loading,setPaginationModel,paginationModel,totalCount } = useRooms();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -106,6 +106,7 @@ const { data: facilities } = useFacilities();
     matchesFacility
   );
 });
+
   return (
     <>
       <Dialog
@@ -262,6 +263,9 @@ const { data: facilities } = useFacilities();
         rows={filteredRows}
         columns={columns}
         loading={loading}
+         paginationModel={paginationModel}
+  onPaginationModelChange={setPaginationModel}
+  totalCount={totalCount}
         renderActions={(row) => (
           <>
             <IconButton

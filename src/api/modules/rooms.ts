@@ -1,9 +1,15 @@
 import type {  DeleteRoomResponse, GetRoomsResponse, } from "../../types/roomTypes";
 import axiosClient from "../axoisClient";
 
-export const getRooms = async (): Promise<GetRoomsResponse> => {
-    const response = await axiosClient.get("/admin/rooms");
-    return response.data;
+export const getRooms = async (
+  page: number,
+  size: number
+): Promise<GetRoomsResponse> => {
+  const response = await axiosClient.get(
+    `/admin/rooms?page=${page}&size=${size}`
+  );
+
+  return response.data;
 };
 
 export const createRoom = async (data: FormData): Promise<any> => {
