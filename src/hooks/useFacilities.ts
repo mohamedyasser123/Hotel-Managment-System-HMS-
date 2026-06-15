@@ -96,7 +96,7 @@ const handleDelete = async (id: string) => {
   
   useEffect(() => {
     getFacilitiesList();
-  }, []);
+  }, [paginationModel]);
 
   return {
   data,
