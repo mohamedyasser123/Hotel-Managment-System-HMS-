@@ -35,5 +35,6 @@ export interface GetBookingsResponse {
 
   data: {
     booking: Booking[];
+    totalCount: number;
   };
 }
