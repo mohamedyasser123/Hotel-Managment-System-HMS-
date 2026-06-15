@@ -7,6 +7,11 @@ interface SharedTableProps<T = any> {
   columns: GridColDef[];
   renderActions?: (row: T) => React.ReactNode;
   loading?: boolean;
+   paginationModel?: {
+    page: number;
+    pageSize: number;
+  };
+  onPaginationModelChange?: (model: any) => void;
 }
 
 export default function SharedTable<T>({
@@ -14,6 +19,8 @@ export default function SharedTable<T>({
   columns,
   renderActions,
   loading,
+  paginationModel,
+  onPaginationModelChange
 }: SharedTableProps<T>) {
   const finalColumns: GridColDef[] = [
     ...columns,
@@ -43,6 +50,10 @@ export default function SharedTable<T>({
         autoHeight
         hideFooter
         loading={loading}
+         paginationMode="server"
+  paginationModel={paginationModel}
+  onPaginationModelChange={onPaginationModelChange}
+  pageSizeOptions={[10, 20, 50]}
         slotProps={{
           loadingOverlay: {
             variant: "circular-progress",
