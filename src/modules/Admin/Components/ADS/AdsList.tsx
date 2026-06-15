@@ -38,6 +38,13 @@ export default function AdsList() {
   const [rowToDeleteId, setRowToDeleteId] = useState<string | null>(null);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedAdView, setSelectedAdView] = useState<any>(null);
+  
+  const [searchValue, setSearchValue] = useState("");
+  const [filters, setFilters] = useState({
+    isActive: "",
+    price: "",
+  });
+
   const {
     data,
     rooms,
@@ -53,19 +60,18 @@ export default function AdsList() {
     paginationModel,
     setPaginationModel,
     totalCount,
-  } = useAds();
-  const [searchValue, setSearchValue] = useState("");
+  } = useAds(); 
+  // 💡 تنبيه: يفضل تمرير searchValue و filters داخل useAds() لو الـ hook عندك بيدعم الـ Server filtering.
 
-  const [filters, setFilters] = useState({
-    isActive: "",
-    price: "",
-  });
+  // عند كتابة أي كلمة بحث أو تغيير الفلاتر، نرجع تلقائياً للصفحة الأولى حتى لا يحدث تعليق في الـ Pagination
+  useEffect(() => {
+    setPaginationModel((prev) => ({ ...prev, page: 0 }));
+  }, [searchValue, filters, setPaginationModel]);
+
   const rows = useMemo(() => {
     return (data ?? []).map((ad: Ads) => ({
       ...ad,
-
       id: ad._id,
-
       roomName: ad.room?.roomNumber,
       price: ad.room?.price,
       discount: ad.room?.discount,
@@ -75,59 +81,27 @@ export default function AdsList() {
   }, [data]);
 
   const columns = [
-    {
-      field: "roomName",
-      headerName: "Room Name",
-      flex: 1,
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      flex: 1,
-    },
-    {
-      field: "discount",
-      headerName: "Discount",
-      flex: 1,
-    },
-    {
-      field: "capacity",
-      headerName: "Capacity",
-      flex: 1,
-    },
-    {
-      field: "active",
-      headerName: "Active",
-      flex: 1,
-    },
+    { field: "roomName", headerName: "Room Name", flex: 1 },
+    { field: "price", headerName: "Price", flex: 1 },
+    { field: "discount", headerName: "Discount", flex: 1 },
+    { field: "capacity", headerName: "Capacity", flex: 1 },
+    { field: "active", headerName: "Active", flex: 1 },
   ];
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((row: any) => {
-      const matchesSearch =
-        !searchValue ||
-        row.roomName?.toLowerCase().includes(searchValue.toLowerCase());
-
-      const matchesActive =
-        !filters.isActive || String(row.isActive) === filters.isActive;
-
-      const matchesPrice =
-        !filters.price ||
-        (filters.price === "low" ? row.price < 2000 : row.price >= 2000);
-
-      return matchesSearch && matchesActive && matchesPrice;
-    });
-  }, [rows, searchValue, filters]);
+  /* 
+    💡 تعديل جوهري: 
+    لو الباجينيشن Server-side، بنباصي الـ rows علطول للجدول بدون فلاتر فرونت عشان الأرقام والصفحات تظبط.
+    أما لو الداتا بتجيلك كاملة مرة واحدة (Client-side)، فالمشكلة كانت في الـ totalCount اللي لازم تساوي filteredRows.length وليس totalCount القادمة من السيرفر.
+    بناءً على الكود، الإجراء الصحيح هنا هو الاعتماد على الـ Server-side مباشرة:
+  */
 
   useEffect(() => {
     if (!openModal) {
-      reset({
-        room: "",
-      } as any);
-
+      reset({ room: "" } as any);
       setSelectedAd(null);
     }
   }, [openModal, reset, setSelectedAd]);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -140,6 +114,7 @@ export default function AdsList() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
       <CrudHeader
@@ -147,14 +122,12 @@ export default function AdsList() {
         subtitle="You can check all details"
         buttonText="Add New Ads"
         onClick={() => {
-          reset({
-            room: "",
-          } as any);
-
+          reset({ room: "" } as any);
           setSelectedAd(null);
           setOpenModal(true);
         }}
       />
+      
       <SharedFilter
         searchValue={searchValue}
         onSearchChange={setSearchValue}
@@ -184,13 +157,14 @@ export default function AdsList() {
           },
         ]}
       />
+
       <SharedTable
-        rows={filteredRows}
+        rows={rows} 
         columns={columns}
         loading={loading}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        totalCount={totalCount}
+        totalCount={totalCount} // 
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row)}>
@@ -216,25 +190,23 @@ export default function AdsList() {
                   icon: <EditOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (!selectedRow) return;
-
                     setSelectedAd(selectedRow);
-
                     setValue("discount", selectedRow.discount);
-
                     setValue("isActive", selectedRow.isActive);
-
                     setOpenModal(true);
-
                     handleClose();
                   },
                 },
                 {
                   label: "Delete",
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
-onClick: () => {
-  setRowToDeleteId(row._id);
-  setOpenDeleteModal(true);
-}
+                  onClick: () => {
+                    if (selectedRow) {
+                      setRowToDeleteId(selectedRow.id);
+                      setOpenDeleteModal(true);
+                    }
+                    handleClose();
+                  },
                 },
               ]}
             />
@@ -247,41 +219,18 @@ onClick: () => {
         onClose={() => setOpenModal(false)}
         fullWidth
         maxWidth="sm"
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: "16px",
-              p: 1,
-            },
-          },
-        }}>
-        <DialogTitle
-          sx={{
-            fontWeight: 700,
-            fontSize: "28px",
-            color: "#1F263E",
-            position: "relative",
-          }}>
+        slotProps={{ paper: { sx: { borderRadius: "16px", p: 1 } } }}
+      >
+        <DialogTitle sx={{ fontWeight: 700, fontSize: "28px", color: "#1F263E", position: "relative" }}>
           {selectedAd ? "Update Ads" : "Ads"}
-
-          <IconButton
-            onClick={() => setOpenModal(false)}
-            sx={{
-              position: "absolute",
-              right: 15,
-              top: 15,
-              color: "#D92D20",
-            }}>
+          <IconButton onClick={() => setOpenModal(false)} sx={{ position: "absolute", right: 15, top: 15, color: "#D92D20" }}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-
         <DialogContent>
-          {/* Room */}
           {!selectedAd && (
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel>Room</InputLabel>
-
               <Select label="Room" defaultValue="" {...register("room")}>
                 {rooms.map((room) => (
                   <MenuItem key={room._id} value={room._id}>
@@ -291,34 +240,23 @@ onClick: () => {
               </Select>
             </FormControl>
           )}
-          {/* Discount */}
           <TextField
             fullWidth
             label="Discount"
             placeholder="Discount"
             type="number"
             sx={{ mt: 2 }}
-            {...register("discount", {
-              valueAsNumber: true,
-            })}
+            {...register("discount", { valueAsNumber: true })}
           />
-
-          {/* Active */}
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel>Active</InputLabel>
-
             <Select label="Active" defaultValue="" {...register("isActive")}>
               <MenuItem value="true">Yes</MenuItem>
               <MenuItem value="false">No</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
-
-        <DialogActions
-          sx={{
-            px: 3,
-            pb: 3,
-          }}>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button
             variant="contained"
             onClick={handleSubmit((data) =>
@@ -327,22 +265,19 @@ onClick: () => {
                 setSelectedAd(null);
               }),
             )}
-            sx={{
-              backgroundColor: "#203FC7",
-              textTransform: "none",
-              borderRadius: "8px",
-              px: 4,
-            }}>
+            sx={{ backgroundColor: "#203FC7", textTransform: "none", borderRadius: "8px", px: 4 }}
+          >
             {selectedAd ? "Update" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* مودال التأكيد على الحذف */}
       <DeleteConfirmation
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
         onConfirm={() => {
           if (!rowToDeleteId) return;
-
           handleDelete(rowToDeleteId);
           setOpenDeleteModal(false);
           setRowToDeleteId(null);
@@ -350,143 +285,55 @@ onClick: () => {
         itemName="Ads"
       />
 
+      {/* مودال العرض */}
       <Dialog
         open={openViewModal}
         onClose={() => setOpenViewModal(false)}
         fullWidth
         maxWidth="sm"
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: "16px",
-              p: 1,
-            },
-          },
-        }}>
-        <DialogTitle
-          sx={{
-            fontWeight: 600,
-            color: "#1F263E",
-            fontSize: "18px",
-            pb: 2,
-            borderBottom: "1px solid #E2E5EB",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}>
+        slotProps={{ paper: { sx: { borderRadius: "16px", p: 1 } } }}
+      >
+        <DialogTitle sx={{ fontWeight: 600, color: "#1F263E", fontSize: "18px", pb: 2, borderBottom: "1px solid #E2E5EB", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           Ads Details
-          <Chip
-            label={selectedAdView?.isActive ? "Active" : "Inactive"}
-            color={selectedAdView?.isActive ? "success" : "error"}
-            size="small"
-            sx={{ fontWeight: 600, borderRadius: "6px" }}
-          />
+          <Chip label={selectedAdView?.isActive ? "Active" : "Inactive"} color={selectedAdView?.isActive ? "success" : "error"} size="small" sx={{ fontWeight: 600, borderRadius: "6px" }} />
         </DialogTitle>
-
         <DialogContent sx={{ mt: 3, pb: 2 }}>
-          {/* ROOM HEADER */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 2,
-              mb: 4,
-              backgroundColor: "#F8F9FB",
-              p: 2,
-              borderRadius: "12px",
-            }}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2, mb: 4, backgroundColor: "#F8F9FB", p: 2, borderRadius: "12px" }}>
             <Box>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: 700, color: "#1F263E" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, color: "#1F263E" }}>
                 Room #{selectedAdView?.room?.roomNumber || "N/A"}
               </Typography>
-
               <Typography variant="body2" sx={{ color: "#718096" }}>
                 Capacity: {selectedAdView?.room?.capacity || 0}
               </Typography>
             </Box>
-
-            <Chip
-              label={`${selectedAdView?.room?.price || 0} EGP`}
-              sx={{
-                fontWeight: 600,
-                backgroundColor: "#203FC7",
-                color: "#fff",
-              }}
-            />
+            <Chip label={`${selectedAdView?.room?.price || 0} EGP`} sx={{ fontWeight: 600, backgroundColor: "#203FC7", color: "#fff" }} />
           </Box>
-
-          {/* DETAILS GRID */}
           <Grid container spacing={3}>
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>
-                Price
-              </Typography>
-              <Typography sx={{ fontWeight: 600 }}>
-                {selectedAdView?.room?.price || 0} EGP
-              </Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>Price</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.room?.price || 0} EGP</Typography>
             </Grid>
-
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>
-                Discount
-              </Typography>
-              <Typography sx={{ fontWeight: 600 }}>
-                {selectedAdView?.room?.discount || 0}%
-              </Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>Discount</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.room?.discount || 0}%</Typography>
             </Grid>
-
             <Grid size={12}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>
-                Active Status
-              </Typography>
-              <Typography sx={{ fontWeight: 600 }}>
-                {selectedAdView?.isActive ? "Yes" : "No"}
-              </Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>Active Status</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.isActive ? "Yes" : "No"}</Typography>
             </Grid>
-
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>
-                Created At
-              </Typography>
-              <Typography sx={{ fontWeight: 600 }}>
-                {selectedAdView?.createdAt
-                  ? new Date(selectedAdView.createdAt).toLocaleDateString(
-                      "en-GB",
-                    )
-                  : "N/A"}
-              </Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>Created At</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.createdAt ? new Date(selectedAdView.createdAt).toLocaleDateString("en-GB") : "N/A"}</Typography>
             </Grid>
-
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>
-                Updated At
-              </Typography>
-              <Typography sx={{ fontWeight: 600 }}>
-                {selectedAdView?.updatedAt
-                  ? new Date(selectedAdView.updatedAt).toLocaleDateString(
-                      "en-GB",
-                    )
-                  : "N/A"}
-              </Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>Updated At</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.updatedAt ? new Date(selectedAdView.updatedAt).toLocaleDateString("en-GB") : "N/A"}</Typography>
             </Grid>
           </Grid>
         </DialogContent>
-
         <DialogActions sx={{ p: 2, borderTop: "1px solid #F0F2F5", mt: 2 }}>
-          <Button
-            onClick={() => setOpenViewModal(false)}
-            variant="contained"
-            sx={{
-              backgroundColor: "#203FC7",
-              color: "#fff",
-              textTransform: "none",
-              borderRadius: "8px",
-              px: 4,
-              "&:hover": { backgroundColor: "#1730A3" },
-            }}>
+          <Button onClick={() => setOpenViewModal(false)} variant="contained" sx={{ backgroundColor: "#203FC7", color: "#fff", textTransform: "none", borderRadius: "8px", px: 4, "&:hover": { backgroundColor: "#1730A3" } }}>
             Close
           </Button>
         </DialogActions>
