@@ -18,6 +18,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CrudHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
+import SharedFilter from "../../../Shared/Components/filter/filter";
 
 export default function FacilitiesList() {
   const [openModal, setOpenModal] = useState(false);
@@ -27,6 +28,7 @@ export default function FacilitiesList() {
   const [facilityToDelete, setFacilityToDelete] = useState<Facility | null>(
     null,
   );
+  const [searchValue, setSearchValue] = useState("");
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>, row: Facility) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +51,9 @@ export default function FacilitiesList() {
     setSelectedFacility,
     setValue,
     handleDelete,
+    paginationModel,
+    totalCount,
+    setPaginationModel,
   } = useFacilities();
 
   const rows = useMemo(() => {
@@ -68,6 +73,14 @@ export default function FacilitiesList() {
     { field: "updatedAt", headerName: "Updated At", flex: 1 },
   ];
 
+  const filteredRows = rows.filter((facility: any) => {
+    const matchesSearch =
+      !searchValue ||
+      facility.name.toLowerCase().includes(searchValue.toLowerCase());
+
+    return matchesSearch;
+  });
+
   useEffect(() => {
     if (!openModal) {
       setSelectedFacility(null);
@@ -83,7 +96,6 @@ export default function FacilitiesList() {
         buttonText="Add New Facilities"
         onClick={() => {
           setSelectedFacility(null);
-
           reset({
             name: "",
           });
@@ -92,10 +104,21 @@ export default function FacilitiesList() {
         }}
       />
 
+      <SharedFilter
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        filters={[]}
+        values={{}}
+        onFilterChange={() => {}}
+      />
+
       <SharedTable
-        rows={rows}
+        rows={filteredRows}
         loading={loading}
         columns={columns}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        totalCount={totalCount}
         renderActions={(row) => (
           <>
             <IconButton onClick={(event) => handleOpen(event, row as any)}>
