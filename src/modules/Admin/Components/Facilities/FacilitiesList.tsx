@@ -96,7 +96,6 @@ export default function FacilitiesList() {
         buttonText="Add New Facilities"
         onClick={() => {
           setSelectedFacility(null);
-
           reset({
             name: "",
           });
