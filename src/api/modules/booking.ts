@@ -3,10 +3,11 @@ import axiosClient from "../axoisClient";
 
 
 export const getBookingList =
-  async (): Promise<GetBookingsResponse> => {
+  async (page: number,size:number): Promise<GetBookingsResponse> => {
     const response = await axiosClient.get(
-      "/admin/booking"
+      `/admin/booking?page=${page}&size=${size}`
     );
 
     return response.data;
   };
+
