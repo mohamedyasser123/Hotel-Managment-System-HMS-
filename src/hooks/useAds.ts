@@ -23,9 +23,17 @@ export function useAds() {
   const [data, setData] = useState<Ads[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
+  const [adsTotalCount, setAdsTotalCount] = useState(0);
+const [roomsTotalCount, setRoomsTotalCount] = useState(0);
 
   const [selectedAd, setSelectedAd] =
     useState<Ads | null>(null);
+
+    const [paginationModel, setPaginationModel] = useState({
+  page: 0,
+  pageSize: 5,
+});
+ const [totalCount, setTotalCount] = useState(0);
 
   const {
     register,
@@ -40,11 +48,16 @@ export function useAds() {
     setLoading(true);
 
     try {
-      const response = await getAds();
+      const response = await getAds(
+                  paginationModel.page + 1,
+        paginationModel.pageSize
+      );
 
       console.log(response);
 
       setData(response.data.ads);
+            setTotalCount(response.data.totalCount);
+
     } finally {
       setLoading(false);
     }
@@ -53,11 +66,10 @@ export function useAds() {
   // GET ROOMS
   const getRoomsList = async () => {
     try {
-      const response = await getRooms();
-
-      console.log(response);
-
+      const response = await getRooms(                  paginationModel.page + 1,
+        paginationModel.pageSize);
       setRooms(response.data.rooms);
+      setTotalCount(response.data.totalCount);
     } catch (error) {
       console.log(error);
     }
@@ -119,11 +131,10 @@ console.log("DELETE RESPONSE =>", response);
     }
   };
 
-  useEffect(() => {
-    getAdsList();
-    getRoomsList();
-  }, []);
-
+useEffect(() => {
+  getAdsList();
+  getRoomsList();
+}, [paginationModel.page, paginationModel.pageSize]);
   return {
     data,
     rooms,
@@ -137,5 +148,8 @@ console.log("DELETE RESPONSE =>", response);
     setSelectedAd,
     setValue,
     handleDelete,
+    paginationModel,
+    setPaginationModel,
+    totalCount
   };
 }
