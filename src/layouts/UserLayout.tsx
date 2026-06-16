@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from '../modules/Shared/Components/Navbar/Navbar'
 import { Outlet } from 'react-router-dom'
 import Footer from '../modules/Shared/Components/Footer/Footer'
@@ -11,19 +10,12 @@ export default function UserLayout() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
+        width:"80%",
+        margin:"0 auto"
       }}
     >
       <Navbar />
-
-      <Box
-        component="main"
-        sx={{
-          flex: 1,
-        }}
-      >
-        <Outlet />
-      </Box>
-
+      <Outlet />
       <Footer />
     </Box>
   );
