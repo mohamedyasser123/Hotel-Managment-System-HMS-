@@ -39,7 +39,6 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-password", element: <ForgotPassword /> },
@@ -57,7 +56,6 @@ function App() {
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard /> },
         { path: "dashboard", element: <Dashboard /> },
          { path: "user-list", element: <UsersList /> },
           { path: "room-list", element: <RoomsList /> },
@@ -67,22 +65,33 @@ function App() {
             { path: "facilities-list", element: <FacilitiesList /> },
       ],
     },
+   {
+  path: "/",
+  element: <UserLayout />,
+  children: [
+    { index: true, element: <LandingPage /> },
+    { path: "home", element: <LandingPage /> },
+     { path: "explpore", element: <Explore /> },
     {
-      path: "home",
-      element: (
-           <ProtectedRoute allowedRoles={["user"]}>
-   <UserLayout />
-           </ProtectedRoute>
-      ),
+  path: "favorites",
+  element: (
+    <ProtectedRoute allowedRoles={["user"]}>
+      <Favorites />
+    </ProtectedRoute>
+  ),
+},
+{
+  path: "payment",
+  element: (
+    <ProtectedRoute allowedRoles={["user"]}>
+      <Payment />
+    </ProtectedRoute>
+  ),
+},
+    { path: "detailes", element: <DetailsPage /> },
    
-      errorElement: <NotFound />,
-      children: [{ index: true, element: <LandingPage /> },
-        {path: "detailes", element: <DetailsPage /> },
-        {path: "explpore", element: <Explore /> },
-        {path: "favorites", element: <Favorites /> },
-        {path: "payment", element: <Payment /> },
-      ],
-    },
+  ],
+}
   ]);
   return (
     <>
