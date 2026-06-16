@@ -1,23 +1,19 @@
 import { Box } from '@mui/material'
+import HeroSection from "./HeroSection/HeroSection";
 export default function LandingPage() {
   return (
-   <Box
-  sx={{
-    p: 3,
-  }}
->
-{/* hero */}
+    <Box>
+      {/* hero */}
+      <HeroSection  />
+      {/* most pouplar */}
 
-{/* most pouplar */}
+      {/* house slider */}
 
-{/* house slider */}
+      {/* hotel slider */}
 
-{/* hotel slider */}
+      {/* ads section */}
 
-{/* ads section */}
-
-{/* review section */}
-
-</Box>
-  )
+      {/* review section */}
+    </Box>
+  );
 }
