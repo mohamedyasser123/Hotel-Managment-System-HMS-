@@ -1,19 +1,35 @@
 import {
   Box,
   Typography,
-  InputAdornment,
   IconButton,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import heroImg from "../../../../../assets/images/hero.png";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useExploreRooms } from "../../../../../hooks/portal/useExploreRooms";
 
 export default function HeroSection() {
-  const [dateRange, setDateRange] = useState<[any, any]>([null, null]);
+  const navigate = useNavigate();
+  const { capacity, setDates, increase, decrease, loading, dateRange } = useExploreRooms();
+  
+  const handleExplore = () => {
+    if (!dateRange[0] || !dateRange[1]) {
+      toast.warning("Please select date range");
+      return;
+    }
+
+    const startDate = dateRange[0].toISOString();
+    const endDate = dateRange[1].toISOString();
+
+    navigate(
+      `/explore?startDate=${startDate}&endDate=${endDate}&capacity=${capacity}`,
+    );
+  };
 
   return (
     <Box
@@ -65,7 +81,7 @@ export default function HeroSection() {
           {/* DATE PICKER */}
           <DateRangePicker
             value={dateRange}
-            onChange={(newValue) => setDateRange(newValue)}
+            onChange={(newValue) => setDates(newValue)}
             format="DD MMM"
             slotProps={{
               textField: {
@@ -119,6 +135,7 @@ export default function HeroSection() {
               overflow: "hidden",
             }}>
             <IconButton
+              onClick={decrease}
               disableRipple
               sx={{
                 width: "45px",
@@ -144,10 +161,11 @@ export default function HeroSection() {
                 color: "#152C5B",
                 fontWeight: 600,
               }}>
-              person
+              {capacity}
             </Box>
 
             <IconButton
+              onClick={increase}
               disableRipple
               sx={{
                 width: "45px",
@@ -166,6 +184,8 @@ export default function HeroSection() {
           {/* BUTTON */}
           <Button
             variant="contained"
+            disabled={loading}
+            onClick={handleExplore}
             sx={{
               mt: 4,
               backgroundColor: "#3252DF",
@@ -175,7 +195,11 @@ export default function HeroSection() {
               py: 1,
               fontWeight: 600,
             }}>
-            Explore
+            {loading ? (
+              <CircularProgress size={22} sx={{ color: "#fff" }} />
+            ) : (
+              "Explore"
+            )}
           </Button>
         </Box>
       </Box>
