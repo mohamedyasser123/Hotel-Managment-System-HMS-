@@ -1,190 +1,115 @@
-import { Box, Breadcrumbs, Typography, Link as MuiLink, CircularProgress, Grid, Pagination } from '@mui/material'
-import React, { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import usePortalExplore from '../../../../hooks/portal/usePortalExplore';
+import { useSearchParams } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Card,
+  CardContent,
+} from "@mui/material";
+import usePortalExplore from "../../../../hooks/portal/usePortalExplore";
+import Grid from "@mui/material/Grid";
 
-export default function Explore() {
-    const [page, setPage] = useState(1);
-    const pageSize = 10;
-    const params = {
-        page: page,
-        size: pageSize,
-        startDate: "2023-01-20",
-        endDate: "2023-01-30"
-    };
+export default function ExploreComponent() {
+  const [searchParams] = useSearchParams();
 
-    const { data, isLoading, error } = usePortalExplore(params);
-    const totalCount = data?.data.totalCount || 0;
-    const pageCount = Math.ceil(totalCount / pageSize);
+  const startDate = searchParams.get("startDate") || undefined;
+  const endDate = searchParams.get("endDate") || undefined;
+  const capacity = searchParams.get("capacity")
+    ? Number(searchParams.get("capacity"))
+    : undefined;
 
-    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
-    };
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+  const size = searchParams.get("size") ? Number(searchParams.get("size")) : 10;
+
+  const { data, isLoading, error } = usePortalExplore({
+    startDate,
+    endDate,
+    capacity,
+    page,
+    size,
+  });
+
+  if (isLoading) {
     return (
-        <Box
-            sx={{
-                py: 8,
-                px: { xs: 2, sm: 4 },
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
-        >
-            <Typography
-                variant="h3"
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "60vh",
+        }}>
+        <CircularProgress size={50} sx={{ color: "#3252DF" }} />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 4, textAlign: "center" }}>
+        <Typography color="error" variant="h6">
+          Something went wrong while fetching rooms. Please try again.
+        </Typography>
+      </Box>
+    );
+  }
+
+  const roomsList = data?.data?.rooms || [];
+
+  return (
+    <Box sx={{ py: 6, px: 4 }}>
+      <Typography
+        variant="h4"
+        sx={{ color: "#152C5B", fontWeight: 700, mb: 4 }}>
+        Available Rooms For You
+      </Typography>
+
+      {roomsList.length === 0 ? (
+        <Typography
+          sx={{
+            color: "#B0B0B0",
+            fontSize: "18px",
+            textAlign: "center",
+            mt: 4,
+          }}>
+          No rooms available matching your select criteria. Try changing dates
+          or capacity.
+        </Typography>
+      ) : (
+        <Grid container spacing={4}>
+          {roomsList.map((room: any) => (
+            <Grid key={room._id} size={{ xs: 12, sm: 6, md: 4 }}>
+              <Card
                 sx={{
-                    my: 4,
-                    fontWeight: 700,
-                    color: "#152C5B",
-                    textAlign: "center",
-                    fontSize: { xs: '2rem', sm: '3rem' }
-                }}
-            >
-                Explore Places
-            </Typography>
-            <Breadcrumbs separator="/" aria-label="breadcrumb" sx={{ alignSelf: "flex-start", }}>
-
-                <MuiLink<typeof RouterLink>
-                    component={RouterLink}
-                    to="/"
-                    underline="none"
-                    sx={{
-                        color: "#B0B0B0",
-                        fontSize: 16,
-                    }}
-                >
-                    Home
-                </MuiLink>
-
-                <Typography
-                    sx={{
-                        color: "#152C5B",
-                        fontWeight: 500,
-                        fontSize: 16,
-                    }}
-                >
-                    Explore
-                </Typography>
-            </Breadcrumbs>
-            <Typography
-                sx={{
-                    color: "#152C5B",
-                    fontWeight: 500,
-                    fontSize: 16,
-                    my: 6,
-                    alignSelf: "flex-start"
-                }}
-            >
-                All Rooms
-            </Typography>
-            {isLoading && <CircularProgress sx={{ my: 4 }} />}
-            {error && <Typography color="error" sx={{ my: 4 }}>Something Went wrong</Typography>}
-            <Grid container spacing={4} sx={{ width: '100%', justifyContent: 'flex-start' }}>
-                {data?.data.rooms.map((room) => {
-                    const cardImage = room.images && room.images.length > 0
-                        ? room.images[0]
-                        : 'https://via.placeholder.com/361x215?text=No+Image';
-
-                    return (
-                        <Grid key={room._id} size={{ xs: 6, sm: 6, md: 4, lg: 3 }}>
-                            <Box
-                                sx={{
-                                    width: '100%',
-                                    maxHeight: 215,
-                                    aspectRatio: '361/215',
-                                    borderRadius: '15px',
-                                    overflow: 'hidden',
-                                    position: 'relative',
-                                    backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%), url(${cardImage})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'flex-end',
-                                    padding: { xs: '10px', sm: '16px' },
-                                    boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
-                                    cursor: 'pointer',
-                                    transition: 'transform 0.2s ease-in-out',
-                                    '&:hover': {
-                                        transform: 'scale(1.02)',
-                                    },
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        right: 0,
-                                        backgroundColor: '#FF498B',
-                                        color: '#fff',
-                                        padding: { xs: '4px 10px', sm: '8px 24px' },
-                                        borderBottomLeftRadius: '15px',
-                                        fontWeight: 500,
-                                        fontSize: { xs: '10px', sm: '16px' },
-                                        lineHeight: 1.2,
-                                    }}
-                                >
-                                    ${room.price}
-                                    <Box
-                                        component="span"
-                                        sx={{
-                                            fontWeight: 300,
-                                            fontSize: { xs: '6px', sm: '14px' }
-                                        }}
-                                    >
-                                        per night
-                                    </Box>
-                                </Box>
-
-                                <Box sx={{ color: '#fff', textAlign: 'left', pt: { xs: 2, sm: 0 } }}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{
-                                            fontWeight: 500,
-                                            fontSize: { xs: '13px', sm: '20px' },
-                                            lineHeight: 1.2,
-                                            mb: '4px',
-                                            textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
-                                            whiteSpace: 'nowrap',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            width: '85%',
-                                        }}
-                                    >
-                                        {room.roomNumber === "701" ? "Ocean Land" : `Room ${room.roomNumber}`}
-                                    </Typography>
-
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            fontWeight: 300,
-                                            fontSize: '14px',
-                                            color: 'rgba(255, 255, 255, 0.8)',
-                                            textShadow: '1px 1px 3px rgba(0,0,0,0.5)',
-                                        }}
-                                    >
-                                        Bandung, Indonesia
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Grid>
-                    );
-                })}
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+                }}>
+                {room.images?.[0] && (
+                  <Box
+                    component="img"
+                    src={room.images[0]}
+                    alt={room.roomNumber}
+                    sx={{ width: "100%", height: "200px", objectFit: "cover" }}
+                  />
+                )}
+                <CardContent>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#152C5B", fontWeight: 600 }}>
+                    Room: {room.roomNumber}
+                  </Typography>
+                  <Typography sx={{ color: "#B0B0B0", mt: 1 }}>
+                    Capacity: {room.capacity}{" "}
+                    {room.capacity > 1 ? "people" : "person"}
+                  </Typography>
+                  <Typography sx={{ color: "#3252DF", fontWeight: 700, mt: 1 }}>
+                    ${room.price} / night
+                  </Typography>
+                </CardContent>
+              </Card>
             </Grid>
-            {pageCount > 1 && (
-                <Box sx={{ mt: 6, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Pagination
-                        count={pageCount}
-                        page={page}
-                        onChange={handlePageChange}
-                        variant="outlined"
-                        shape="rounded"
-                        color="primary"
-                        size="large"
-                    />
-                </Box>
-            )}
-
-        </Box>
-    )
+          ))}
+        </Grid>
+      )}
+    </Box>
+  );
 }
