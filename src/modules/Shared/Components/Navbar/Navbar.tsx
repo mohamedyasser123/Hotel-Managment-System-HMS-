@@ -129,6 +129,7 @@ export default function Navbar() {
                   sx={{
                     bgcolor: "#3252DF",
                     textTransform: "none",
+                    color:"#fff !important",
                     px: 3,
                     borderRadius: 2,
                     "&:hover": { backgroundColor: "#2441c7" },
@@ -142,6 +143,8 @@ export default function Navbar() {
                   variant="contained"
                   sx={{
                     bgcolor: "#3252DF",
+                    color:"#fff !important",
+                    
                     textTransform: "none",
                     px: 3,
                     borderRadius: 2,
