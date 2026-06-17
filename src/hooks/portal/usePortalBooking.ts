@@ -8,43 +8,50 @@ export  function usePortalBooking(roomId?: string) {
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  // CAPACITY HANDLERS
+  // CAPACITY
   const increase = () => setCapacity((prev) => prev + 1);
   const decrease = () =>
     setCapacity((prev) => (prev > 1 ? prev - 1 : 1));
 
-  // DATE HANDLER
+  // DATE 
   const setDates = (value: [any, any]) => {
     setDateRange(value);
   };
 
   // CREATE BOOKING 
-  const createBooking = async () => {
-    try {
-          if (!roomId) {
-      throw new Error("roomId is missing");
+const createBooking = async () => {
+  if (!roomId) throw new Error("Room not found");
+  if (loading) return;
+
+  setLoading(true);
+  setError(null);
+
+  try {
+    const startDate = dateRange[0]?.toISOString();
+    const endDate = dateRange[1]?.toISOString();
+
+    if (!startDate || !endDate) {
+      throw new Error("Please select date range");
     }
-      setLoading(true);
-      setError(null);
 
-      const payload = {
-        startDate: dateRange?.[0]?.toISOString(),
-        endDate: dateRange?.[1]?.toISOString(),
-        capacity,
-        room: roomId,
-      };
-      const response = await apiCreateBooking(payload);
-      setData(response);
+    const payload = {
+      startDate,
+      endDate,
+      capacity,
+      room: roomId,
+    };
 
-      return response;
-    } catch (err) {
-      setError(err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
+    const response = await apiCreateBooking(payload);
+    setData(response);
 
+    return response;
+  } catch (err) {
+    setError(err);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
   return {
     dateRange,
     capacity,

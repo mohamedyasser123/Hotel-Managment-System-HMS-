@@ -71,7 +71,7 @@ function App() {
   children: [
     { index: true, element: <LandingPage /> },
     { path: "home", element: <LandingPage /> },
-     { path: "explpore", element: <Explore /> },
+     { path: "explore", element: <Explore /> },
     {
   path: "favorites",
   element: (
