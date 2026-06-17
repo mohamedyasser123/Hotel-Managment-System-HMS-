@@ -11,12 +11,14 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import heroImg from "../../../../../assets/images/hero.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useExploreRooms } from "../../../../../hooks/portal/useExploreRooms";
+import useRoomFilters from "../../../../../hooks/portal/useRoomFilters";
 
 export default function HeroSection() {
+  const { dateRange, setDateRange, capacity, increase, decrease } =
+    useRoomFilters();
+
   const navigate = useNavigate();
-  const { capacity, setDates, increase, decrease, loading, dateRange } = useExploreRooms();
-  
+
   const handleExplore = () => {
     if (!dateRange[0] || !dateRange[1]) {
       toast.warning("Please select date range");
@@ -39,12 +41,27 @@ export default function HeroSection() {
         justifyContent: "space-between",
         gap: 8,
         py: 8,
+
+        flexDirection: { xs: "column", md: "row" },
+        textAlign: { xs: "center", md: "left" },
       }}>
       {/* LEFT */}
-      <Box sx={{ flex: 1 }}>
+      <Box
+        sx={{
+          flex: 1,
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: { xs: "center", md: "flex-start" },
+        }}>
         <Typography
           sx={{
-            fontSize: "42px",
+            fontSize: {
+              xs: "26px",
+              sm: "30px",
+              md: "36px",
+              lg: "42px",
+            },
             fontWeight: 700,
             color: "#152C5B",
             lineHeight: 1.3,
@@ -68,7 +85,14 @@ export default function HeroSection() {
         </Typography>
 
         {/* BOOKING */}
-        <Box sx={{ mt: 5 }}>
+        <Box
+          sx={{
+            mt: 5,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: { xs: "center", md: "flex-start" },
+            width: "100%",
+          }}>
           <Typography
             sx={{
               color: "#152C5B",
@@ -81,14 +105,15 @@ export default function HeroSection() {
           {/* DATE PICKER */}
           <DateRangePicker
             value={dateRange}
-            onChange={(newValue) => setDates(newValue)}
+            onChange={(newValue) => setDateRange(newValue)}
             format="DD MMM"
             slotProps={{
               textField: {
                 fullWidth: true,
                 sx: {
                   mb: 3,
-                  maxWidth: "400px",
+                  maxWidth: { xs: "100%", md: "400px" },
+                  width: "100%",
 
                   "& .MuiInputBase-root": {
                     backgroundColor: "#F5F6F8 !important",
@@ -104,12 +129,6 @@ export default function HeroSection() {
                     WebkitTextFillColor: "#152C5B !important",
                     fontWeight: "600 !important",
                     textAlign: "center",
-                  },
-
-                  "& .MuiBox-root, & .MuiTypography-root": {
-                    color: "#152C5B !important",
-                    fontWeight: "600 !important",
-                    mx: 1,
                   },
                 },
               },
@@ -130,7 +149,8 @@ export default function HeroSection() {
             sx={{
               display: "flex",
               alignItems: "center",
-              maxWidth: "320px",
+              width: { xs: "100%", md: "320px" },
+              justifyContent: "center",
               borderRadius: "8px",
               overflow: "hidden",
             }}>
@@ -143,9 +163,6 @@ export default function HeroSection() {
                 borderRadius: 0,
                 backgroundColor: "#E74C3C",
                 color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#E74C3C",
-                },
               }}>
               <RemoveIcon />
             </IconButton>
@@ -173,9 +190,6 @@ export default function HeroSection() {
                 borderRadius: 0,
                 backgroundColor: "#1ABC9C",
                 color: "#fff",
-                "&:hover": {
-                  backgroundColor: "#1ABC9C",
-                },
               }}>
               <AddIcon />
             </IconButton>
@@ -183,11 +197,11 @@ export default function HeroSection() {
 
           {/* BUTTON */}
           <Button
-            variant="contained"
-            disabled={loading}
             onClick={handleExplore}
+            variant="contained"
             sx={{
               mt: 4,
+              width: { xs: "100%", md: "auto" },
               backgroundColor: "#3252DF",
               textTransform: "none",
               borderRadius: "8px",
@@ -195,17 +209,18 @@ export default function HeroSection() {
               py: 1,
               fontWeight: 600,
             }}>
-            {loading ? (
-              <CircularProgress size={22} sx={{ color: "#fff" }} />
-            ) : (
-              "Explore"
-            )}
+            Explore
           </Button>
         </Box>
       </Box>
 
       {/* RIGHT IMAGE */}
-      <Box sx={{ flex: 1 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: { xs: "none", md: "flex" },
+          justifyContent: "center",
+        }}>
         <Box
           component="img"
           src={heroImg}

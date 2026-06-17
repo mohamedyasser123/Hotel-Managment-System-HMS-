@@ -24,8 +24,9 @@ export interface Room {
 export interface GetAvailableRoomsParams {
   page: number;
   size: number;
-  startDate: string; 
-  endDate: string; 
+  startDate?: string; 
+  endDate?: string; 
+    capacity?: number;
 }
 
 export interface AvailableRoomsResponse {
