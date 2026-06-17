@@ -5,6 +5,7 @@ import {
   CircularProgress,
   IconButton,
   Grid,
+  Pagination,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -14,7 +15,7 @@ import { Breadcrumbs, Link as MuiLink } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 export default function ExploreComponent() {
-  const [searchParams] = useSearchParams();
+const [searchParams, setSearchParams] = useSearchParams();
 
   const startDate = searchParams.get("startDate") || undefined;
   const endDate = searchParams.get("endDate") || undefined;
@@ -22,8 +23,10 @@ export default function ExploreComponent() {
     ? Number(searchParams.get("capacity"))
     : undefined;
 
-  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
-  const size = searchParams.get("size") ? Number(searchParams.get("size")) : 10;
+const page =
+  searchParams.get("page")
+    ? Number(searchParams.get("page"))
+    : 1;  const size = searchParams.get("size") ? Number(searchParams.get("size")) : 10;
 
   const { data, isLoading, error } = usePortalExplore({
     startDate,
@@ -32,6 +35,16 @@ export default function ExploreComponent() {
     page,
     size,
   });
+const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handlePageChange = (
+  _: React.ChangeEvent<unknown>,
+  value: number
+) => {
+  const params = new URLSearchParams(searchParams);
+
+  params.set("page", value.toString());
+
+  setSearchParams(params);
+};
 
   if (isLoading) {
     return (
@@ -220,6 +233,27 @@ export default function ExploreComponent() {
           ))}
         </Grid>
       )}
+      {pageCount > 1 && (
+  <Box
+    sx={{
+      mt: 6,
+      display: "flex",
+      justifyContent: "center",
+      width: "100%",
+    }}
+  >
+    <Pagination
+      count={pageCount}
+      page={page}
+      onChange={handlePageChange}
+      variant="outlined"
+      shape="rounded"
+      color="primary"
+      size="large"
+    />
+  </Box>
+)}
+
     </Box>
   );
 }
