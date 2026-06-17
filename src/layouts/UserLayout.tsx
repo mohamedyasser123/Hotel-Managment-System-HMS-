@@ -10,12 +10,12 @@ export default function UserLayout() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        width:"80%",
-        margin:"0 auto"
-      }}
-    >
+        alignItems: "center",
+      }}>
       <Navbar />
-      <Outlet />
+      <Box sx={{ width: "80%", margin: "0 auto", flex: 1 }}>
+        <Outlet />
+      </Box>
       <Footer />
     </Box>
   );
