@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -13,20 +13,23 @@ import usePortalExplore from "../../../../hooks/portal/usePortalExplore";
 import { Breadcrumbs, Link as MuiLink } from "@mui/material";
 
 import { Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ExploreComponent() {
-const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const startDate = searchParams.get("startDate") || undefined;
   const endDate = searchParams.get("endDate") || undefined;
   const capacity = searchParams.get("capacity")
     ? Number(searchParams.get("capacity"))
     : undefined;
-
-const page =
-  searchParams.get("page")
-    ? Number(searchParams.get("page"))
-    : 1;  const size = searchParams.get("size") ? Number(searchParams.get("size")) : 10;
+    const navigate=useNavigate()
+  const { t, i18n } = useTranslation("user");
+  const isRTL = i18n.language === "ar";
+  const page =
+    searchParams.get("page")
+      ? Number(searchParams.get("page"))
+      : 1; const size = searchParams.get("size") ? Number(searchParams.get("size")) : 10;
 
   const { data, isLoading, error } = usePortalExplore({
     startDate,
@@ -35,16 +38,16 @@ const page =
     page,
     size,
   });
-const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handlePageChange = (
-  _: React.ChangeEvent<unknown>,
-  value: number
-) => {
-  const params = new URLSearchParams(searchParams);
+  const pageCount = Math.ceil((data?.data?.totalCount || 0) / size); const handlePageChange = (
+    _: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    const params = new URLSearchParams(searchParams);
 
-  params.set("page", value.toString());
+    params.set("page", value.toString());
 
-  setSearchParams(params);
-};
+    setSearchParams(params);
+  };
 
   if (isLoading) {
     return (
@@ -64,7 +67,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
     return (
       <Box sx={{ p: 4, textAlign: "center" }}>
         <Typography color="error" variant="h6">
-          Something went wrong while fetching rooms. Please try again.
+          {t("explorePage.errorFetching", "Something went wrong while fetching rooms. Please try again.")}
         </Typography>
       </Box>
     );
@@ -73,7 +76,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
   const roomsList = data?.data?.rooms || [];
 
   return (
-    <Box sx={{ py: 6, px: 4 }}>
+    <Box sx={{ py: 6, px: 4 }} dir={isRTL ? "rtl" : "ltr"}>
       <Breadcrumbs separator="/" aria-label="breadcrumb" sx={{ mb: 2 }}>
         <MuiLink
           component={RouterLink}
@@ -83,7 +86,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
             color: "#B0B0B0",
             fontSize: "16px",
           }}>
-          Home
+          {t("navbar.home")}
         </MuiLink>
 
         <Typography
@@ -92,7 +95,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
             fontWeight: 500,
             fontSize: "16px",
           }}>
-          Explore
+          {t("navbar.explore")}
         </Typography>
       </Breadcrumbs>
 
@@ -107,8 +110,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
             md: "36px",
           },
         }}>
-        Explore All Rooms
-      </Typography>
+        {t("explorePage.title", "Explore All Rooms")}      </Typography>
 
       {roomsList.length === 0 ? (
         <Typography
@@ -118,8 +120,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
             textAlign: "center",
             mt: 4,
           }}>
-          No rooms available matching your select criteria. Try changing dates
-          or capacity.
+          {t("explorePage.noRooms", "No rooms available matching your select criteria. Try changing dates or capacity.")}
         </Typography>
       ) : (
         <Grid container spacing={4}>
@@ -158,12 +159,13 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
                 <Box
                   sx={{
                     position: "absolute",
-                    top: 0,
-                    right: 0,
+                    right: isRTL ? "auto" : 0,
+                    left: isRTL ? 0 : "auto",
+                    borderBottomLeftRadius: isRTL ? 0 : "16px",
+                    borderBottomRightRadius: isRTL ? "16px" : 0,
                     backgroundColor: "#FF4D80",
                     color: "#fff",
                     padding: "8px 24px",
-                    borderBottomLeftRadius: "16px",
                     fontWeight: 500,
                     fontSize: "14px",
                     zIndex: 3,
@@ -172,7 +174,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
                   <Box
                     component="span"
                     sx={{ fontWeight: 300, fontSize: "12px" }}>
-                    per night
+                    {t("explorePage.perNight", "per night")}
                   </Box>
                 </Box>
 
@@ -195,7 +197,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
                     <FavoriteIcon sx={{ fontSize: "28px" }} />
                   </IconButton>
                   <IconButton sx={{ color: "#fff" }}>
-                    <VisibilityIcon sx={{ fontSize: "28px" }} />
+                    <VisibilityIcon  onClick={() => navigate(`/detailes/${room._id}`)} sx={{ fontSize: "28px" }} />
                   </IconButton>
                 </Box>
 
@@ -214,7 +216,7 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
                   }}>
                   <Typography
                     sx={{ fontWeight: 600, fontSize: "19px", lineHeight: 1.2 }}>
-                    Room: {room.roomNumber}
+                    {t("room")}: {room.roomNumber}
                   </Typography>
 
                   <Typography
@@ -224,8 +226,8 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
                       mt: 0.5,
                       fontWeight: 300,
                     }}>
-                    Capacity: {room.capacity}{" "}
-                    {room.capacity > 1 ? "people" : "person"}
+                    {t("explorePage.capacity", "Capacity")}: {room.capacity}{" "}
+                    {room.capacity > 1 ? t("explorePage.people", "people") : t("explorePage.person", "person")}
                   </Typography>
                 </Box>
               </Box>
@@ -234,25 +236,32 @@ const pageCount = Math.ceil((data?.data?.totalCount || 0) / size);  const handle
         </Grid>
       )}
       {pageCount > 1 && (
-  <Box
+        <Box
+          sx={{
+            mt: 6,
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Pagination
+            count={pageCount}
+            page={page}
+            onChange={handlePageChange}
+            variant="outlined"
+            shape="rounded"
+            color="primary"
+            size="large"
     sx={{
-      mt: 6,
-      display: "flex",
-      justifyContent: "center",
-      width: "100%",
+      "& button[aria-label*='page'], & button[aria-label*='Go to']": {
+      },
+      "& button:not([aria-label*='page']):not([aria-label*='Go to']) svg": {
+        transform: isRTL ? "rotate(180deg)" : "none",
+      },
     }}
-  >
-    <Pagination
-      count={pageCount}
-      page={page}
-      onChange={handlePageChange}
-      variant="outlined"
-      shape="rounded"
-      color="primary"
-      size="large"
-    />
-  </Box>
-)}
+          />
+        </Box>
+      )}
 
     </Box>
   );
