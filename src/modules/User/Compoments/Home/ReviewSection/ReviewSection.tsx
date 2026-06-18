@@ -14,7 +14,7 @@ const testimonialsData = [
     rating: 5,
     text: t("reviews.happyFamilyText"),
     author: t("reviews.happyFamilyAuthor"),
-    image: "...",
+    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop',
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const testimonialsData = [
     rating: 5,
     text: t("reviews.amazingExperienceText"),
     author: t("reviews.amazingExperienceAuthor"),
-    image: "...",
+    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop',
   },
     {
     id: 3,
@@ -30,7 +30,7 @@ const testimonialsData = [
     rating: 5,
     text: t("reviews.happyFamilyText"),
     author: t("reviews.happyFamilyAuthor"),
-    image: "...",
+    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop',
   },
    {
     id: 4,
@@ -38,7 +38,7 @@ const testimonialsData = [
     rating: 5,
     text: t("reviews.amazingExperienceText"),
     author: t("reviews.amazingExperienceAuthor"),
-    image: "...",
+    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop',
   },
 ];
 return (
