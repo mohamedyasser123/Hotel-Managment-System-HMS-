@@ -11,5 +11,24 @@
     "amazingExperience": "تجربة مذهلة",
     "amazingExperienceText": "إجازة لا تُنسى! كل شيء كان منظمًا وسلسًا بشكل رائع.",
     "amazingExperienceAuthor": "سارة، مديرة تسويق"
+  },
+   "footer": {
+    "description": "نجعل عطلتك الجميلة أكثر تميزًا وذكريات لا تُنسى.",
+
+    "forBeginners": "للمبتدئين",
+    "newAccount": "حساب جديد",
+    "startBooking": "ابدأ الحجز",
+    "usePayments": "طرق الدفع",
+
+    "exploreUs": "استكشفنا",
+    "ourCareers": "وظائفنا",
+    "privacy": "سياسة الخصوصية",
+    "terms": "الشروط والأحكام",
+
+    "connectUs": "تواصل معنا",
+
+    "address": "ستايكيشن، كيمانج، جاكرتا",
+
+    "copyright": "حقوق النشر 2026 • جميع الحقوق محفوظة • Staycation"
   }
 }
