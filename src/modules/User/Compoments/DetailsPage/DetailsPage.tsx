@@ -14,7 +14,7 @@ import {
   TextField,
   Rating,
 } from "@mui/material";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { GridAddIcon, GridRemoveIcon } from "@mui/x-data-grid";
 import { Link as RouterLink } from "react-router-dom";
 import bathroomIcon from "../../../../assets/images/bathroom.png";
@@ -27,14 +27,63 @@ import wifiIcon from "../../../../assets/images/wifi.png";
 import acroomIcon from "../../../../assets/images/acroom.png";
 import useAuth from "../../../../hooks/useAuth";
 import { useEffect } from "react";
+import { usePortalBooking } from "../../../../hooks/portal/usePortalBooking";
+import { toast } from "react-toastify";
 export default function DetailsPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { room } = useRoomDetails(id);
   const { data, fetchProfile } = useAuth();
   const user = data?.user;
   const role = user?.role;
   useEffect(() => {
     if (!data) fetchProfile();
   }, [data, fetchProfile]);
+  const {
+    capacity,
+    increase,
+    decrease,
+    createBooking,
+    setStartDate,
+    setEndDate,
+    startDate,
+    endDate,
+    loading,
+  } = usePortalBooking(id);
 
+  // Handle booking
+  const handleBooking = async () => {
+    try {
+      if (!startDate || !endDate) {
+        toast.warning("Please select date range");
+        return;
+      }
+
+      if (!room?.price) {
+        toast.error("Room data not loaded");
+        return;
+      }
+
+      const res = await createBooking(room.price);
+
+      const booking = res?.data?.booking;
+
+      if (res?.success && booking) {
+        toast.success(`Booking created successfully`);
+
+        navigate("/payment", {
+          state: { booking },
+        });
+
+        return;
+      }
+
+      toast.error(res?.message || "Failed to create booking");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Something went wrong");
+    }
+  };
+  // faclities
   const facilities = [
     { icon: bedroomIcon, count: 5, name: "bedroom" },
     { icon: livingroomIcon, count: 1, name: "living room" },
@@ -80,9 +129,7 @@ export default function DetailsPage() {
       boxShadow: "0 6px 16px rgba(50, 82, 223, 0.3)",
     },
   };
-  const navigate = useNavigate()
-  const { id } = useParams();
-  const { room, loading } = useRoomDetails(id);
+
   if (loading || !room) {
     return (
       <Box
@@ -97,6 +144,8 @@ export default function DetailsPage() {
       </Box>
     );
   }
+  const discountedPrice = room.price - (room.price * room.discount) / 100;
+  const totalPrice = discountedPrice * capacity;
 
   return (
     <Box sx={{ py: 5 }}>
@@ -337,34 +386,49 @@ export default function DetailsPage() {
               </Typography>
 
               {/* DATE PICKER */}
-              <DateRangePicker
-                format="DD MMM"
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    sx: {
-                      mb: 3,
-                      width: "100%",
-                      "& .MuiInputBase-root": {
-                        backgroundColor: "#F5F6F8 !important",
-                        borderRadius: "8px",
-                        height: "44px",
-                        "& fieldset": { border: "none !important" },
-                        "&:hover fieldset": { border: "none !important" },
-                        "&.Mui-focused fieldset": { border: "none !important" },
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: 2,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                }}>
+                <Box sx={{ width: "100%" }}>
+                  <DatePicker
+                    label="Start Date"
+                    value={startDate}
+                    onChange={(newValue) => setStartDate(newValue)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        sx: {
+                          backgroundColor: "#F5F6F8",
+                          borderRadius: "8px",
+                        },
                       },
-                      "& input": {
-                        color: "#152C5B !important",
-                        WebkitTextFillColor: "#152C5B !important",
-                        fontWeight: "600 !important",
-                        textAlign: "center",
-                        fontSize: "14px",
-                      },
-                    },
-                  },
-                }}
-              />
+                    }}
+                  />
+                </Box>
 
+                <Box sx={{ width: "100%" }}>
+                  <DatePicker
+                    label="End Date"
+                    value={endDate}
+                    onChange={(newValue) => setEndDate(newValue)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        sx: {
+                          backgroundColor: "#F5F6F8",
+                          borderRadius: "8px",
+                        },
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
               <Typography
                 sx={{
                   color: "#152C5B",
@@ -372,9 +436,8 @@ export default function DetailsPage() {
                   mb: 1,
                   fontSize: "15px",
                 }}>
-                Capacity
+                capacity
               </Typography>
-
               <Box
                 sx={{
                   display: "flex",
@@ -386,6 +449,7 @@ export default function DetailsPage() {
                   mb: 4,
                 }}>
                 <IconButton
+                  onClick={decrease}
                   disableRipple
                   sx={{
                     width: "45px",
@@ -409,10 +473,11 @@ export default function DetailsPage() {
                     color: "#152C5B",
                     fontWeight: 600,
                   }}>
-                  1
+                  {capacity}
                 </Box>
 
                 <IconButton
+                  onClick={increase}
                   disableRipple
                   sx={{
                     width: "45px",
@@ -425,7 +490,6 @@ export default function DetailsPage() {
                   <GridAddIcon />
                 </IconButton>
               </Box>
-
               <Box sx={{ mb: 3, width: "100%" }}>
                 <Typography
                   sx={{
@@ -442,14 +506,13 @@ export default function DetailsPage() {
                       fontWeight: 600,
                       fontSize: "18px",
                     }}>
-                    $480 USD
+                    ${totalPrice.toFixed(2)} USD
                   </Box>{" "}
-                  per 2 Persons
+                  per {capacity} Persons
                 </Typography>
               </Box>
-
               <Button
-                onClick={() => navigate("/payment")}
+                onClick={handleBooking}
                 fullWidth
                 variant="contained"
                 sx={{
