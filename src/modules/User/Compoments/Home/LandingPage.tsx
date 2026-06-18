@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import HeroSection from "./HeroSection/HeroSection";
 import Houses from '../HousesSection/Houses';
 import PopularAds from "./PopularAds/PopularAds";
+import Hotels from "../HotelsSection/Hotels";
 import AdsSection from './AdsSection/AdsSection';
 export default function LandingPage() {
   return (
@@ -13,7 +14,7 @@ export default function LandingPage() {
       {/* house slider */}
       <Houses />
       {/* hotel slider */}
-
+      <Hotels />
       {/* ads section */}
 <AdsSection />
       {/* review section */}
