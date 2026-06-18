@@ -1,48 +1,52 @@
-import { Box, Container, Grid, IconButton, Rating, Typography } from '@mui/material';
-import React from 'react'
+import { Box, Grid, IconButton, Rating, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation,Autoplay } from "swiper/modules";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useTranslation } from 'react-i18next';
 export default function ReviewSection() {
-    const testimonialsData = [
+    const { t, i18n } = useTranslation("user");
+const isRTL = i18n.language === "ar";
+const testimonialsData = [
   {
     id: 1,
-    title: 'Happy Family',
+    title: t("reviews.happyFamily"),
     rating: 5,
-    text: 'What a great trip with my family and I should try again next time soon ...',
-    author: 'Angga, Product Designer',
-    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop', 
+    text: t("reviews.happyFamilyText"),
+    author: t("reviews.happyFamilyAuthor"),
+    image: "...",
   },
   {
     id: 2,
-    title: 'Amazing Experience',
+    title: t("reviews.amazingExperience"),
     rating: 5,
-    text: 'An unforgettable vacation! Everything was perfectly organized and smooth.',
-    author: 'Sarah, Marketing Manager',
-    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop',
+    text: t("reviews.amazingExperienceText"),
+    author: t("reviews.amazingExperienceAuthor"),
+    image: "...",
   },
     {
     id: 3,
-    title: 'Happy Family',
+    title: t("reviews.happyFamily"),
     rating: 5,
-    text: 'What a great trip with my family and I should try again next time soon ...',
-    author: 'Angga, Product Designer',
-    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop', 
+    text: t("reviews.happyFamilyText"),
+    author: t("reviews.happyFamilyAuthor"),
+    image: "...",
   },
    {
     id: 4,
-    title: 'Amazing Experience',
+    title: t("reviews.amazingExperience"),
     rating: 5,
-    text: 'An unforgettable vacation! Everything was perfectly organized and smooth.',
-    author: 'Sarah, Marketing Manager',
-    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop',
+    text: t("reviews.amazingExperienceText"),
+    author: t("reviews.amazingExperienceAuthor"),
+    image: "...",
   },
 ];
 return (
     <Box  sx={{ py: 8 }}>
       <Swiper
         modules={[Navigation,Autoplay]}
+         key={i18n.language}
+  dir={isRTL ? "rtl" : "ltr"}
         spaceBetween={30}
         slidesPerView={1}
         autoplay={{
@@ -163,7 +167,7 @@ return (
                         '&.swiper-button-disabled': { opacity: 0.4, borderColor: '#ccc', color: '#ccc' }
                       }}
                     >
-                      <ArrowBackIcon />
+{isRTL ? <ArrowForwardIcon /> : <ArrowBackIcon />}
                     </IconButton>
 
                     <IconButton
@@ -177,7 +181,7 @@ return (
                         '&.swiper-button-disabled': { opacity: 0.4, borderColor: '#ccc', color: '#ccc' }
                       }}
                     >
-                      <ArrowForwardIcon />
+                      {isRTL ? <ArrowBackIcon /> : <ArrowForwardIcon />}
                     </IconButton>
                   </Box>
 

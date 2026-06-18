@@ -2,5 +2,17 @@
   "ads": "Ads",
   "off": "OFF",
   "room": "Room",
-  "location": "Bandung, Indonesia"
+  "location": "Bandung, Indonesia",
+  
+  "reviews": {
+    "happyFamily": "Happy Family",
+    "happyFamilyText": "What a great trip with my family and I should try again next time soon ...",
+    "happyFamilyAuthor": "Angga, Product Designer",
+
+    "amazingExperience": "Amazing Experience",
+    "amazingExperienceText": "An unforgettable vacation! Everything was perfectly organized and smooth.",
+    "amazingExperienceAuthor": "Sarah, Marketing Manager"
+  }
+
+
 }

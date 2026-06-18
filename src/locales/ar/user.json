@@ -2,5 +2,14 @@
   "ads": "الإعلانات",
   "off": "خصم",
   "room": "غرفة",
-  "location": "باندونج، إندونيسيا"
+  "location": "باندونج، إندونيسيا",
+   "reviews": {
+    "happyFamily": "عائلة سعيدة",
+    "happyFamilyText": "كانت رحلة رائعة مع عائلتي وسأكررها مرة أخرى قريبًا...",
+    "happyFamilyAuthor": "أنجا، مصمم منتجات",
+
+    "amazingExperience": "تجربة مذهلة",
+    "amazingExperienceText": "إجازة لا تُنسى! كل شيء كان منظمًا وسلسًا بشكل رائع.",
+    "amazingExperienceAuthor": "سارة، مديرة تسويق"
+  }
 }
