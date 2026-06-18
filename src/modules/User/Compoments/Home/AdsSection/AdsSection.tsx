@@ -4,9 +4,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from "swiper/modules";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useTranslation } from 'react-i18next';
 export default function AdsSection() {
     const { ads, loading, error } = usePortalAds();
-    console.log(ads);
+    const { t } = useTranslation("user");
+    const { i18n } = useTranslation();
+    const isRTL = i18n.language === "ar";
     if (loading) {
         return (
             <Box
@@ -42,10 +45,11 @@ export default function AdsSection() {
                     mb: 4,
                 }}
             >
-                Ads
+                {t("ads")}
             </Typography>
             <Swiper
                 modules={[Autoplay]}
+                  dir={isRTL ? "rtl" : "ltr"}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
@@ -143,7 +147,7 @@ export default function AdsSection() {
                                     <Box
                                         component="span"
                                         sx={{ fontWeight: 300, fontSize: "12px" }}>
-                                        OFF
+                                        {t("off")}
                                     </Box>
                                 </Box>
                             </Box>
@@ -159,9 +163,9 @@ export default function AdsSection() {
                                     color: "#152C5B"
                                 }}
                             >
-                                {ad.room.roomNumber
-                                    ? `Room ${ad.room.roomNumber}`
-                                    : "Ocean Land"}
+                               {ad.room.roomNumber
+  ? `${t("room")} ${ad.room.roomNumber}`
+  : "Ocean Land"}
                             </Typography>
 
                             <Typography
@@ -171,7 +175,7 @@ export default function AdsSection() {
                                     fontWeight: 300,
                                 }}
                             >
-                                Bandung, Indonesia</Typography>
+                                {t("location")}</Typography>
                         </Box>
                     </SwiperSlide>
                 ))}
