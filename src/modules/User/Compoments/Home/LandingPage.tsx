@@ -4,6 +4,7 @@ import Houses from '../HousesSection/Houses';
 import PopularAds from "./PopularAds/PopularAds";
 import Hotels from "../HotelsSection/Hotels";
 import AdsSection from './AdsSection/AdsSection';
+import ReviewSection from './ReviewSection/ReviewSection';
 export default function LandingPage() {
   return (
     <Box>
@@ -18,6 +19,7 @@ export default function LandingPage() {
       {/* ads section */}
 <AdsSection />
       {/* review section */}
+      <ReviewSection />
     </Box>
   );
 }
