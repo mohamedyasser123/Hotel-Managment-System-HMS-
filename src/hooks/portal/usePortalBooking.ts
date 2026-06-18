@@ -1,66 +1,56 @@
 import { useState } from "react";
+import { Dayjs } from "dayjs";
 import { apiCreateBooking } from "../../api/modules/portal/portalBooking";
 
-export  function usePortalBooking(roomId?: string) {
-  const [dateRange, setDateRange] = useState<[any, any]>([null, null]);
-  const [capacity, setCapacity] = useState(2);
+export function usePortalBooking(roomId?: string) {
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+
+  const [capacity, setCapacity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any>(null);
 
-  // CAPACITY
-  const increase = () => setCapacity((prev) => prev + 1);
-  const decrease = () =>
-    setCapacity((prev) => (prev > 1 ? prev - 1 : 1));
+  const increase = () => setCapacity((p) => p + 1);
+  const decrease = () => setCapacity((p) => (p > 1 ? p - 1 : 1));
 
-  // DATE 
-  const setDates = (value: [any, any]) => {
-    setDateRange(value);
+  const createBooking = async (roomPrice: number) => {
+    if (!roomId) throw new Error("Room not found");
+    if (!startDate || !endDate) throw new Error("Dates required");
+
+    setLoading(true);
+
+    try {
+      const days =
+        endDate.diff(startDate, "day") || 1;
+
+      const totalPrice = days * roomPrice * capacity;
+
+      const payload = {
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        room: roomId,
+        totalPrice,
+      };
+
+      const res = await apiCreateBooking(payload);
+      setData(res);
+      return res;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // CREATE BOOKING 
-const createBooking = async () => {
-  if (!roomId) throw new Error("Room not found");
-  if (loading) return;
-
-  setLoading(true);
-  setError(null);
-
-  try {
-    const startDate = dateRange[0]?.toISOString();
-    const endDate = dateRange[1]?.toISOString();
-
-    if (!startDate || !endDate) {
-      throw new Error("Please select date range");
-    }
-
-    const payload = {
-      startDate,
-      endDate,
-      capacity,
-      room: roomId,
-    };
-
-    const response = await apiCreateBooking(payload);
-    setData(response);
-
-    return response;
-  } catch (err) {
-    setError(err);
-    throw err;
-  } finally {
-    setLoading(false);
-  }
-};
   return {
-    dateRange,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate,
     capacity,
-    loading,
-    error,
-    data,
-    setDates,
     increase,
     decrease,
     createBooking,
+    loading,
+    error,
   };
 }

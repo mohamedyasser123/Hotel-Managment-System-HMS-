@@ -1,7 +1,6 @@
 export type CreateBookingPayload = {
   startDate: string;
   endDate: string;
-  capacity: number;
   room: string;
 }
 
