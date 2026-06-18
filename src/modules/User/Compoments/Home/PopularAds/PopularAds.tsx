@@ -2,9 +2,11 @@ import usePortalAds from "../../../../../hooks/portal/usePortalAds";
 import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 
 export default function PopularAds() {
   const { ads, loading, error } = usePortalAds();
+  const navigate = useNavigate()
 
   if (loading) {
     return (
@@ -31,7 +33,6 @@ export default function PopularAds() {
   const featuredAds = ads?.slice(0, 5) || [];
 
   return (
-    // 💡 الحفاظ على البادينج اليمين لعدم خروج العناصر برة الكونتينر الأساسي للموقع
     <Box sx={{ py: 3, pr: { xs: 0, md: 4 } }}>
       <Typography
         variant="h5"
@@ -42,7 +43,6 @@ export default function PopularAds() {
       <Box
         sx={{
           display: "grid",
-          // التقسيمة الأساسية المعتمدة
           gridTemplateColumns: {
             xs: "1fr",
             md: "1.2fr 2fr 2fr", 
@@ -51,7 +51,6 @@ export default function PopularAds() {
             xs: "280px",
             md: "260px",
           },
-          // 💡 تقليل الـ gap لـ 2 (حوالي 16px) عشان نلغي الفراغات الواسعة المزعجة بين الكروت
           gap: 2, 
           width: "100%",
         }}>
@@ -59,7 +58,6 @@ export default function PopularAds() {
           let gridStyles = {};
 
           if (index === 0) {
-            // الصورة الكبيرة بكامل قوتها وعرضها
             gridStyles = {
               gridColumn: { xs: "auto", md: "1" },
               gridRow: { xs: "auto", md: "span 2" },
@@ -67,12 +65,11 @@ export default function PopularAds() {
               width: "100%",
             };
           } else {
-            // 💡 الصور الأربعة ملمومين واخدين width مريح والـ gap الصغير قفل الفراغات اللي في النص
             gridStyles = {
               gridColumn: "auto",
               gridRow: "auto",
               height: "100%",
-              width: "100%", // رجعناها 100% لأن الـ gap الصغير والـ padding الخارجي هما اللي هيتحكموا في المساحة بدون فراغات داخلية
+              width: "100%", 
               maxWidth: { xs: "100%", md: "95%" },
             };
           }
@@ -147,7 +144,7 @@ export default function PopularAds() {
                 <IconButton sx={{ color: "#fff" }}>
                   <FavoriteIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
-                <IconButton sx={{ color: "#fff" }}>
+                <IconButton onClick={() => navigate(`/detailes/${ad.room._id}`)}  sx={{ color: "#fff" }}>
                   <VisibilityIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
               </Box>

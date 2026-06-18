@@ -88,7 +88,7 @@ function App() {
     </ProtectedRoute>
   ),
 },
-    { path: "detailes", element: <DetailsPage /> },
+    { path: "detailes/:id", element: <DetailsPage /> },
    
   ],
 }
