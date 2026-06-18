@@ -12,7 +12,28 @@
     "amazingExperience": "Amazing Experience",
     "amazingExperienceText": "An unforgettable vacation! Everything was perfectly organized and smooth.",
     "amazingExperienceAuthor": "Sarah, Marketing Manager"
+  },
+  
+  "footer": {
+    "description": "We kaboom your beauty holiday instantly and memorable.",
+
+    "forBeginners": "For Beginners",
+    "newAccount": "New Account",
+    "startBooking": "Start Booking",
+    "usePayments": "Use Payments",
+
+    "exploreUs": "Explore Us",
+    "ourCareers": "Our Careers",
+    "privacy": "Privacy",
+    "terms": "Terms & Conditions",
+
+    "connectUs": "Connect Us",
+
+    "address": "Staycation, Kemang, Jakarta",
+
+    "copyright": "Copyright 2026 • All rights reserved • Staycation"
   }
+
 
 
 }
