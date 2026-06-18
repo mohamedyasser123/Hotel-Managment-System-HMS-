@@ -32,6 +32,14 @@
     "address": "Staycation, Kemang, Jakarta",
 
     "copyright": "Copyright 2026 • All rights reserved • Staycation"
+  },
+   "navbar": {
+    "home": "Home",
+    "explore": "Explore",
+    "review": "Review",
+    "favorites": "Favorites",
+    "login": "Login",
+    "register": "Register"
   }
 
 

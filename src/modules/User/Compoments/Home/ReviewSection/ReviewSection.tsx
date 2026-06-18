@@ -42,7 +42,7 @@ const testimonialsData = [
   },
 ];
 return (
-    <Box  sx={{ py: 8 }}>
+    <Box id="reviews"  sx={{ py: 8 }}>
       <Swiper
         modules={[Navigation,Autoplay]}
          key={i18n.language}

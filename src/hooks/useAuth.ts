@@ -103,26 +103,30 @@ const handleLogin = async (data: LoginFormData) => {
       setIsLoading(false);
     }
   };
- const fetchProfile = async () => {
-    const userId = localStorage.getItem("userId");
-    
-    if (!userId) {
-      toast.error("User ID not found, please login again");
-      return;
-    }
+const fetchProfile = async () => {
+ const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
 
-    setIsLoading(true);
-    try {
-      const response = await authApi.getUserProfile(userId); 
-      if (response.success) {
-        setData(response.data); 
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to load profile");
-    } finally {
-      setIsLoading(false);
+if (!token || !userId) {
+  return;
+}
+
+  setIsLoading(true);
+
+  try {
+    const response = await authApi.getUserProfile(userId);
+
+    if (response.success) {
+      setData(response.data);
     }
-  };
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.message || "Failed to load profile"
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return {
     data,
