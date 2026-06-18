@@ -40,6 +40,19 @@
     "favorites": "Favorites",
     "login": "Login",
     "register": "Register"
+  },
+
+  "heroSection":{
+    "title" :"Forget Busy Work,Start Next Vacation",
+    "discription" :"We provide what you need to enjoy your holiday with family. Time to make another memorable moments.",
+    "booking" :"Start Booking",
+    "capacity" :"Capacity",
+    "explore":"Explore",
+      "start date": "Start Date",
+      "end date": "End Date"
+
+
+
   }
 
 
