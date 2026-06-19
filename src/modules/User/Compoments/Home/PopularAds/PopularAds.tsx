@@ -2,9 +2,16 @@ import usePortalAds from "../../../../../hooks/portal/usePortalAds";
 import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../../../i18n";
 
 export default function PopularAds() {
-  const { ads, loading, error } = usePortalAds();
+  const { ads, loading } = usePortalAds();
+  const isArabic = i18n.language === "ar";
+
+  const navigate = useNavigate();
+  const { t } = useTranslation("user");
 
   if (loading) {
     return (
@@ -21,45 +28,34 @@ export default function PopularAds() {
     );
   }
 
-  if (error)
-    return (
-      <Typography sx={{ textAlign: "center", py: 5, color: "error.main" }}>
-        Error loading ads
-      </Typography>
-    );
-
   const featuredAds = ads?.slice(0, 5) || [];
 
   return (
-    // 💡 الحفاظ على البادينج اليمين لعدم خروج العناصر برة الكونتينر الأساسي للموقع
     <Box sx={{ py: 3, pr: { xs: 0, md: 4 } }}>
       <Typography
         variant="h5"
         sx={{ color: "#152C5B", fontWeight: 700, mb: 3, fontSize: "24px" }}>
-        Most popular ads
+        {t("popAds.title")}
       </Typography>
 
       <Box
         sx={{
           display: "grid",
-          // التقسيمة الأساسية المعتمدة
           gridTemplateColumns: {
             xs: "1fr",
-            md: "1.2fr 2fr 2fr", 
+            md: "1.4fr 2fr 2fr",
           },
           gridAutoRows: {
             xs: "280px",
-            md: "260px",
+            md: "270px",
           },
-          // 💡 تقليل الـ gap لـ 2 (حوالي 16px) عشان نلغي الفراغات الواسعة المزعجة بين الكروت
-          gap: 2, 
+          gap: 2,
           width: "100%",
         }}>
         {featuredAds.map((ad, index) => {
           let gridStyles = {};
 
           if (index === 0) {
-            // الصورة الكبيرة بكامل قوتها وعرضها
             gridStyles = {
               gridColumn: { xs: "auto", md: "1" },
               gridRow: { xs: "auto", md: "span 2" },
@@ -67,13 +63,12 @@ export default function PopularAds() {
               width: "100%",
             };
           } else {
-            // 💡 الصور الأربعة ملمومين واخدين width مريح والـ gap الصغير قفل الفراغات اللي في النص
             gridStyles = {
               gridColumn: "auto",
               gridRow: "auto",
               height: "100%",
-              width: "100%", // رجعناها 100% لأن الـ gap الصغير والـ padding الخارجي هما اللي هيتحكموا في المساحة بدون فراغات داخلية
-              maxWidth: { xs: "100%", md: "95%" },
+              width: "100%",
+              maxWidth: "100%",
             };
           }
 
@@ -120,12 +115,13 @@ export default function PopularAds() {
                   fontWeight: 500,
                   fontSize: "14px",
                   zIndex: 3,
+                  textAlign: isArabic ? "right" : "left",
                 }}>
                 ${ad.room.price}{" "}
                 <Box
                   component="span"
                   sx={{ fontWeight: 300, fontSize: "12px" }}>
-                  per night
+                  {t("popAds.badge")}
                 </Box>
               </Box>
 
@@ -147,7 +143,9 @@ export default function PopularAds() {
                 <IconButton sx={{ color: "#fff" }}>
                   <FavoriteIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
-                <IconButton sx={{ color: "#fff" }}>
+                <IconButton
+                  onClick={() => navigate(`/detailes/${ad.room._id}`)}
+                  sx={{ color: "#fff" }}>
                   <VisibilityIcon sx={{ fontSize: "28px" }} />
                 </IconButton>
               </Box>
@@ -164,11 +162,12 @@ export default function PopularAds() {
                     "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)",
                   color: "#fff",
                   zIndex: 1,
+                  textAlign: isArabic ? "right" : "left",
                 }}>
                 <Typography
                   sx={{ fontWeight: 600, fontSize: "19px", lineHeight: 1.2 }}>
                   {ad.room.roomNumber
-                    ? `Room ${ad.room.roomNumber}`
+                    ? `${t("popAds.room")} ${ad.room.roomNumber}`
                     : "Ocean Land"}
                 </Typography>
 
@@ -179,7 +178,7 @@ export default function PopularAds() {
                     mt: 0.5,
                     fontWeight: 300,
                   }}>
-                  Bandung, Indonesia
+                  {t("popAds.country")}
                 </Typography>
               </Box>
             </Box>

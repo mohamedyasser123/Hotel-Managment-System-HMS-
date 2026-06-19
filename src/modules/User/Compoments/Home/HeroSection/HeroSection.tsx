@@ -1,36 +1,40 @@
-import {
-  Box,
-  Typography,
-  IconButton,
-  Button,
-  CircularProgress,
-} from "@mui/material";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import { Box, Typography, IconButton, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import heroImg from "../../../../../assets/images/hero.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useRoomFilters from "../../../../../hooks/portal/useRoomFilters";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../../../i18n";
 
 export default function HeroSection() {
-  const { dateRange, setDateRange, capacity, increase, decrease } =
-    useRoomFilters();
+  const { t } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
+  const {
+    startDate,
+    endDate,
+    setEndDate,
+    setStartDate,
+    capacity,
+    increase,
+    decrease,
+  } = useRoomFilters();
 
   const navigate = useNavigate();
 
   const handleExplore = () => {
-    if (!dateRange[0] || !dateRange[1]) {
+    if (!startDate || !endDate) {
       toast.warning("Please select date range");
       return;
     }
 
-    const startDate = dateRange[0].toISOString();
-    const endDate = dateRange[1].toISOString();
+    const start = startDate.toISOString();
+    const end = endDate.toISOString();
 
-    navigate(
-      `/explore?startDate=${startDate}&endDate=${endDate}&capacity=${capacity}`,
-    );
+    navigate(`/explore?startDate=${start}&endDate=${end}&capacity=${capacity}`);
   };
 
   return (
@@ -39,8 +43,8 @@ export default function HeroSection() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 8,
-        py: 8,
+        gap: { xs: 8, lg: 12, xl: 16 },
+        py: { xs: 8, lg: 12 },
 
         flexDirection: { xs: "column", md: "row" },
         textAlign: { xs: "center", md: "left" },
@@ -52,36 +56,36 @@ export default function HeroSection() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: { xs: "center", md: "flex-start" },
+          alignItems: { xs: "center", md: "flex-start", sm: "center" },
         }}>
         <Typography
           sx={{
             fontSize: {
-              xs: "26px",
-              sm: "30px",
+              xs: "30px",
+              sm: "32px",
               md: "36px",
-              lg: "42px",
+              lg: "46px",
+              xl: "54px",
             },
             fontWeight: 700,
             color: "#152C5B",
             lineHeight: 1.3,
-            maxWidth: "450px",
+            maxWidth: { xs: "450px", lg: "580px", xl: "680px" },
+            textAlign: isArabic ? "right" : "left",
           }}>
-          Forget Busy Work,
-          <br />
-          Start Next Vacation
+          {t("user:heroSection.title")}
         </Typography>
 
         <Typography
           sx={{
             color: "#B0B0B0",
             mt: 2,
-            maxWidth: "420px",
+            maxWidth: { xs: "420px", lg: "520px", xl: "600px" },
             lineHeight: 1.8,
-            fontSize: "16px",
+            fontSize: { xs: "16px", lg: "18px" },
+            textAlign: isArabic ? "right" : "left",
           }}>
-          We provide what you need to enjoy your holiday with family. Time to
-          make another memorable moments.
+          {t("user:heroSection.discription")}
         </Typography>
 
         {/* BOOKING */}
@@ -98,56 +102,84 @@ export default function HeroSection() {
               color: "#152C5B",
               fontWeight: 600,
               mb: 1,
+              fontSize: { xs: "16px", lg: "18px" },
             }}>
-            Start Booking
+            {t("user:heroSection.booking")}
           </Typography>
 
           {/* DATE PICKER */}
-          <DateRangePicker
-            value={dateRange}
-            onChange={(newValue) => setDateRange(newValue)}
-            format="DD MMM"
-            slotProps={{
-              textField: {
-                fullWidth: true,
-                sx: {
-                  mb: 3,
-                  maxWidth: { xs: "100%", md: "400px" },
-                  width: "100%",
-
-                  "& .MuiInputBase-root": {
-                    backgroundColor: "#F5F6F8 !important",
-                    borderRadius: "8px",
-                    height: "44px",
-                    "& fieldset": { border: "none !important" },
-                    "&:hover fieldset": { border: "none !important" },
-                    "&.Mui-focused fieldset": { border: "none !important" },
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              maxWidth: { xs: "100%", lg: "460px", xl: "520px" },
+            }}>
+            <Box sx={{ width: "100%" }}>
+              <DatePicker
+                label={t("user:heroSection.start date")}
+                value={startDate}
+                onChange={(newValue) => setStartDate(newValue)}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    sx: {
+                      backgroundColor: "#F5F6F8",
+                      borderRadius: "8px",
+                      textAlign: isArabic ? "right" : "left",
+                      "& .MuiInputLabel-root": {
+                        right: isArabic ? 20 : "auto",
+                        left: isArabic ? "auto" : 0,
+                        textAlign: isArabic ? "right" : "left",
+                      },
+                    },
                   },
+                }}
+              />
+            </Box>
 
-                  "& input": {
-                    color: "#152C5B !important",
-                    WebkitTextFillColor: "#152C5B !important",
-                    fontWeight: "600 !important",
-                    textAlign: "center",
+            <Box sx={{ width: "100%" }}>
+              <DatePicker
+                label={t("user:heroSection.end date")}
+                value={endDate}
+                onChange={(newValue) => setEndDate(newValue)}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    sx: {
+                      backgroundColor: "#F5F6F8",
+                      borderRadius: "8px",
+                      textAlign: isArabic ? "right" : "left",
+                              "& .MuiInputLabel-root": {
+          right: isArabic ? 20 : "auto",
+          left: isArabic ? "auto" : 0,
+          textAlign: isArabic ? "right" : "left",
+        },
+                    },
                   },
-                },
-              },
-            }}
-          />
+                }}
+              />
+            </Box>
+          </Box>
 
           {/* CAPACITY */}
           <Typography
             sx={{
               color: "#152C5B",
               fontWeight: 600,
-              mb: 1,
+              my: 1,
+              fontSize: { xs: "16px", lg: "18px" },
             }}>
-            Capacity
+            {t("user:heroSection.capacity")}
           </Typography>
 
           <Box
             sx={{
               display: "flex",
+              flexDirection: i18n.language === "ar" ? "row-reverse" : "row",
               alignItems: "center",
               width: { xs: "100%", md: "320px" },
               justifyContent: "center",
@@ -177,6 +209,7 @@ export default function HeroSection() {
                 justifyContent: "center",
                 color: "#152C5B",
                 fontWeight: 600,
+                fontSize: { xs: "16px", lg: "18px" },
               }}>
               {capacity}
             </Box>
@@ -194,7 +227,6 @@ export default function HeroSection() {
               <AddIcon />
             </IconButton>
           </Box>
-
           {/* BUTTON */}
           <Button
             onClick={handleExplore}
@@ -205,11 +237,12 @@ export default function HeroSection() {
               backgroundColor: "#3252DF",
               textTransform: "none",
               borderRadius: "8px",
-              px: 8,
-              py: 1,
+              px: { xs: 8, lg: 10 },
+              py: { xs: 1, lg: 1.5 },
+              fontSize: { xs: "16px", lg: "18px" },
               fontWeight: 600,
             }}>
-            Explore
+            {t("user:heroSection.explore")}
           </Button>
         </Box>
       </Box>
@@ -227,8 +260,8 @@ export default function HeroSection() {
           alt="hotel"
           sx={{
             width: "100%",
-            maxWidth: "500px",
-            height: "500px",
+            maxWidth: { md: "500px", lg: "580px", xl: "660px" },
+            height: { md: "500px", lg: "580px", xl: "660px" },
             borderRadius: "24px",
           }}
         />

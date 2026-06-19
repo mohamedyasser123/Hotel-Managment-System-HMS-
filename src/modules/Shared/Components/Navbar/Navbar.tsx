@@ -8,21 +8,28 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuth";
 import { useEffect } from "react";
 import LanguageToggle from "../LangToggleBtn/LangToggleBtn";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
-  const { data, fetchProfile } = useAuth();
+  const { data, fetchProfile, } = useAuth();
+  const { t, i18n } = useTranslation("user");
+const isRTL = i18n.language === "ar";
   const user = data?.user;
   const role = user?.role;
+const navigate=useNavigate();
+useEffect(() => {
+  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    if (!data) fetchProfile();
-  }, [data, fetchProfile]);
+  if (token && !data) {
+    fetchProfile();
+  }
+}, [data, fetchProfile]);
 
   return (
     <AppBar
@@ -36,15 +43,16 @@ export default function Navbar() {
       <Toolbar sx={{ px: 0 }}>
         <Box
           sx={{
-            width: "80%",
+            width: { xs: "92%", md: "85%" },
+            maxWidth: "1750px", 
             margin: "0 auto",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: 2,
+            direction: isRTL ? "rtl" : "ltr",
           }}>
-          {/* LOGO */}
           <Typography
             variant="h5"
             sx={{
@@ -60,7 +68,6 @@ export default function Navbar() {
             </Box>
           </Typography>
 
-          {/* LINKS */}
           <Box
             sx={{
               display: "flex",
@@ -78,17 +85,28 @@ export default function Navbar() {
               },
             }}>
             <Button component={NavLink} to="/home" end>
-              Home
+              {t("navbar.home")}
             </Button>
             <Button component={NavLink} to="/explore">
-              Explore
+              {t("navbar.explore")}
             </Button>
 
             {role === "user" ? (
               <>
-                <Button>Review</Button>
+                <Button
+                  onClick={() => {
+                    navigate("/");
+
+                    setTimeout(() => {
+                      document
+                        .getElementById("reviews")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }}>
+                  {t("navbar.review")}
+                </Button>
                 <Button component={NavLink} to="/favorites">
-                  Favorites
+                  {t("navbar.favorites")}
                 </Button>
 
                 <Box
@@ -129,12 +147,12 @@ export default function Navbar() {
                   sx={{
                     bgcolor: "#3252DF",
                     textTransform: "none",
-                    color:"#fff !important",
+                    color: "#fff !important",
                     px: 3,
                     borderRadius: 2,
                     "&:hover": { backgroundColor: "#2441c7" },
                   }}>
-                  Login
+                  {t("navbar.login")}
                 </Button>
 
                 <Button
@@ -143,14 +161,14 @@ export default function Navbar() {
                   variant="contained"
                   sx={{
                     bgcolor: "#3252DF",
-                    color:"#fff !important",
-                    
+                    color: "#fff !important",
+
                     textTransform: "none",
                     px: 3,
                     borderRadius: 2,
                     "&:hover": { backgroundColor: "#2441c7" },
                   }}>
-                  Register
+                  {t("navbar.register")}
                 </Button>
               </>
             )}
