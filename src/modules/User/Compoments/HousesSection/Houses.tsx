@@ -54,7 +54,10 @@ export default function Houses() {
     <Box sx={{ py: 8 }}>
       <Typography
         sx={{
-          fontSize: "24px",
+          fontSize: {
+          xs: "20px",
+          md: "24px",
+           },
           fontWeight: 500,
           color: "#152C5B",
           mb: 4,
@@ -70,7 +73,20 @@ export default function Houses() {
      disableOnInteraction: false,
      }}
   spaceBetween={20}
-  slidesPerView={4}
+  breakpoints={{
+  0: {
+    slidesPerView: 1,
+  },
+  600: {
+    slidesPerView: 2,
+  },
+  900: {
+    slidesPerView: 3,
+  },
+  1200: {
+    slidesPerView: 4,
+  },
+}}
   style={{ paddingLeft: 0 }}
 >
 
@@ -118,7 +134,10 @@ export default function Houses() {
     <Typography
       sx={{
         mt: 2,
-        fontSize: "20px",
+         fontSize: {
+  xs: "16px",
+  md: "20px",
+},
         fontWeight: 500,
         color: "#152C5B"
       }}
@@ -128,7 +147,10 @@ export default function Houses() {
 
    <Typography
   sx={{
-    fontSize: "15px",
+    fontSize: {
+  xs: "13px",
+  md: "15px",
+},
     color: "#B0B0B0",
     fontWeight: 300,
   }}
