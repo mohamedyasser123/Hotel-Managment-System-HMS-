@@ -29,7 +29,10 @@ import useAuth from "../../../../hooks/useAuth";
 import { useEffect } from "react";
 import { usePortalBooking } from "../../../../hooks/portal/usePortalBooking";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 export default function DetailsPage() {
+  const { t, i18n } = useTranslation("user");
+  const isArabic = i18n.language === "ar";
   const { id } = useParams();
   const navigate = useNavigate();
   const { room } = useRoomDetails(id);
@@ -85,14 +88,14 @@ export default function DetailsPage() {
   };
   // faclities
   const facilities = [
-    { icon: bedroomIcon, count: 5, name: "bedroom" },
-    { icon: livingroomIcon, count: 1, name: "living room" },
-    { icon: bathroomIcon, count: 3, name: "bathroom" },
-    { icon: diningroomIcon, count: 1, name: "dining room" },
+    { icon: bedroomIcon, count: 5, name: t("roomDetailes.bedroom") },
+    { icon: livingroomIcon, count: 1, name: t("roomDetailes.livingRoom") },
+    { icon: bathroomIcon, count: 3, name: t("roomDetailes.bathroom") },
+    { icon: diningroomIcon, count: 1, name: t("roomDetailes.diningroom") },
     { icon: wifiIcon, count: 10, name: "mbp/s" },
-    { icon: acroomIcon, count: 7, name: "unit ready" },
-    { icon: kulkasIcon, count: 2, name: "refrigerator" },
-    { icon: tvIcon, count: 4, name: "television" },
+    { icon: acroomIcon, count: 7, name: t("roomDetailes.unitready") },
+    { icon: kulkasIcon, count: 2, name: t("roomDetailes.refrigerator") },
+    { icon: tvIcon, count: 4, name: t("roomDetailes.television") },
   ];
 
   const textareaStyle = {
@@ -158,7 +161,7 @@ export default function DetailsPage() {
             color: "#B0B0B0",
             fontSize: "16px",
           }}>
-          Home
+          {t("roomDetailes.home")}
         </MuiLink>
 
         <Typography
@@ -167,7 +170,7 @@ export default function DetailsPage() {
             fontWeight: "800",
             fontSize: "16px",
           }}>
-          Room Details
+          {t("roomDetailes.roomDetails")}
         </Typography>
       </Breadcrumbs>
 
@@ -225,7 +228,7 @@ export default function DetailsPage() {
               <Typography
                 variant="h4"
                 sx={{ color: "#152C5B", fontWeight: 700, mb: 1 }}>
-                Room {room.roomNumber}
+                {t("roomDetailes.room")} {room.roomNumber}
               </Typography>
             </Box>
 
@@ -237,11 +240,7 @@ export default function DetailsPage() {
                   textAlign: "justify",
                   mb: 1,
                 }}>
-                Minimal techno is a minimalist subgenre of techno music. It is
-                characterized by a stripped-down aesthetic that exploits the use
-                of repetition and understated development. Minimal techno is
-                thought to have been originally developed in the early 1990s by
-                Detroit-based producers Robert Hood and Daniel Bell.
+                {t("roomDetailes.description1")}
               </Typography>
 
               <Typography
@@ -251,10 +250,7 @@ export default function DetailsPage() {
                   textAlign: "justify",
                   mb: 1,
                 }}>
-                Such trends saw the demise of the soul-infused techno that
-                typified the original Detroit sound. Robert Hood has noted that
-                he and Daniel Bell both realized something was missing from
-                techno in the post-rave era.
+                {t("roomDetailes.description2")}
               </Typography>
 
               <Typography
@@ -263,12 +259,7 @@ export default function DetailsPage() {
                   lineHeight: 2.3,
                   textAlign: "justify",
                 }}>
-                Design is a plan or specification for the construction of an
-                object or system or for the implementation of an activity or
-                process, or the result of that plan or specification in the form
-                of a prototype, product or process. The national agency for
-                design: enabling Singapore to use design for economic growth and
-                to make lives better.
+                {t("roomDetailes.description3")}
               </Typography>
             </Box>
             <Box sx={{ mt: 5, width: "100%" }}>
@@ -336,7 +327,7 @@ export default function DetailsPage() {
                 fontSize: "20px",
                 mb: 2,
               }}>
-              Start Booking
+              {t("roomDetailes.startBooking")}
             </Typography>
 
             <Box sx={{ mb: 4 }}>
@@ -351,7 +342,7 @@ export default function DetailsPage() {
                     fontSize: "18px",
                     fontWeight: "light",
                   }}>
-                  per night
+                  {t("roomDetailes.night")}
                 </Typography>
               </Box>
 
@@ -363,7 +354,7 @@ export default function DetailsPage() {
                     fontSize: "14px",
                     mt: 0.5,
                   }}>
-                  Discount {room.discount}% off
+                  {t("roomDetailes.roomDiscount")} {room.discount}% off
                 </Typography>
               )}
             </Box>
@@ -382,7 +373,7 @@ export default function DetailsPage() {
                   mb: 1,
                   fontSize: "15px",
                 }}>
-                Pick a Date
+                {t("roomDetailes.pickDate")}
               </Typography>
 
               {/* DATE PICKER */}
@@ -397,7 +388,7 @@ export default function DetailsPage() {
                 }}>
                 <Box sx={{ width: "100%" }}>
                   <DatePicker
-                    label="Start Date"
+                    label={t("roomDetailes.startDate")}
                     value={startDate}
                     onChange={(newValue) => setStartDate(newValue)}
                     slotProps={{
@@ -406,6 +397,11 @@ export default function DetailsPage() {
                         sx: {
                           backgroundColor: "#F5F6F8",
                           borderRadius: "8px",
+                          "& .MuiInputLabel-root": {
+                            right: isArabic ? 20 : "auto",
+                            left: isArabic ? "auto" : 0,
+                            textAlign: isArabic ? "right" : "left",
+                          },
                         },
                       },
                     }}
@@ -414,7 +410,7 @@ export default function DetailsPage() {
 
                 <Box sx={{ width: "100%" }}>
                   <DatePicker
-                    label="End Date"
+                    label={t("roomDetailes.EndDate")}
                     value={endDate}
                     onChange={(newValue) => setEndDate(newValue)}
                     slotProps={{
@@ -423,6 +419,11 @@ export default function DetailsPage() {
                         sx: {
                           backgroundColor: "#F5F6F8",
                           borderRadius: "8px",
+                          "& .MuiInputLabel-root": {
+                            right: isArabic ? 20 : "auto",
+                            left: isArabic ? "auto" : 0,
+                            textAlign: isArabic ? "right" : "left",
+                          },
                         },
                       },
                     }}
@@ -436,10 +437,11 @@ export default function DetailsPage() {
                   mb: 1,
                   fontSize: "15px",
                 }}>
-                capacity
+                {t("roomDetailes.capacity")}
               </Typography>
               <Box
                 sx={{
+                  flexDirection: i18n.language === "ar" ? "row-reverse" : "row",
                   display: "flex",
                   alignItems: "center",
                   width: "100%",
@@ -498,7 +500,7 @@ export default function DetailsPage() {
                     textAlign: "center",
                     lineHeight: 1.5,
                   }}>
-                  You will pay{" "}
+                  {t("roomDetailes.youWillPay")}{" "}
                   <Box
                     component="span"
                     sx={{
@@ -508,7 +510,10 @@ export default function DetailsPage() {
                     }}>
                     ${totalPrice.toFixed(2)} USD
                   </Box>{" "}
-                  per {capacity} Persons
+                  {t("roomDetailes.for")} {capacity}{" "}
+                  {capacity === 1
+                    ? t("roomDetailes.person")
+                    : t("roomDetailes.persons")}
                 </Typography>
               </Box>
               <Button
@@ -529,7 +534,7 @@ export default function DetailsPage() {
                     boxShadow: "0 8px 20px rgba(50, 82, 223, 0.35)",
                   },
                 }}>
-                Continue to Book
+                {t("roomDetailes.bookingBtn")}
               </Button>
             </Box>
           </Paper>
@@ -558,19 +563,19 @@ export default function DetailsPage() {
                 fontSize: "20px",
                 mb: 2,
               }}>
-              Rate this Room
+              {t("roomDetailes.rate")}
             </Typography>
 
             <TextField
               multiline
               rows={4}
-              placeholder="add your rate"
+              placeholder={t("roomDetailes.ratePlace")}
               fullWidth
               sx={textareaStyle}
             />
 
             <Button variant="contained" sx={buttonStyle}>
-              Rate
+              {t("roomDetailes.rateBtn")}
             </Button>
           </Box>
 
@@ -586,19 +591,19 @@ export default function DetailsPage() {
                 fontSize: "20px",
                 mb: 2,
               }}>
-              Add your comments
+              {t("roomDetailes.comment")}
             </Typography>
 
             <TextField
               multiline
               rows={4}
-              placeholder="add your comment"
+              placeholder={t("roomDetailes.commentPlace")}
               fullWidth
               sx={textareaStyle}
             />
 
             <Button variant="contained" sx={buttonStyle}>
-              Send
+              {t("roomDetailes.commentBtn")}
             </Button>
           </Box>
         </Box>
