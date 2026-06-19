@@ -92,7 +92,28 @@
       "comment":"Add your comment",
       "commentPlace":"Add your comment",
       "commentBtn":"Send"
-    }
+    },
+"houses": {
+  "title": "Houses with beauty backyard",
+  "popular": "Popular",
+  "choice": "Choice",
+
+  "house1": "Tabby Town",
+  "house2": "Anggana",
+  "house3": "Seattle Rain",
+  "house4": "Woodden Pit",
+  "house5": "Garden Haven",
+  "house6": "Blue Lagoon",
+  "house7": "Forest Cabin",
+
+  "location1": "Gunung Batu, Indonesia",
+  "location2": "Bogor, Indonesia",
+  "location3": "Jakarta, Indonesia",
+  "location4": "Wonosobo, Indonesia",
+  "location5": "Bali, Indonesia",
+  "location6": "Bogor, Indonesia",
+  "location7": "Wonosobo, Indonesia"
+}
   
   
   

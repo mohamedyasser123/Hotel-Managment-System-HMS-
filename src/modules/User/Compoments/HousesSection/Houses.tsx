@@ -9,58 +9,62 @@ import image5 from "../../../../assets/images/image1.jpeg";
 import image6 from "../../../../assets/images/image2.jpeg";
 import image7 from "../../../../assets/images/image3.jpeg";
 import { Autoplay } from "swiper/modules";
+import { useTranslation } from "react-i18next";
 const houses = [
   {
     image: image1,
-    title: "Tabby Town",
-    location: "Gunung Batu, Indonesia",
+    title: "houses.house1",
+    location: "houses.location1",
   },
   {
     image: image2,
-    title: "Anggana",
-    location: "Bogor, Indonesia",
+    title: "houses.house2",
+    location: "houses.location2",
   },
   {
     image: image3,
-    title: "Seattle Rain",
-    location: "Jakarta, Indonesia",
+    title: "houses.house3",
+    location: "houses.location3",
   },
   {
     image: image4,
-    title: "Woodden Pit",
-    location: "Wonosobo, Indonesia",
+    title: "houses.house4",
+    location: "houses.location4",
   },
   {
     image: image5,
-    title: "Garden Haven",
-    location: "Bali, Indonesia",
+    title: "houses.house5",
+    location: "houses.location5",
   },
   {
     image: image6,
-    title: "Blue Lagoon",
-    location: "Bogor, Indonesia",
+    title: "houses.house6",
+    location: "houses.location6",
   },
   {
     image: image7,
-    title: "Forest Cabin",
-    location: "Wonosobo, Indonesia",
+    title: "houses.house7",
+    location: "houses.location7",
   },
 ];
 
 export default function Houses() {
- 
+ const { t } = useTranslation("user");
 
   return (
     <Box sx={{ py: 8 }}>
       <Typography
         sx={{
-          fontSize: "24px",
+          fontSize: {
+          xs: "20px",
+          md: "24px",
+           },
           fontWeight: 500,
           color: "#152C5B",
           mb: 4,
         }}
       >
-        Houses with beauty backyard
+        {t("houses.title")}
       </Typography>
 
       <Swiper
@@ -70,7 +74,20 @@ export default function Houses() {
      disableOnInteraction: false,
      }}
   spaceBetween={20}
-  slidesPerView={4}
+  breakpoints={{
+  0: {
+    slidesPerView: 1,
+  },
+  600: {
+    slidesPerView: 2,
+  },
+  900: {
+    slidesPerView: 3,
+  },
+  1200: {
+    slidesPerView: 4,
+  },
+}}
   style={{ paddingLeft: 0 }}
 >
 
@@ -109,8 +126,8 @@ export default function Houses() {
     fontSize: "14px",
   }}
 >
-  <span style={{ fontWeight: 600 }}>Popular</span>{" "}
-  <span style={{ fontWeight: 300 }}>Choice</span>
+  <span style={{ fontWeight: 600 }}>{t("houses.popular")}</span>{" "}
+  <span style={{ fontWeight: 300 }}>{t("houses.choice")}</span>
 </Box>
       )}
     </Box>
@@ -118,22 +135,28 @@ export default function Houses() {
     <Typography
       sx={{
         mt: 2,
-        fontSize: "20px",
+         fontSize: {
+  xs: "16px",
+  md: "20px",
+},
         fontWeight: 500,
         color: "#152C5B"
       }}
     >
-      {house.title}
+      {t(house.title)}
     </Typography>
 
    <Typography
   sx={{
-    fontSize: "15px",
+    fontSize: {
+  xs: "13px",
+  md: "15px",
+},
     color: "#B0B0B0",
     fontWeight: 300,
   }}
 >
-  {house.location}
+  {t(house.location)}
 </Typography>
   </Box>
 </SwiperSlide>
