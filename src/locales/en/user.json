@@ -48,12 +48,20 @@
     "booking" :"Start Booking",
     "capacity" :"Capacity",
     "explore":"Explore",
-      "start date": "Start Date",
-      "end date": "End Date"
+    "start date": "Start Date",
+    "end date": "End Date"
+  },
 
+    "popAds":{
+      "title":"Most popular ads",
+      "badge" :" per night",
+      "room" :"Room",
+      "country":"Bandung, Indonesia"
+    }
 
-
-  }
+  
+  
+  
 
 
 
