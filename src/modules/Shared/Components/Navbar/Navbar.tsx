@@ -43,15 +43,15 @@ useEffect(() => {
       <Toolbar sx={{ px: 0 }}>
         <Box
           sx={{
-            width: "80%",
+            width: { xs: "92%", md: "85%" },
+            maxWidth: "1750px", 
             margin: "0 auto",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: 2,
-                direction: isRTL ? "rtl" : "ltr",
-
+            direction: isRTL ? "rtl" : "ltr",
           }}>
           <Typography
             variant="h5"
@@ -93,15 +93,18 @@ useEffect(() => {
 
             {role === "user" ? (
               <>
-                <Button   onClick={() => {
-    navigate("/");
+                <Button
+                  onClick={() => {
+                    navigate("/");
 
-    setTimeout(() => {
-      document
-        .getElementById("reviews")
-        ?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }}>{t("navbar.review")}</Button>
+                    setTimeout(() => {
+                      document
+                        .getElementById("reviews")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }}>
+                  {t("navbar.review")}
+                </Button>
                 <Button component={NavLink} to="/favorites">
                   {t("navbar.favorites")}
                 </Button>
@@ -144,12 +147,12 @@ useEffect(() => {
                   sx={{
                     bgcolor: "#3252DF",
                     textTransform: "none",
-                    color:"#fff !important",
+                    color: "#fff !important",
                     px: 3,
                     borderRadius: 2,
                     "&:hover": { backgroundColor: "#2441c7" },
                   }}>
-                  {t("navbar.login")}   
+                  {t("navbar.login")}
                 </Button>
 
                 <Button
@@ -158,8 +161,8 @@ useEffect(() => {
                   variant="contained"
                   sx={{
                     bgcolor: "#3252DF",
-                    color:"#fff !important",
-                    
+                    color: "#fff !important",
+
                     textTransform: "none",
                     px: 3,
                     borderRadius: 2,
