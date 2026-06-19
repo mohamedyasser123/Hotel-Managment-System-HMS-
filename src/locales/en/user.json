@@ -57,8 +57,42 @@
       "badge" :" per night",
       "room" :"Room",
       "country":"Bandung, Indonesia"
-    }
+    },
 
+
+    "roomDetailes":{
+      "roomDetails":"Room Details",
+      "home":"Home",
+      "room" :"Room",
+      "roomDiscount" :"Discount",
+      "description1":"Minimal techno is a minimalist subgenre of techno music. It is characterized by a stripped-down aesthetic that exploits the use of repetition and understated development. Minimal techno is thought to have been originally developed in the early 1990s by Detroit-based producers Robert Hood and Daniel Bell.",
+      "description2" :"Such trends saw the demise of the soul-infused techno that typified the original Detroit sound. Robert Hood has noted that he and Daniel Bell both realized something was missing from techno in the post-rave era.",
+      "description3" :"Design is a plan or specification for the construction of an object or system or for the implementation of an activity or process, or the result of that plan or specification in the form of a prototype, product or process. The national agency for design: enabling Singapore to use design for economic growth and to make lives better.",
+      "startBooking" :"Start Booking",
+      "night" :"per night",
+      "pickDate":"Pick a Date",
+      "startDate" :"Start Date",
+      "EndDate":"End Date",
+      "capacity" :"Capacity",
+    "youWillPay": "You will pay",
+    "for": "for",
+    "person": "person",
+    "persons": "persons",
+      "bookingBtn":"Continue to book",
+      "bathroom" :"Bathroom",
+      "bedroom" :"Bedroom",
+      "livingRoom" :"Living room",
+      "diningroom" :"dining room",
+      "unitready" :"unit ready",
+      "refrigerator" :"refrigerator",
+      "television" :"television",
+      "rate":"Rate This Room",
+      "ratePlace":"Add your rating",
+      "rateBtn":"Rate",
+      "comment":"Add your comment",
+      "commentPlace":"Add your comment",
+      "commentBtn":"Send"
+    }
   
   
   

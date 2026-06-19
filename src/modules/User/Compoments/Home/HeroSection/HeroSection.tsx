@@ -56,7 +56,7 @@ export default function HeroSection() {
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: { xs: "center", md: "flex-start", sm:"center" },
+          alignItems: { xs: "center", md: "flex-start", sm: "center" },
         }}>
         <Typography
           sx={{
@@ -130,6 +130,11 @@ export default function HeroSection() {
                       backgroundColor: "#F5F6F8",
                       borderRadius: "8px",
                       textAlign: isArabic ? "right" : "left",
+                      "& .MuiInputLabel-root": {
+                        right: isArabic ? 20 : "auto",
+                        left: isArabic ? "auto" : 0,
+                        textAlign: isArabic ? "right" : "left",
+                      },
                     },
                   },
                 }}
@@ -148,6 +153,11 @@ export default function HeroSection() {
                       backgroundColor: "#F5F6F8",
                       borderRadius: "8px",
                       textAlign: isArabic ? "right" : "left",
+                              "& .MuiInputLabel-root": {
+          right: isArabic ? 20 : "auto",
+          left: isArabic ? "auto" : 0,
+          textAlign: isArabic ? "right" : "left",
+        },
                     },
                   },
                 }}
@@ -253,7 +263,6 @@ export default function HeroSection() {
             maxWidth: { md: "500px", lg: "580px", xl: "660px" },
             height: { md: "500px", lg: "580px", xl: "660px" },
             borderRadius: "24px",
-            
           }}
         />
       </Box>
