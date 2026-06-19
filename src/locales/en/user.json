@@ -113,8 +113,28 @@
   "location5": "Bali, Indonesia",
   "location6": "Bogor, Indonesia",
   "location7": "Wonosobo, Indonesia"
-}
-  
+},
+"hotels": {
+  "title": "Hotels with large living room",
+  "popular": "Popular",
+  "choice": "Choice",
+
+  "hotel1": "Green Park",
+  "hotel2": "Podo Wae",
+  "hotel3": "Silver Rain",
+  "hotel4": "Cashville",
+  "hotel5": "Ocean View",
+  "hotel6": "Royal Nest",
+  "hotel7": "Golden Stay",
+
+  "location1": "Tangerang, Indonesia",
+  "location2": "Madiun, Indonesia",
+  "location3": "Bandung, Indonesia",
+  "location4": "Kemang, Indonesia",
+  "location5": "Bali, Indonesia",
+  "location6": "Jakarta, Indonesia",
+  "location7": "Bogor, Indonesia"
+}  
   
   
 

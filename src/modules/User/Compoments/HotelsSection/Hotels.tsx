@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import image1 from "../../../../assets/images/Rectangle 3 (4).png";
@@ -12,55 +13,58 @@ import { Autoplay } from "swiper/modules";
 const hotels = [
   {
     image: image1,
-    title: "Green Park",
-    location: "Tangerang, Indonesia",
+    title: "hotels.hotel1",
+    location: "hotels.location1",
   },
   {
     image: image2,
-    title: "Podo Wae",
-    location: "Madiun, Indonesia",
+    title: "hotels.hotel2",
+    location: "hotels.location2",
   },
   {
     image: image3,
-    title: "Silver Rain",
-    location: "Bandung, Indonesia",
+    title: "hotels.hotel3",
+    location: "hotels.location3",
   },
   {
     image: image4,
-    title: "Cashville",
-    location: "Kemang, Indonesia",
+    title: "hotels.hotel4",
+    location: "hotels.location4",
   },
   {
     image: image5,
-    title: "Ocean View",
-    location: "Bali, Indonesia",
+    title: "hotels.hotel5",
+    location: "hotels.location5",
   },
   {
     image: image6,
-    title: "Royal Nest",
-    location: "Jakarta, Indonesia",
+    title: "hotels.hotel6",
+    location: "hotels.location6",
   },
   {
     image: image7,
-    title: "Golden Stay",
-    location: "Bogor, Indonesia",
+    title: "hotels.hotel7",
+    location: "hotels.location7",
   },
 ];
 
 export default function Houses() {
- 
+ const { t } = useTranslation("user");
 
   return (
     <Box sx={{ py: 8 }}>
       <Typography
         sx={{
-          fontSize: "24px",
+        fontSize: {
+        xs: "20px",
+        md: "24px",
+         },
           fontWeight: 500,
           color: "#152C5B",
           mb: 4,
         }}
       >
-        Hotels with large living room
+       {t("hotels.title")}
       </Typography>
 
       <Swiper
@@ -122,8 +126,12 @@ export default function Houses() {
     fontSize: "14px",
   }}
 >
-  <span style={{ fontWeight: 600 }}>Popular</span>{" "}
-  <span style={{ fontWeight: 300 }}>Choice</span>
+  <span style={{ fontWeight: 600 }}>
+  {t("hotels.popular")}
+</span>{" "}
+<span style={{ fontWeight: 300 }}>
+  {t("hotels.choice")}
+</span>
 </Box>
       )}
     </Box>
@@ -131,22 +139,28 @@ export default function Houses() {
     <Typography
       sx={{
         mt: 2,
-        fontSize: "20px",
+        fontSize: {
+         xs: "16px",
+         md: "20px",
+        },
         fontWeight: 500,
         color: "#152C5B"
       }}
     >
-      {hotel.title}
+     {t(hotel.title)}
     </Typography>
 
    <Typography
   sx={{
-    fontSize: "15px",
+    fontSize: {
+  xs: "13px",
+  md: "15px",
+},
     color: "#B0B0B0",
     fontWeight: 300,
   }}
 >
-  {hotel.location}
+ {t(hotel.location)}
 </Typography>
   </Box>
 </SwiperSlide>
