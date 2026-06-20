@@ -148,6 +148,12 @@
   "room": "Room",
   "capacity": "Capacity",
   "night": "per night",
+
+  "error": "Something went wrong while fetching favorite rooms.",
+  "removeSuccess": "Room removed from favorites successfully",
+  "removeError": "Failed to remove room from favorites"
+}
+
   "error": "Something went wrong while fetching favorite rooms."
 },
   
@@ -185,4 +191,6 @@
 
 
 
+
 }
+  

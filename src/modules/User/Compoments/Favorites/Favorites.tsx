@@ -18,10 +18,11 @@ import { removeFavorite } from "../../../../api/modules/portal/favorites";
 import type { FavoriteRoom } from "../../../../types/portal/favorites";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 export default function Favorites() {
 const { t } = useTranslation("user");
 const navigate = useNavigate();
-  const { data, isLoading, error } = useFavorites();
+ const { data, isLoading, error, fetchFavorites } = useFavorites();
   console.log("Favorites Data =>", data);
   const [page, setPage] = useState(1);
 
@@ -75,13 +76,18 @@ const handleRemove = async (
 
   console.log("CLICKED ROOM ID =>", roomId);
 
-  try {
-    const result = await removeFavorite(roomId);
+ try {
+  const result = await removeFavorite(roomId);
+  await fetchFavorites();
 
-    console.log("API DELETE =>", result);
-  } catch (error) {
-    console.log(error);
-  }
+  console.log("API DELETE =>", result);
+
+  toast.success(t("favorites.removeSuccess"));
+} catch (error) {
+  console.log(error);
+
+  toast.error(t("favorites.removeError"));
+}
 };
 
   return (
