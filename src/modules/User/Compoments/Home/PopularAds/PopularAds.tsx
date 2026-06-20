@@ -12,7 +12,8 @@ import {
 import { toast } from "react-toastify";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { useState } from "react";
-
+import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined"; // 👈 أيقونة المثلث التحذيري
 export default function PopularAds() {
   const { ads, loading } = usePortalAds();
   const isArabic = i18n.language === "ar";
@@ -21,6 +22,7 @@ export default function PopularAds() {
   const { t } = useTranslation("user");
   const { loginData } = useAuthContext();
   const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
 
   if (loading) {
     return (
@@ -42,7 +44,7 @@ export default function PopularAds() {
     e.stopPropagation();
 
     if (!loginData) {
-      toast.error("You need to login first");
+      setOpenLoginModal(true);
       return;
     }
 
@@ -51,187 +53,280 @@ export default function PopularAds() {
       if (isFavorite) {
         setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
         await removeFavorite(roomId);
-        toast.success("Removed from favorites");
+        toast.success("Successfully removed from favorites");
       } else {
         setFavoriteRooms((prev) => [...prev, roomId]);
         await addFavorite(roomId);
-        toast.success("Added to favorites");
+        toast.success("Successfully added to favorites");
       }
     } catch (error: any) {
-  console.log("FAVORITE ERROR:", error?.response?.data || error);
-  toast.error(error?.response?.data?.message || "Something went wrong");
-}
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
   };
   return (
-    <Box sx={{ py: 3, pr: { xs: 0, md: 4 } }}>
-      <Typography
-        variant="h5"
-        sx={{ color: "#152C5B", fontWeight: 700, mb: 3, fontSize: "24px" }}>
-        {t("popAds.title")}
-      </Typography>
+    <>
+      {" "}
+      <Box sx={{ py: 3, pr: { xs: 0, md: 4 } }}>
+        <Typography
+          variant="h5"
+          sx={{ color: "#152C5B", fontWeight: 700, mb: 3, fontSize: "24px" }}>
+          {t("popAds.title")}
+        </Typography>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            md: "1.4fr 2fr 2fr",
-          },
-          gridAutoRows: {
-            xs: "280px",
-            md: "270px",
-          },
-          gap: 2,
-          width: "100%",
-        }}>
-        {featuredAds.map((ad, index) => {
-          let gridStyles = {};
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "1.4fr 2fr 2fr",
+            },
+            gridAutoRows: {
+              xs: "280px",
+              md: "270px",
+            },
+            gap: 2,
+            width: "100%",
+          }}>
+          {featuredAds.map((ad, index) => {
+            let gridStyles = {};
 
-          if (index === 0) {
-            gridStyles = {
-              gridColumn: { xs: "auto", md: "1" },
-              gridRow: { xs: "auto", md: "span 2" },
-              height: "100%",
-              width: "100%",
-            };
-          } else {
-            gridStyles = {
-              gridColumn: "auto",
-              gridRow: "auto",
-              height: "100%",
-              width: "100%",
-              maxWidth: "100%",
-            };
-          }
+            if (index === 0) {
+              gridStyles = {
+                gridColumn: { xs: "auto", md: "1" },
+                gridRow: { xs: "auto", md: "span 2" },
+                height: "100%",
+                width: "100%",
+              };
+            } else {
+              gridStyles = {
+                gridColumn: "auto",
+                gridRow: "auto",
+                height: "100%",
+                width: "100%",
+                maxWidth: "100%",
+              };
+            }
 
-          return (
-            <Box
-              key={ad._id}
-              sx={{
-                position: "relative",
-                borderRadius: "16px",
-                overflow: "hidden",
-                cursor: "pointer",
-                "&:hover .overlay": {
-                  opacity: 1,
-                },
-                "&:hover img": {
-                  transform: "scale(1.04)",
-                },
-                ...gridStyles,
-              }}>
-              {/* IMAGE */}
+            return (
               <Box
-                component="img"
-                src={ad.room.images?.[0] || "/placeholder.jpg"}
-                alt={ad.room.roomNumber}
+                key={ad._id}
                 sx={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  transition: "transform 0.5s ease",
-                }}
-              />
-
-              {/* BADGE */}
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  backgroundColor: "#FF4D80",
-                  color: "#fff",
-                  padding: "8px 24px",
-                  borderBottomLeftRadius: "16px",
-                  fontWeight: 500,
-                  fontSize: "14px",
-                  zIndex: 3,
-                  textAlign: isArabic ? "right" : "left",
+                  position: "relative",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  "&:hover .overlay": {
+                    opacity: 1,
+                  },
+                  "&:hover img": {
+                    transform: "scale(1.04)",
+                  },
+                  ...gridStyles,
                 }}>
-                ${ad.room.price}{" "}
+                {/* IMAGE */}
                 <Box
-                  component="span"
-                  sx={{ fontWeight: 300, fontSize: "12px" }}>
-                  {t("popAds.badge")}
+                  component="img"
+                  src={ad.room.images?.[0] || "/placeholder.jpg"}
+                  alt={ad.room.roomNumber}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    transition: "transform 0.5s ease",
+                  }}
+                />
+
+                {/* BADGE */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#FF4D80",
+                    color: "#fff",
+                    padding: "8px 24px",
+                    borderBottomLeftRadius: "16px",
+                    fontWeight: 500,
+                    fontSize: "14px",
+                    zIndex: 3,
+                    textAlign: isArabic ? "right" : "left",
+                  }}>
+                  ${ad.room.price}{" "}
+                  <Box
+                    component="span"
+                    sx={{ fontWeight: 300, fontSize: "12px" }}>
+                    {t("popAds.badge")}
+                  </Box>
+                </Box>
+
+                {/* OVERLAY ICONS */}
+                <Box
+                  className="overlay"
+                  sx={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "rgba(0, 0, 0, 0.25)",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 2,
+                    opacity: 0,
+                    transition: "0.3s ease",
+                    zIndex: 2,
+                  }}>
+                  <IconButton
+                    onClick={(e) => handleFavorite(e, ad.room._id)}
+                    sx={{
+                      backgroundColor: "rgba(255,255,255,0.2)",
+                      "&:hover": {
+                        backgroundColor: "rgba(255,255,255,0.4)",
+                      },
+                    }}>
+                    <FavoriteIcon
+                      sx={{
+                        fontSize: "28px",
+                        color: "#fff",
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => navigate(`/detailes/${ad.room._id}`)}
+                    sx={{ color: "#fff" }}>
+                    <VisibilityIcon sx={{ fontSize: "28px" }} />
+                  </IconButton>
+                </Box>
+
+                {/* TEXT BOTTOM */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: "100%",
+                    p: 3,
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)",
+                    color: "#fff",
+                    zIndex: 1,
+                    textAlign: isArabic ? "right" : "left",
+                  }}>
+                  <Typography
+                    sx={{ fontWeight: 600, fontSize: "19px", lineHeight: 1.2 }}>
+                    {ad.room.roomNumber
+                      ? `${t("popAds.room")} ${ad.room.roomNumber}`
+                      : "Ocean Land"}
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      opacity: 0.8,
+                      mt: 0.5,
+                      fontWeight: 300,
+                    }}>
+                    {t("popAds.country")}
+                  </Typography>
                 </Box>
               </Box>
-
-              {/* OVERLAY ICONS */}
-              <Box
-                className="overlay"
-                sx={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "rgba(0, 0, 0, 0.25)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 2,
-                  opacity: 0,
-                  transition: "0.3s ease",
-                  zIndex: 2,
-                }}>
-                <IconButton
-                  onClick={(e) => handleFavorite(e, ad.room._id)}
-                  sx={{
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    "&:hover": {
-                      backgroundColor: "rgba(255,255,255,0.4)",
-                    },
-                  }}>
-                  <FavoriteIcon
-                    sx={{
-                      fontSize: "28px",
-                      color: favoriteRooms.includes(ad.room._id)
-                        ? "#FF4D80"
-                        : "#fff",
-                      transition: "0.3s",
-                    }}
-                  />
-                </IconButton>
-                <IconButton
-                  onClick={() => navigate(`/detailes/${ad.room._id}`)}
-                  sx={{ color: "#fff" }}>
-                  <VisibilityIcon sx={{ fontSize: "28px" }} />
-                </IconButton>
-              </Box>
-
-              {/* TEXT BOTTOM */}
-              <Box
-                sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  width: "100%",
-                  p: 3,
-                  background:
-                    "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)",
-                  color: "#fff",
-                  zIndex: 1,
-                  textAlign: isArabic ? "right" : "left",
-                }}>
-                <Typography
-                  sx={{ fontWeight: 600, fontSize: "19px", lineHeight: 1.2 }}>
-                  {ad.room.roomNumber
-                    ? `${t("popAds.room")} ${ad.room.roomNumber}`
-                    : "Ocean Land"}
-                </Typography>
-
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    opacity: 0.8,
-                    mt: 0.5,
-                    fontWeight: 300,
-                  }}>
-                  {t("popAds.country")}
-                </Typography>
-              </Box>
-            </Box>
-          );
-        })}
+            );
+          })}
+        </Box>
       </Box>
-    </Box>
+      <Dialog
+        open={openLoginModal}
+        onClose={() => setOpenLoginModal(false)}
+        maxWidth="xs"
+        fullWidth
+        sx={{
+          "& .MuiDialog-paper": {
+            borderRadius: "24px",
+            padding: "16px",
+            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.08)",
+          },
+        }}>
+        <DialogContent sx={{ pb: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              mt: 2,
+            }}>
+            <Box
+              sx={{
+                width: "70px",
+                height: "70px",
+                borderRadius: "50%",
+                backgroundColor: "#f5a52344",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mb: 3,
+                border: "1px solid #f5a52344",
+              }}>
+              <ReportProblemOutlinedIcon
+                sx={{ fontSize: "35px", color: "#F5A623" }}
+              />{" "}
+            </Box>
+
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: "#000",
+                mb: 1.5,
+                fontSize: "22px",
+              }}>
+              Login Required
+            </Typography>
+
+            <Typography
+              sx={{
+                color: "#B0B0B0", 
+                fontSize: "15px",
+                lineHeight: 1.6,
+                maxWidth: "85%",
+              }}>
+              You need to login first to unlock full access and add this room to
+              your favorites.
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            gap: 2,
+            px: 3,
+            pb: 3,
+            pt: 2,
+          }}>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpenLoginModal(false);
+            }}
+            sx={{
+              backgroundColor: "#3252DF", 
+              color: "#fff",
+              fontWeight: 600,
+              px: 5,
+              py: 1.2,
+              borderRadius: "12px",
+              textTransform: "none",
+              boxShadow: "0px 4px 12px rgba(50, 82, 223, 0.24)",
+              "&:hover": {
+                backgroundColor: "#2943B7",
+                boxShadow: "0px 6px 16px rgba(50, 82, 223, 0.35)",
+              },
+            }}>
+           Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
