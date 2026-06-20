@@ -14,6 +14,7 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import { addNotification } from "../../../../../uitiltes/notification";
 import GenericSkeleton from "../../../../Shared/Skeleton/Skeleton";
 export default function PopularAds() {
   const { ads, loading } = usePortalAds();
@@ -41,29 +42,56 @@ export default function PopularAds() {
   }
 
   const featuredAds = ads?.slice(0, 5) || [];
-  const handleFavorite = async (e: React.MouseEvent, roomId: string) => {
-    e.stopPropagation();
+  const handleFavorite = async (
+  e: React.MouseEvent,
+  roomId: string,
+  roomNumber: number) => {
+        e.stopPropagation();
+    
+        if (!loginData) {
+          setOpenLoginModal(true);
+          return;
+        }
+    
+        try {
+          const isFavorite = favoriteRooms.includes(roomId);
+         if (isFavorite) {
+  setFavoriteRooms((prev) =>
+    prev.filter((id) => id !== roomId)
+  );
 
-    if (!loginData) {
-      setOpenLoginModal(true);
-      return;
-    }
+  await removeFavorite(roomId);
 
-    try {
-      const isFavorite = favoriteRooms.includes(roomId);
-      if (isFavorite) {
-        setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
-        await removeFavorite(roomId);
-        toast.success("Successfully removed from favorites");
-      } else {
-        setFavoriteRooms((prev) => [...prev, roomId]);
-        await addFavorite(roomId);
-        toast.success("Successfully added to favorites");
-      }
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Something went wrong");
-    }
-  };
+  addNotification(
+    "Removed From Favorites",
+    `Room ${roomNumber} removed successfully`
+  );
+
+  toast.success(
+    "Successfully removed from favorites"
+  );
+} else {
+  setFavoriteRooms((prev) => [
+    ...prev,
+    roomId,
+  ]);
+
+  await addFavorite(roomId);
+
+  addNotification(
+    "Added To Favorites",
+    `Room ${roomNumber} added successfully`
+  );
+
+  toast.success(
+    "Added to favorites"
+  );
+
+          }
+        } catch (error: any) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
   return (
     <>
       {" "}
@@ -177,7 +205,11 @@ export default function PopularAds() {
                     zIndex: 2,
                   }}>
                   <IconButton
-                    onClick={(e) => handleFavorite(e, ad.room._id)}
+                    onClick={(e) =>  handleFavorite(
+    e,
+   ad.room._id,
+    Number(ad.room?.roomNumber)
+  )}
                     sx={{
                       backgroundColor: "rgba(255,255,255,0.2)",
                       "&:hover": {
