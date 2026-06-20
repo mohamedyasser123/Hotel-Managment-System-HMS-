@@ -14,12 +14,18 @@ export const addFavorite = async (roomId: string) => {
 };
 
 export const removeFavorite = async (roomId: string) => {
+  console.log("Sending Room ID =>", roomId);
+
   const response = await axiosClient.delete(
-    "/portal/favorite-rooms",
+    `/portal/favorite-rooms/${roomId}`,
     {
-      data: { roomId },
+      data: {
+        roomId,
+      },
     }
   );
+
+  console.log("DELETE RESPONSE =>", response);
 
   return response.data;
 };
