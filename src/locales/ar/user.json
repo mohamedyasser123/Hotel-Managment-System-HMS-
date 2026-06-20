@@ -90,6 +90,36 @@
     "commentPlace": "اكتب تعليقك هنا",
     "commentBtn": "إرسال التعليق"
   },
+  "booking": {
+  "transferPayment": "تحويل الدفع:",
+  "startDate": "تاريخ البدء",
+  "endDate": "تاريخ الانتهاء",
+  "subTotal": "المجموع الفرعي",
+  "tax": "الضريبة",
+  "total": "الإجمالي",
+  "secureStripe": "دفع آمن عبر Stripe",
+  "back": "رجوع",
+  "continueToPayment": "المتابعة للدفع"
+},
+"stepper": {
+    "bookingDetails": "تفاصيل الحجز",
+    "payment": "الدفع",
+    "completed": "اكتمل الحجز"
+  },
+  "payment": {
+    "noBooking": "لم يتم العثور على بيانات الحجز",
+    "stripeNotLoaded": "لم يتم تحميل نظام Stripe بنجاح",
+    "cardFieldNotFound": "حقل بطاقة الدفع غير موجود",
+    "failed": "فشلت عملية الدفع",
+    "cardInformation": "بيانات البطاقة الائتمانية",
+    "cancel": "إلغاء",
+    "payNow": "ادفع الآن"
+  },
+  "complete": {
+    "title": "رائع! اكتمل الحجز بنجاح",
+    "description": "سنقوم بإخطارك عبر البريد الإلكتروني لاحقاً فور قبول المعاملة وتأكيدها",
+    "backHome": "العودة للرئيسية"
+  }
 "houses": {
   "title": "منازل بحدائق خلفية جميلة",
   "popular": "الأكثر",

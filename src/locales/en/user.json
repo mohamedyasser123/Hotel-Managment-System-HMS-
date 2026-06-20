@@ -93,6 +93,7 @@
       "commentPlace":"Add your comment",
       "commentBtn":"Send"
     },
+  
 "houses": {
   "title": "Houses with beauty backyard",
   "popular": "Popular",
@@ -146,6 +147,36 @@
   "error": "Something went wrong while fetching favorite rooms."
 }
   
+  "booking": {
+    "transferPayment": "Transfer Payment:",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "subTotal": "Sub Total",
+    "tax": "Tax",
+    "total": "Total",
+    "secureStripe": "Secure Stripe Payment",
+    "back": "Back",
+    "continueToPayment": "Continue To Payment"
+  },
+"stepper": {
+    "bookingDetails": "Booking Details",
+    "payment": "Payment",
+    "completed": "Completed"
+  },
+  "payment": {
+    "noBooking": "No booking found",
+    "stripeNotLoaded": "Stripe not loaded",
+    "cardFieldNotFound": "Card field not found",
+    "failed": "Payment failed",
+    "cardInformation": "Card Information",
+    "cancel": "Cancel",
+    "payNow": "Pay Now"
+  },
+  "complete": {
+    "title": "Yay! Completed",
+    "description": "We will inform you via email later once the transaction has been accepted",
+    "backHome": "Back To Home"
+  }
   
 
 
