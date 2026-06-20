@@ -10,11 +10,21 @@ import {
 } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LanguageToggle from "../LangToggleBtn/LangToggleBtn";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useTranslation } from "react-i18next";
+import MenuIcon from "@mui/icons-material/Menu";
+
+import {
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import { toast } from "react-toastify";
+import DeleteConfirmation from "../DeleteConfirmation/DeleteConfirmation";
 
 export default function Navbar() {
   const { data, fetchProfile, } = useAuth();
@@ -30,7 +40,18 @@ useEffect(() => {
     fetchProfile();
   }
 }, [data, fetchProfile]);
+const [openDrawer, setOpenDrawer] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false);
 
+const handleLogoutConfirm = () => {
+  localStorage.clear();
+
+  setOpenLogout(false);
+
+  toast.success("Logout success");
+
+  navigate("/login");
+};
   return (
     <AppBar
       position="static"
@@ -67,13 +88,30 @@ useEffect(() => {
               cation.
             </Box>
           </Typography>
-
+ <Box
+  sx={{
+    display: {
+      xs: "block",
+      md: "none",
+    },
+  }}
+>
+  <IconButton
+    onClick={() => setOpenDrawer(true)}
+  >
+    <MenuIcon />
+  </IconButton>
+</Box>
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: { xs: 1, md: 2 },
-              flexWrap: "wrap",
+                 display: {
+      xs: "none",
+      md: "flex",
+    },
+
+    alignItems: "center",
+    gap: 2,
+  
               "& .active": {
                 color: "#3252DF !important",
                 fontWeight: 600,
@@ -84,6 +122,7 @@ useEffect(() => {
                 fontWeight: 500,
               },
             }}>
+             
             <Button component={NavLink} to="/home" end>
               {t("navbar.home")}
             </Button>
@@ -137,6 +176,16 @@ useEffect(() => {
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>
+                <Button
+  onClick={() => setOpenLogout(true)}
+  sx={{
+    color: "#d32f2f !important",
+    fontWeight: 600,
+  }}
+>
+    {t("navbar.logout")}
+
+</Button>
               </>
             ) : (
               <>
@@ -175,6 +224,92 @@ useEffect(() => {
           </Box>
         </Box>
       </Toolbar>
+      <Drawer
+  anchor={isRTL ? "right" : "left"}
+  open={openDrawer}
+  onClose={() => setOpenDrawer(false)}
+>
+  <Box
+    sx={{
+      width: 280,
+      p: 2,
+    }}
+  >
+    <List>
+
+      <ListItemButton
+        component={NavLink}
+        to="/home"
+      >
+        <ListItemText
+          primary={t("navbar.home")}
+        />
+      </ListItemButton>
+
+      <ListItemButton
+        component={NavLink}
+        to="/explore"
+      >
+        <ListItemText
+          primary={t("navbar.explore")}
+        />
+      </ListItemButton>
+
+      <ListItemButton
+        onClick={() => {
+          navigate("/");
+
+          setTimeout(() => {
+            document
+              .getElementById("reviews")
+              ?.scrollIntoView({
+                behavior: "smooth",
+              });
+          }, 100);
+
+          setOpenDrawer(false);
+        }}
+      >
+        <ListItemText
+          primary={t("navbar.review")}
+        />
+      </ListItemButton>
+
+      {role === "user" && (
+        <ListItemButton
+          component={NavLink}
+          to="/favorites"
+        >
+          <ListItemText
+            primary={t("navbar.favorites")}
+          />
+        </ListItemButton>
+      )}
+
+      <Box sx={{ px: 2, py: 1 }}>
+        <LanguageToggle />
+      </Box>
+
+      {role === "user" && (
+        <ListItemButton
+  onClick={() => setOpenLogout(true)}
+>
+  <ListItemText primary="Logout" />
+</ListItemButton>
+      )}
+    </List>
+  </Box>
+</Drawer>
+<DeleteConfirmation
+  open={openLogout}
+  onClose={() => setOpenLogout(false)}
+  onConfirm={handleLogoutConfirm}
+  itemName="Session"
+  title={t("navbar.logout")}
+  description={t("navbar.logoutDescription")}
+  confirmText={t("navbar.logout")}
+/>
     </AppBar>
+    
   );
 }
