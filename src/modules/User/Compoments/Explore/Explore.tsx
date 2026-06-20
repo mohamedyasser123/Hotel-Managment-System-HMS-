@@ -14,7 +14,12 @@ import { Breadcrumbs, Link as MuiLink } from "@mui/material";
 
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
+import { useAuthContext } from "../../../../context/AuthContext";
+import { useState } from "react";
+import { addFavorite, removeFavorite } from "../../../../api/modules/portal/favorites";
+import { toast } from "react-toastify";
+import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 export default function ExploreComponent() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -48,7 +53,33 @@ export default function ExploreComponent() {
 
     setSearchParams(params);
   };
-
+  const { loginData } = useAuthContext();
+    
+      const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
+      const [openLoginModal, setOpenLoginModal] = useState(false);
+     const handleFavorite = async (e: React.MouseEvent, roomId: string) => {
+        e.stopPropagation();
+    
+        if (!loginData) {
+          setOpenLoginModal(true);
+          return;
+        }
+    
+        try {
+          const isFavorite = favoriteRooms.includes(roomId);
+          if (isFavorite) {
+            setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
+            await removeFavorite(roomId);
+            toast.success("Successfully removed from favorites");
+          } else {
+            setFavoriteRooms((prev) => [...prev, roomId]);
+            await addFavorite(roomId);
+            toast.success("Successfully added to favorites");
+          }
+        } catch (error: any) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
   if (isLoading) {
     return (
       <Box
@@ -193,7 +224,8 @@ export default function ExploreComponent() {
                     transition: "0.3s ease",
                     zIndex: 2,
                   }}>
-                  <IconButton sx={{ color: "#fff" }}>
+                  <IconButton sx={{ color: "#fff" }} onClick={(e) => handleFavorite(e,room._id)}
+>
                     <FavoriteIcon sx={{ fontSize: "28px" }} />
                   </IconButton>
                   <IconButton sx={{ color: "#fff" }}>
@@ -262,7 +294,101 @@ export default function ExploreComponent() {
           />
         </Box>
       )}
+  <Dialog
+        open={openLoginModal}
+        onClose={() => setOpenLoginModal(false)}
+        maxWidth="xs"
+        fullWidth
+        sx={{
+          "& .MuiDialog-paper": {
+            borderRadius: "24px",
+            padding: "16px",
+            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.08)",
+          },
+        }}>
+        <DialogContent sx={{ pb: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              mt: 2,
+            }}>
+            <Box
+              sx={{
+                width: "70px",
+                height: "70px",
+                borderRadius: "50%",
+                backgroundColor: "#f5a52344",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mb: 3,
+                border: "1px solid #f5a52344",
+              }}>
+              <ReportProblemOutlinedIcon
+                sx={{ fontSize: "35px", color: "#F5A623" }}
+              />{" "}
+            </Box>
 
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: "#000",
+                mb: 1.5,
+                fontSize: "22px",
+              }}>
+              Login Required
+            </Typography>
+
+            <Typography
+              sx={{
+                color: "#B0B0B0", 
+                fontSize: "15px",
+                lineHeight: 1.6,
+                maxWidth: "85%",
+              }}>
+              You need to login first to unlock full access and add this room to
+              your favorites.
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions
+          sx={{
+            justifyContent: "center",
+            gap: 2,
+            px: 3,
+            pb: 3,
+            pt: 2,
+          }}>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpenLoginModal(false);
+            }}
+            sx={{
+              backgroundColor: "#3252DF", 
+              color: "#fff",
+              fontWeight: 600,
+              px: 5,
+              py: 1.2,
+              borderRadius: "12px",
+              textTransform: "none",
+              boxShadow: "0px 4px 12px rgba(50, 82, 223, 0.24)",
+              "&:hover": {
+                backgroundColor: "#2943B7",
+                boxShadow: "0px 6px 16px rgba(50, 82, 223, 0.35)",
+              },
+            }}>
+           Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    
     </Box>
   );
 }
