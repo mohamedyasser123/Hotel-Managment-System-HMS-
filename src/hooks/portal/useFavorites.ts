@@ -6,25 +6,25 @@ export default function useFavorites() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 
-  useEffect(() => {
+  
     const fetchFavorites = async () => {
       try {
-  setIsLoading(true);
+        setIsLoading(true);
 
-  const result = await getFavorites();
+        const result = await getFavorites();
 
-  setData(result);
-  setError(null);
+        setData(result);
+        setError(null);
 
-} catch (err) {
-  console.log("Favorites Error =>", err);
-  setError(err);
+      } catch (err) {
+        console.log("Favorites Error =>", err);
+        setError(err);
 
-} finally {
-  setIsLoading(false);
-}
+      } finally {
+        setIsLoading(false);
+      }
     };
-
+    useEffect(() => {
     fetchFavorites();
   }, []);
 
@@ -32,5 +32,6 @@ export default function useFavorites() {
     data,
     isLoading,
     error,
+    fetchFavorites,
   };
 }
