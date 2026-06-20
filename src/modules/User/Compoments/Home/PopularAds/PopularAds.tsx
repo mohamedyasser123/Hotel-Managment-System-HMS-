@@ -5,6 +5,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../../../i18n";
+import {
+  addFavorite,
+  removeFavorite,
+} from "../../../../../api/modules/portal/favorites";
+import { toast } from "react-toastify";
+import { useAuthContext } from "../../../../../context/AuthContext";
+import { useState } from "react";
 
 export default function PopularAds() {
   const { ads, loading } = usePortalAds();
@@ -12,6 +19,8 @@ export default function PopularAds() {
 
   const navigate = useNavigate();
   const { t } = useTranslation("user");
+  const { loginData } = useAuthContext();
+  const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
 
   if (loading) {
     return (
@@ -29,7 +38,30 @@ export default function PopularAds() {
   }
 
   const featuredAds = ads?.slice(0, 5) || [];
+  const handleFavorite = async (e: React.MouseEvent, roomId: string) => {
+    e.stopPropagation();
 
+    if (!loginData) {
+      toast.error("You need to login first");
+      return;
+    }
+
+    try {
+      const isFavorite = favoriteRooms.includes(roomId);
+      if (isFavorite) {
+        setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
+        await removeFavorite(roomId);
+        toast.success("Removed from favorites");
+      } else {
+        setFavoriteRooms((prev) => [...prev, roomId]);
+        await addFavorite(roomId);
+        toast.success("Added to favorites");
+      }
+    } catch (error: any) {
+  console.log("FAVORITE ERROR:", error?.response?.data || error);
+  toast.error(error?.response?.data?.message || "Something went wrong");
+}
+  };
   return (
     <Box sx={{ py: 3, pr: { xs: 0, md: 4 } }}>
       <Typography
@@ -140,8 +172,23 @@ export default function PopularAds() {
                   transition: "0.3s ease",
                   zIndex: 2,
                 }}>
-                <IconButton sx={{ color: "#fff" }}>
-                  <FavoriteIcon sx={{ fontSize: "28px" }} />
+                <IconButton
+                  onClick={(e) => handleFavorite(e, ad.room._id)}
+                  sx={{
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.4)",
+                    },
+                  }}>
+                  <FavoriteIcon
+                    sx={{
+                      fontSize: "28px",
+                      color: favoriteRooms.includes(ad.room._id)
+                        ? "#FF4D80"
+                        : "#fff",
+                      transition: "0.3s",
+                    }}
+                  />
                 </IconButton>
                 <IconButton
                   onClick={() => navigate(`/detailes/${ad.room._id}`)}
