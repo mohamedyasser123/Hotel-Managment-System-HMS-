@@ -20,6 +20,7 @@ import { addFavorite, removeFavorite } from "../../../../api/modules/portal/favo
 import { toast } from "react-toastify";
 import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import { addNotification } from "../../../../uitiltes/notification";
 export default function ExploreComponent() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -57,7 +58,10 @@ export default function ExploreComponent() {
     
       const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
       const [openLoginModal, setOpenLoginModal] = useState(false);
-     const handleFavorite = async (e: React.MouseEvent, roomId: string) => {
+    const handleFavorite = async (
+  e: React.MouseEvent,
+  roomId: string,
+  roomNumber: number) => {
         e.stopPropagation();
     
         if (!loginData) {
@@ -67,14 +71,38 @@ export default function ExploreComponent() {
     
         try {
           const isFavorite = favoriteRooms.includes(roomId);
-          if (isFavorite) {
-            setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
-            await removeFavorite(roomId);
-            toast.success("Successfully removed from favorites");
-          } else {
-            setFavoriteRooms((prev) => [...prev, roomId]);
-            await addFavorite(roomId);
-            toast.success("Successfully added to favorites");
+         if (isFavorite) {
+  setFavoriteRooms((prev) =>
+    prev.filter((id) => id !== roomId)
+  );
+
+  await removeFavorite(roomId);
+
+  addNotification(
+    "Removed From Favorites",
+    `Room ${roomNumber} removed successfully`
+  );
+
+  toast.success(
+    "Successfully removed from favorites"
+  );
+} else {
+  setFavoriteRooms((prev) => [
+    ...prev,
+    roomId,
+  ]);
+
+  await addFavorite(roomId);
+
+  addNotification(
+    "Added To Favorites",
+    `Room ${roomNumber} added successfully`
+  );
+
+  toast.success(
+    "Added to favorites"
+  );
+
           }
         } catch (error: any) {
           toast.error(error?.response?.data?.message || "Something went wrong");
@@ -224,7 +252,11 @@ export default function ExploreComponent() {
                     transition: "0.3s ease",
                     zIndex: 2,
                   }}>
-                  <IconButton sx={{ color: "#fff" }} onClick={(e) => handleFavorite(e,room._id)}
+                  <IconButton sx={{ color: "#fff" }} onClick={(e) =>  handleFavorite(
+    e,
+    room._id,
+    room.roomNumber
+  )}
 >
                     <FavoriteIcon sx={{ fontSize: "28px" }} />
                   </IconButton>
