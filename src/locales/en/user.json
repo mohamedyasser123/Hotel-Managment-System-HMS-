@@ -152,10 +152,9 @@
   "error": "Something went wrong while fetching favorite rooms.",
   "removeSuccess": "Room removed from favorites successfully",
   "removeError": "Failed to remove room from favorites"
-}
-
-  "error": "Something went wrong while fetching favorite rooms."
 },
+
+
   
   "booking": {
     "transferPayment": "Transfer Payment:",
