@@ -4,7 +4,10 @@ import {
   Badge,
   Box,
   Button,
+  Divider,
   IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -33,6 +36,7 @@ const isRTL = i18n.language === "ar";
   const user = data?.user;
   const role = user?.role;
 const navigate=useNavigate();
+
 useEffect(() => {
   const token = localStorage.getItem("token");
 
@@ -52,7 +56,67 @@ const handleLogoutConfirm = () => {
 
   navigate("/login");
 };
+
+const [notifications, setNotifications] =
+  useState<any[]>([]);
+
+const [anchorEl, setAnchorEl] =
+  useState<null | HTMLElement>(null);
+
+const openNotifications = Boolean(anchorEl);
+
+const handleOpenNotifications = (
+  event: React.MouseEvent<HTMLElement>
+) => {
+  setAnchorEl(event.currentTarget);
+
+  const updatedNotifications =
+    notifications.map((item) => ({
+      ...item,
+      read: true,
+    }));
+
+  setNotifications(updatedNotifications);
+
+  localStorage.setItem(
+    "notifications",
+    JSON.stringify(updatedNotifications)
+  );
+};
+
+const handleCloseNotifications = () => {
+  setAnchorEl(null);
+};
+
+const loadNotifications = () => {
+  const storedNotifications = JSON.parse(
+    localStorage.getItem("notifications") || "[]"
+  );
+
+  setNotifications(storedNotifications);
+};
+
+useEffect(() => {
+  loadNotifications();
+
+  window.addEventListener(
+    "notification-added",
+    loadNotifications
+  );
+
+  return () => {
+    window.removeEventListener(
+      "notification-added",
+      loadNotifications
+    );
+  };
+}, []);
+
+const unreadCount = notifications.filter(
+  (item) => !item.read
+).length;
   return (
+    <>
     <AppBar
       position="static"
       color="inherit"
@@ -171,11 +235,17 @@ const handleLogoutConfirm = () => {
                   <KeyboardArrowDownIcon />
                 </Box>
 
-                <IconButton sx={{ color: "#1F384C" }}>
-                  <Badge badgeContent={4} color="error">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
+              <IconButton
+  sx={{ color: "#1F384C" }}
+  onClick={handleOpenNotifications}
+>
+  <Badge
+    badgeContent={unreadCount}
+    color="error"
+  >
+    <NotificationsIcon />
+  </Badge>
+</IconButton>
                 <Button
   onClick={() => setOpenLogout(true)}
   sx={{
@@ -309,7 +379,74 @@ const handleLogoutConfirm = () => {
   description={t("navbar.logoutDescription")}
   confirmText={t("navbar.logout")}
 />
+
+
+
     </AppBar>
+    <Menu
+  anchorEl={anchorEl}
+  open={openNotifications}
+  onClose={handleCloseNotifications}
+   slotProps={{
+    paper: {
+      sx: {
+        width: 350,
+        maxHeight: 400,
+        overflowY: "auto",
+      },
+    },
+  }}
+>
+  <Box sx={{ px: 2, py: 1 }}>
+    <Typography
+      variant="h6"
+      sx={{fontWeight:600}}
+      
+    >
+      Notifications
+    </Typography>
+  </Box>
+
+  <Divider />
+
+  {notifications.length === 0 ? (
+    <MenuItem disabled>
+      No Notifications
+    </MenuItem>
+  ) : (
+    notifications.map((item) => (
+      <MenuItem
+        key={item.id}
+        sx={{
+          whiteSpace: "normal",
+          alignItems: "flex-start",
+          py: 1.5,
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: 14,
+            }}
+          >
+            {item.title}
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 13,
+              color: "text.secondary",
+            }}
+          >
+            {item.message}
+          </Typography>
+        </Box>
+      </MenuItem>
+    ))
+  )}
+</Menu>
+    </>
     
   );
 }
