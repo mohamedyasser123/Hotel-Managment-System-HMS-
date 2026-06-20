@@ -134,7 +134,17 @@
   "location5": "Bali, Indonesia",
   "location6": "Jakarta, Indonesia",
   "location7": "Bogor, Indonesia"
-}  
+},
+"favorites": {
+  "home": "Home",
+  "favorites": "Favorites",
+  "title": "Your Favorites",
+  "empty": "No favorite rooms found.",
+  "room": "Room",
+  "capacity": "Capacity",
+  "night": "per night",
+  "error": "Something went wrong while fetching favorite rooms."
+}
   
   
 
