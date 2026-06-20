@@ -14,6 +14,7 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import GenericSkeleton from "../../../../Shared/Skeleton/Skeleton";
 export default function PopularAds() {
   const { ads, loading } = usePortalAds();
   const isArabic = i18n.language === "ar";
@@ -34,7 +35,7 @@ export default function PopularAds() {
           minHeight: "40vh",
           width: "100%",
         }}>
-        <CircularProgress size={50} sx={{ color: "#3252DF" }} />
+         <GenericSkeleton/>
       </Box>
     );
   }
