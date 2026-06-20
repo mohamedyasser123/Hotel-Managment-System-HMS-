@@ -39,7 +39,11 @@
     "review": "Review",
     "favorites": "Favorites",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "logout": "Logout",
+    "logoutDescription": "Are you sure you want to log out of your account?"
+
+
   },
 
   "heroSection":{

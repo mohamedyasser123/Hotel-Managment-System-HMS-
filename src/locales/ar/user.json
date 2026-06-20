@@ -37,7 +37,11 @@
     "review": "التقييمات",
     "favorites": "المفضلة",
     "login": "تسجيل الدخول",
-    "register": "إنشاء حساب"
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "logoutDescription": "هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟"
+
+
   },
 
     "heroSection":{
