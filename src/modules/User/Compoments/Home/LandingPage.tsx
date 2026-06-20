@@ -1,7 +1,25 @@
-import React from 'react'
-
+import { Box } from '@mui/material'
+import HeroSection from "./HeroSection/HeroSection";
+import Houses from '../HousesSection/Houses';
+import PopularAds from "./PopularAds/PopularAds";
+import Hotels from "../HotelsSection/Hotels";
+import AdsSection from './AdsSection/AdsSection';
+import ReviewSection from './ReviewSection/ReviewSection';
 export default function LandingPage() {
   return (
-    <div>LandingPage</div>
-  )
+    <Box>
+      {/* hero */}
+      <HeroSection />
+      {/* most pouplar */}
+      <PopularAds />
+      {/* house slider */}
+      <Houses />
+      {/* hotel slider */}
+      <Hotels />
+      {/* ads section */}
+<AdsSection />
+      {/* review section */}
+      <ReviewSection />
+    </Box>
+  );
 }

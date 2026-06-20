@@ -22,6 +22,10 @@ import RoomsData from "./modules/Admin/Components/Rooms/RoomsData";
 import FacilitiesList from "./modules/Admin/Components/Facilities/FacilitiesList";
 import BookingList from "./modules/Admin/Components/Booking/BookingList";
 import AdsList from "./modules/Admin/Components/ADS/AdsList";
+import DetailsPage from "./modules/User/Compoments/DetailsPage/DetailsPage";
+import Explore from "./modules/User/Compoments/Explore/Explore";
+import Favorites from "./modules/User/Compoments/Favorites/Favorites";
+import Payment from "./modules/User/Compoments/Payment/Payment";
 
 function App() {
   const { i18n } = useTranslation();
@@ -35,7 +39,6 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-password", element: <ForgotPassword /> },
@@ -53,29 +56,42 @@ function App() {
       ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard /> },
         { path: "dashboard", element: <Dashboard /> },
          { path: "user-list", element: <UsersList /> },
           { path: "room-list", element: <RoomsList /> },
-           { path: "room-data", element: <RoomsData /> },
+           { path: "room-data/:id?", element: <RoomsData /> },
            { path: "booking-list", element: <BookingList /> },
            { path: "ads-list", element: <AdsList /> },
             { path: "facilities-list", element: <FacilitiesList /> },
       ],
     },
+   {
+  path: "/",
+  element: <UserLayout />,
+  children: [
+    { index: true, element: <LandingPage /> },
+    { path: "home", element: <LandingPage /> },
+     { path: "explore", element: <Explore /> },
     {
-      path: "home",
-      element: (
-           <ProtectedRoute allowedRoles={["user"]}>
-   <UserLayout />
-           </ProtectedRoute>
-      ),
+  path: "favorites",
+  element: (
+    <ProtectedRoute allowedRoles={["user"]}>
+      <Favorites />
+    </ProtectedRoute>
+  ),
+},
+{
+  path: "payment",
+  element: (
+    <ProtectedRoute allowedRoles={["user"]}>
+      <Payment />
+    </ProtectedRoute>
+  ),
+},
+    { path: "detailes/:id", element: <DetailsPage /> },
    
-      errorElement: <NotFound />,
-      children: [{ index: true, element: <LandingPage /> },
-        {path: "home", element: <LandingPage /> }
-      ],
-    },
+  ],
+}
   ]);
   return (
     <>

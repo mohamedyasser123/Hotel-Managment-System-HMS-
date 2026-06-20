@@ -1,0 +1,184 @@
+{
+  "ads": "Ads",
+  "off": "OFF",
+  "room": "Room",
+  "location": "Bandung, Indonesia",
+  
+  "reviews": {
+    "happyFamily": "Happy Family",
+    "happyFamilyText": "What a great trip with my family and I should try again next time soon ...",
+    "happyFamilyAuthor": "Angga, Product Designer",
+
+    "amazingExperience": "Amazing Experience",
+    "amazingExperienceText": "An unforgettable vacation! Everything was perfectly organized and smooth.",
+    "amazingExperienceAuthor": "Sarah, Marketing Manager"
+  },
+  
+  "footer": {
+    "description": "We kaboom your beauty holiday instantly and memorable.",
+
+    "forBeginners": "For Beginners",
+    "newAccount": "New Account",
+    "startBooking": "Start Booking",
+    "usePayments": "Use Payments",
+
+    "exploreUs": "Explore Us",
+    "ourCareers": "Our Careers",
+    "privacy": "Privacy",
+    "terms": "Terms & Conditions",
+
+    "connectUs": "Connect Us",
+
+    "address": "Staycation, Kemang, Jakarta",
+
+    "copyright": "Copyright 2026 • All rights reserved • Staycation"
+  },
+   "navbar": {
+    "home": "Home",
+    "explore": "Explore",
+    "review": "Review",
+    "favorites": "Favorites",
+    "login": "Login",
+    "register": "Register"
+  },
+
+  "heroSection":{
+    "title" :"Forget Busy Work,Start Next Vacation",
+    "discription" :"We provide what you need to enjoy your holiday with family. Time to make another memorable moments.",
+    "booking" :"Start Booking",
+    "capacity" :"Capacity",
+    "explore":"Explore",
+    "start date": "Start Date",
+    "end date": "End Date"
+  },
+
+    "popAds":{
+      "title":"Most popular ads",
+      "badge" :" per night",
+      "room" :"Room",
+      "country":"Bandung, Indonesia"
+    },
+
+
+    "roomDetailes":{
+      "roomDetails":"Room Details",
+      "home":"Home",
+      "room" :"Room",
+      "roomDiscount" :"Discount",
+      "description1":"Minimal techno is a minimalist subgenre of techno music. It is characterized by a stripped-down aesthetic that exploits the use of repetition and understated development. Minimal techno is thought to have been originally developed in the early 1990s by Detroit-based producers Robert Hood and Daniel Bell.",
+      "description2" :"Such trends saw the demise of the soul-infused techno that typified the original Detroit sound. Robert Hood has noted that he and Daniel Bell both realized something was missing from techno in the post-rave era.",
+      "description3" :"Design is a plan or specification for the construction of an object or system or for the implementation of an activity or process, or the result of that plan or specification in the form of a prototype, product or process. The national agency for design: enabling Singapore to use design for economic growth and to make lives better.",
+      "startBooking" :"Start Booking",
+      "night" :"per night",
+      "pickDate":"Pick a Date",
+      "startDate" :"Start Date",
+      "EndDate":"End Date",
+      "capacity" :"Capacity",
+    "youWillPay": "You will pay",
+    "for": "for",
+    "person": "person",
+    "persons": "persons",
+      "bookingBtn":"Continue to book",
+      "bathroom" :"Bathroom",
+      "bedroom" :"Bedroom",
+      "livingRoom" :"Living room",
+      "diningroom" :"dining room",
+      "unitready" :"unit ready",
+      "refrigerator" :"refrigerator",
+      "television" :"television",
+      "rate":"Rate This Room",
+      "ratePlace":"Add your rating",
+      "rateBtn":"Rate",
+      "comment":"Add your comment",
+      "commentPlace":"Add your comment",
+      "commentBtn":"Send"
+    },
+  
+"houses": {
+  "title": "Houses with beauty backyard",
+  "popular": "Popular",
+  "choice": "Choice",
+
+  "house1": "Tabby Town",
+  "house2": "Anggana",
+  "house3": "Seattle Rain",
+  "house4": "Woodden Pit",
+  "house5": "Garden Haven",
+  "house6": "Blue Lagoon",
+  "house7": "Forest Cabin",
+
+  "location1": "Gunung Batu, Indonesia",
+  "location2": "Bogor, Indonesia",
+  "location3": "Jakarta, Indonesia",
+  "location4": "Wonosobo, Indonesia",
+  "location5": "Bali, Indonesia",
+  "location6": "Bogor, Indonesia",
+  "location7": "Wonosobo, Indonesia"
+},
+"hotels": {
+  "title": "Hotels with large living room",
+  "popular": "Popular",
+  "choice": "Choice",
+
+  "hotel1": "Green Park",
+  "hotel2": "Podo Wae",
+  "hotel3": "Silver Rain",
+  "hotel4": "Cashville",
+  "hotel5": "Ocean View",
+  "hotel6": "Royal Nest",
+  "hotel7": "Golden Stay",
+
+  "location1": "Tangerang, Indonesia",
+  "location2": "Madiun, Indonesia",
+  "location3": "Bandung, Indonesia",
+  "location4": "Kemang, Indonesia",
+  "location5": "Bali, Indonesia",
+  "location6": "Jakarta, Indonesia",
+  "location7": "Bogor, Indonesia"
+},
+"favorites": {
+  "home": "Home",
+  "favorites": "Favorites",
+  "title": "Your Favorites",
+  "empty": "No favorite rooms found.",
+  "room": "Room",
+  "capacity": "Capacity",
+  "night": "per night",
+  "error": "Something went wrong while fetching favorite rooms."
+},
+  
+  "booking": {
+    "transferPayment": "Transfer Payment:",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "subTotal": "Sub Total",
+    "tax": "Tax",
+    "total": "Total",
+    "secureStripe": "Secure Stripe Payment",
+    "back": "Back",
+    "continueToPayment": "Continue To Payment"
+  },
+"stepper": {
+    "bookingDetails": "Booking Details",
+    "payment": "Payment",
+    "completed": "Completed"
+  },
+  "payment": {
+    "noBooking": "No booking found",
+    "stripeNotLoaded": "Stripe not loaded",
+    "cardFieldNotFound": "Card field not found",
+    "failed": "Payment failed",
+    "cardInformation": "Card Information",
+    "cancel": "Cancel",
+    "payNow": "Pay Now"
+  },
+  "complete": {
+    "title": "Yay! Completed",
+    "description": "We will inform you via email later once the transaction has been accepted",
+    "backHome": "Back To Home"
+  }
+  
+
+
+
+}

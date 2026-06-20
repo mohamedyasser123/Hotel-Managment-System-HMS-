@@ -8,6 +8,7 @@ import { useAuthContext } from "../context/AuthContext";
 export default function useAuth(role: "admin" | "user" = "user") {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [data, setData] = useState<any>(null);
   const { saveLoginData } = useAuthContext();
 
 const handleLogin = async (data: LoginFormData) => {
@@ -17,8 +18,10 @@ const handleLogin = async (data: LoginFormData) => {
       if (res?.data?.token) {
         const cleanToken = res.data.token.replace("Bearer ", "");
         const serverRole = res.data.user.role as "admin" | "user";
+        const userId = res.data.user._id;
         localStorage.setItem("token", cleanToken);
         localStorage.setItem("role", serverRole);
+        localStorage.setItem("userId", userId);
         saveLoginData(cleanToken); 
         toast.success(res.message || "User logged in successfully");
         if (serverRole === "admin") {
@@ -100,13 +103,39 @@ const handleLogin = async (data: LoginFormData) => {
       setIsLoading(false);
     }
   };
+const fetchProfile = async () => {
+ const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
+if (!token || !userId) {
+  return;
+}
+
+  setIsLoading(true);
+
+  try {
+    const response = await authApi.getUserProfile(userId);
+
+    if (response.success) {
+      setData(response.data);
+    }
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.message || "Failed to load profile"
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return {
+    data,
     isLoading,
     handleLogin,
     handleSignUp,
     handleForgotPassword,
     handleResetPassword,
-    handleChangePassword
+    handleChangePassword,
+    fetchProfile
   };
 }

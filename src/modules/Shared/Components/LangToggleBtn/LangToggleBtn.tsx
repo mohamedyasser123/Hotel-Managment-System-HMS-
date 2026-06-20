@@ -6,7 +6,6 @@ export default function LanguageToggle() {
 
   const isArabic = i18n.language === "ar";
 
-  // دالة تغيير اللغة الجديدة الخاصة بك
   const toggleLanguage = () => {
     const newLang = i18n.language === "en" ? "ar" : "en";
 
@@ -27,7 +26,6 @@ export default function LanguageToggle() {
         userSelect: "none"
       }}
     >
-      {/* نص اللغة الإنجليزية */}
       <Typography 
         sx={{ 
           fontSize: 13, 
@@ -76,7 +74,6 @@ export default function LanguageToggle() {
         }}
       />
 
-      {/* نص اللغة العربية */}
       <Typography 
         sx={{ 
           fontSize: 13, 
