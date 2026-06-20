@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
-import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined"; // 👈 أيقونة المثلث التحذيري
+import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
 export default function PopularAds() {
   const { ads, loading } = usePortalAds();
   const isArabic = i18n.language === "ar";
