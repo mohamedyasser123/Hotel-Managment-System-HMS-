@@ -35,17 +35,17 @@ const { t } = useTranslation("admin");
 
   const cards = [
     {
-    title: t("rooms"),
+    title: t("dashboard.rooms"),
       value: stats.rooms,
       icon: <PeopleIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
     {
-    title: t("facilities"),
+    title: t("dashboard.facilities"),
       value: stats.facilities,
       icon: <InventoryIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
     {
-    title: t("ads"),
+    title: t("dashboard.ads"),
       value: stats.ads,
       icon: <CampaignIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
@@ -166,13 +166,13 @@ const { t } = useTranslation("admin");
                     {
                       id: 0,
                       value: stats?.bookings?.pending,
-    label: t("pending"),
+    label: t("dashboard.pending"),
                       color: "#5368F0",
                     },
                     {
                       id: 1,
                       value: stats?.bookings?.completed,
-    label: t("completed"),
+    label: t("dashboard.completed"),
                       color: "#9D57D5",
                     },
                   ],
@@ -221,13 +221,13 @@ const { t } = useTranslation("admin");
                       {
                         id: 0,
                         value: stats?.users?.user,
-    label: t("users"),
+    label: t("dashboard.users"),
                         color: "#4C6FFF",
                       },
                       {
                         id: 1,
                         value: stats?.users?.admin,
-    label: t("admins"),
+    label: t("dashboard.admins"),
                         color: "#FFB020",
                       },
                     ],
@@ -257,7 +257,7 @@ const { t } = useTranslation("admin");
                   }}
                 />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-  {t("users")}: {stats?.users?.user ?? 0}
+  {t("dashboard.users")}: {stats?.users?.user ?? 0}
                 </Typography>
               </Box>
 
@@ -271,7 +271,7 @@ const { t } = useTranslation("admin");
                   }}
                 />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-  {t("admins")}: {stats?.users?.admin ?? 0}
+  {t("dashboard.admins")}: {stats?.users?.admin ?? 0}
                 </Typography>
               </Box>
             </Box>
