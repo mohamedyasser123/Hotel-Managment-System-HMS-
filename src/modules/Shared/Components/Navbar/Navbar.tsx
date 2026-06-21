@@ -360,13 +360,58 @@ const unreadCount = notifications.filter(
         <LanguageToggle />
       </Box>
 
-      {role === "user" && (
-        <ListItemButton
-  onClick={() => setOpenLogout(true)}
->
-  <ListItemText primary="Logout" />
-</ListItemButton>
-      )}
+     {role === "user" ? (
+  <ListItemButton
+    onClick={() => setOpenLogout(true)}
+  >
+    <ListItemText
+      primary={t("navbar.logout")}
+    />
+  </ListItemButton>
+) : (
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 2,
+      mt: 2,
+      px: 2,
+    }}
+  >
+    <Button
+      component={NavLink}
+      to="/login"
+      variant="contained"
+      fullWidth
+      onClick={() => setOpenDrawer(false)}
+      sx={{
+        bgcolor: "#3252DF",
+        textTransform: "none",
+        color: "#fff",
+        borderRadius: 2,
+        "&:hover": {
+          bgcolor: "#2441c7",
+        },
+      }}
+    >
+      {t("navbar.login")}
+    </Button>
+
+    <Button
+      component={NavLink}
+      to="/register"
+      variant="outlined"
+      fullWidth
+      onClick={() => setOpenDrawer(false)}
+      sx={{
+        textTransform: "none",
+        borderRadius: 2,
+      }}
+    >
+      {t("navbar.register")}
+    </Button>
+  </Box>
+)}
     </List>
   </Box>
 </Drawer>
