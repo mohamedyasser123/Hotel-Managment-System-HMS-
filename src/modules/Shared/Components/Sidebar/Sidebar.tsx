@@ -33,7 +33,7 @@ export default function Sidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+ const { t, i18n } = useTranslation("admin");
   const theme = useTheme();
   
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -62,23 +62,35 @@ export default function Sidebar() {
   };
 
   const menuItems = [
-    { title: "Dashboard", icon: <DashboardIcon />, path: "/admin/dashboard" },
-    { title: "Users", icon: <PeopleIcon />, path: "/admin/user-list" },
-    { title: "Rooms", icon: <MeetingRoomIcon />, path: "/admin/room-list" },
-    { title: "ADS", icon: <CampaignIcon />, path: "/admin/ads-list" },
-    { title: "Booking", icon: <BookOnlineIcon />, path: "/admin/booking-list" },
-    {
-      title: "Facilities",
-      icon: <CorporateFareIcon />,
-      path: "/admin/facilities-list",
-    },
-    {
-      title: "Change Password",
-      icon: <LockResetIcon />,
-      path: "/change-password",
-    },
-    { title: "LogOut", icon: <LogoutIcon />, path: "#", action: "logout" },
-  ];
+  { title: t("sidebar.dashboard"), icon: <DashboardIcon />, path: "/admin/dashboard" },
+
+  { title: t("sidebar.users"), icon: <PeopleIcon />, path: "/admin/user-list" },
+
+  { title: t("sidebar.rooms"), icon: <MeetingRoomIcon />, path: "/admin/room-list" },
+
+  { title: t("sidebar.ads"), icon: <CampaignIcon />, path: "/admin/ads-list" },
+
+  { title: t("sidebar.booking"), icon: <BookOnlineIcon />, path: "/admin/booking-list" },
+
+  {
+    title: t("sidebar.facilities"),
+    icon: <CorporateFareIcon />,
+    path: "/admin/facilities-list",
+  },
+
+  {
+    title: t("sidebar.changePassword"),
+    icon: <LockResetIcon />,
+    path: "/change-password",
+  },
+
+  {
+    title: t("sidebar.logout"),
+    icon: <LogoutIcon />,
+    path: "#",
+    action: "logout",
+  },
+];
 
   const drawerContent = (
     <>
@@ -217,10 +229,10 @@ export default function Sidebar() {
           open={openLogout}
           onClose={() => setOpenLogout(false)}
           onConfirm={handleLogoutConfirm}
-          itemName="Session"
-          title="Log Out ?"
-          description="Are you sure you want to log out of your account?"
-          confirmText="Log Out"
+          itemName={t("sidebar.session")}
+title={t("sidebar.logoutTitle")}
+description={t("sidebar.logoutDescription")}
+confirmText={t("sidebar.logout")}
         />
       </Box>
     </>

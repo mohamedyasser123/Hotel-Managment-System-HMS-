@@ -1,3 +1,249 @@
 {
-  "test": "test"
+  "adminHeader": {
+  "loading": "جاري التحميل..."
+},
+
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "users": "المستخدمون",
+    "rooms": "الغرف",
+    "ads": "الإعلانات",
+    "booking": "الحجوزات",
+    "facilities": "المرافق",
+    "changePassword": "تغيير كلمة المرور",
+    "logout": "تسجيل الخروج",
+    "session": "الجلسة",
+    "logoutTitle": "تسجيل الخروج ؟",
+    "logoutDescription": "هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟"
+  },
+  
+  "ads": {
+    "header": {
+      "title": "تفاصيل الإعلانات",
+      "subtitle": "يمكنك الاطلاع على جميع التفاصيل",
+      "addButton": "إضافة إعلان جديد"
+    },
+    "columns": {
+      "roomName": "رقم الغرفة",
+      "price": "السعر",
+      "discount": "الخصم",
+      "capacity": "السعة",
+      "active": "الحالة"
+    },
+    "filters": {
+      "price": "السعر",
+      "lowPrice": "منخفض (<2000)",
+      "highPrice": "مرتفع (>=2000)",
+      "activeStatus": "حالة الإعلان",
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "actions": {
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "modal": {
+      "createTitle": "إعلان",
+      "updateTitle": "تعديل الإعلان",
+      "room": "الغرفة",
+      "discount": "الخصم",
+      "active": "الحالة",
+      "save": "حفظ",
+      "update": "تحديث"
+    },
+    "common": {
+      "yes": "نعم",
+      "no": "لا"
+    },
+    "view": {
+      "title": "تفاصيل الإعلان",
+      "room": "الغرفة",
+      "capacity": "السعة",
+      "price": "السعر",
+      "discount": "الخصم",
+      "activeStatus": "حالة الإعلان",
+      "createdAt": "تاريخ الإنشاء",
+      "updatedAt": "تاريخ التعديل",
+      "notAvailable": "غير متاح",
+      "close": "إغلاق",
+      "currency": "ج.م"
+    },
+    "itemName": "الإعلان"
+  },
+  
+  "booking": {
+    "header": {
+      "title": "تفاصيل الحجوزات",
+      "subtitle": "يمكنك الاطلاع على جميع التفاصيل"
+    },
+
+    "columns": {
+      "roomNumber": "رقم الغرفة",
+      "price": "السعر",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "user": "المستخدم",
+      "status": "الحالة"
+    },
+
+    "filters": {
+      "price": "السعر",
+      "less1000": "أقل من 1000",
+      "less2000": "أقل من 2000",
+      "less3000": "أقل من 3000"
+    },
+
+    "actions": {
+      "view": "عرض"
+    },
+
+    "view": {
+      "title": "تفاصيل الحجز",
+      "room": "الغرفة",
+      "bookedBy": "تم الحجز بواسطة",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "totalPrice": "إجمالي السعر",
+      "currency": "ج.م",
+      "close": "إغلاق"
+    }
+  },
+"facilities": {
+  "header": {
+    "title": "تفاصيل المرافق",
+    "subtitle": "يمكنك الاطلاع على جميع التفاصيل",
+    "addButton": "إضافة مرفق جديد"
+  },
+  "columns": {
+    "name": "الاسم",
+    "createdAt": "تاريخ الإنشاء",
+    "createdBy": "تم الإنشاء بواسطة",
+    "updatedAt": "تاريخ التعديل"
+  },
+  "actions": {
+    "view": "عرض",
+    "edit": "تعديل",
+    "delete": "حذف"
+  },
+  "modal": {
+    "addTitle": "إضافة مرفق",
+    "updateTitle": "تعديل المرفق",
+    "facilityName": "اسم المرفق",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "update": "تحديث"
+  },
+  "itemName": "مرفق"
+},
+"users": {
+  "header": {
+    "title": "تفاصيل المستخدمين",
+    "subtitle": "يمكنك عرض جميع التفاصيل"
+  },
+  "columns": {
+    "userName": "اسم المستخدم",
+    "profileImage": "الصورة الشخصية",
+    "email": "البريد الإلكتروني"
+  },
+  "actions": {
+    "view": "عرض"
+  },
+  "common": {
+    "user": "مستخدم"
+  },
+  "view": {
+    "title": "تفاصيل المستخدم",
+    "verified": "موثق",
+    "notVerified": "غير موثق",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "country": "الدولة",
+    "joinedAt": "تاريخ الانضمام",
+    "lastUpdated": "آخر تحديث",
+    "close": "إغلاق"
+  }
+},
+
+  "rooms": {
+    "itemName": "غرفة",
+
+    "header": {
+      "title": "تفاصيل الغرف",
+      "subtitle": "يمكنك عرض جميع التفاصيل",
+      "addButton": "إضافة غرفة جديدة"
+    },
+
+    "columns": {
+      "roomNumber": "رقم الغرفة",
+      "image": "الصورة",
+      "price": "السعر",
+      "discount": "الخصم",
+      "capacity": "السعة",
+      "facilities": "المرافق"
+    },
+
+    "actions": {
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+
+    "filters": {
+      "price": "السعر",
+      "facilities": "المرافق",
+      "less1000": "أقل من 1000",
+      "less2000": "أقل من 2000",
+      "less3000": "أقل من 3000"
+    },
+
+    "view": {
+      "title": "تفاصيل الغرفة",
+      "roomNumber": "رقم الغرفة",
+      "pricePerNight": "السعر لكل ليلة",
+      "capacity": "السعة",
+      "persons": "أشخاص",
+      "discount": "الخصم",
+      "facilities": "المرافق",
+      "roomImages": "صور الغرفة",
+      "createdBy": "تم الإنشاء بواسطة",
+      "createdAt": "تاريخ الإنشاء",
+      "close": "إغلاق"
+    },
+
+    "common": {
+      "noImage": "لا توجد صورة",
+      "noFacilitiesAvailable": "لا توجد مرافق متاحة",
+      "noImagesAvailable": "لا توجد صور متاحة"
+    }
+  },
+ "deleteConfirmation": {
+  "title": "حذف {{item}}؟",
+  "description": "هل أنت متأكد من حذف هذا العنصر؟ إذا كنت متأكدًا اضغط على حذف.",
+  "delete": "حذف",
+  "cancel": "إلغاء"
+},
+
+  "roomData": {
+    "roomNumber": "رقم الغرفة",
+    "price": "السعر",
+    "capacity": "السعة",
+    "discount": "الخصم",
+    "facilities": "المرافق",
+    "uploadImages": "اسحب الصور وأفلتها أو اختر الصور",
+    "newFilesSelected": "ملفات جديدة تم اختيارها",
+    "cancel": "إلغاء",
+    "saving": "جاري الحفظ...",
+    "updateRoom": "تحديث الغرفة",
+    "saveRoom": "حفظ الغرفة",
+
+    "validation": {
+      "roomNumberRequired": "رقم الغرفة مطلوب",
+      "priceRequired": "السعر مطلوب",
+      "capacityRequired": "السعة مطلوبة"
+    }
+  
+}
+
+
 }
