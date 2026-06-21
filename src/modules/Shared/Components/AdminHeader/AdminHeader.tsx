@@ -4,11 +4,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import useAuth from '../../../../hooks/useAuth';
 import { useEffect } from 'react';
 import LanguageToggle from '../LangToggleBtn/LangToggleBtn';
-
+import { useTranslation } from "react-i18next";
 export default function AdminHeader() {
   const { data, fetchProfile } = useAuth();
   const user = data?.user;
-
+const { t } = useTranslation("user");
   useEffect(() => {
     if (!data) {
       fetchProfile();
@@ -72,7 +72,9 @@ export default function AdminHeader() {
         />
       </Box>
     ) : (
-      <Typography variant="body2" color="text.secondary">Loading...</Typography>
+      <Typography variant="body2" color="text.secondary">
+  {t("adminHeader.loading")}
+</Typography>
     )}
 
     <IconButton sx={{ color: "#1F384C", p: { xs: 0.5, sm: 1 } }}>

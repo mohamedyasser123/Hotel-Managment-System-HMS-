@@ -32,8 +32,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import CrudHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
 import SharedFilter from "../../../Shared/Components/filter/filter";
-
+import { useTranslation } from "react-i18next";
 export default function AdsList() {
+  const { t, i18n } = useTranslation("admin");
   const [openModal, setOpenModal] = useState(false);
   const [rowToDeleteId, setRowToDeleteId] = useState<string | null>(null);
   const [openViewModal, setOpenViewModal] = useState(false);
@@ -76,17 +77,19 @@ export default function AdsList() {
       price: ad.room?.price,
       discount: ad.room?.discount,
       capacity: ad.room?.capacity,
-      active: ad.isActive ? "Yes" : "No",
+      active: ad.isActive
+  ? t("ads.common.yes")
+  : t("ads.common.no"),
     }));
-  }, [data]);
+ }, [data, t]);
 
   const columns = [
-    { field: "roomName", headerName: "Room Name", flex: 1 },
-    { field: "price", headerName: "Price", flex: 1 },
-    { field: "discount", headerName: "Discount", flex: 1 },
-    { field: "capacity", headerName: "Capacity", flex: 1 },
-    { field: "active", headerName: "Active", flex: 1 },
-  ];
+  { field: "roomName", headerName: t("ads.columns.roomName"), flex: 1 },
+  { field: "price", headerName: t("ads.columns.price"), flex: 1 },
+  { field: "discount", headerName: t("ads.columns.discount"), flex: 1 },
+  { field: "capacity", headerName: t("ads.columns.capacity"), flex: 1 },
+  { field: "active", headerName: t("ads.columns.active"), flex: 1 },
+];
 
   /* 
     💡 تعديل جوهري: 
@@ -118,9 +121,9 @@ export default function AdsList() {
   return (
     <>
       <CrudHeader
-        title="ADS Table Details"
-        subtitle="You can check all details"
-        buttonText="Add New Ads"
+        title={t("ads.header.title")}
+subtitle={t("ads.header.subtitle")}
+buttonText={t("ads.header.addButton")}
         onClick={() => {
           reset({ room: "" } as any);
           setSelectedAd(null);
@@ -141,18 +144,18 @@ export default function AdsList() {
         filters={[
           {
             key: "price",
-            placeholder: "Price",
+            placeholder: t("ads.filters.price"),
             options: [
-              { label: "Low (<2000)", value: "low" },
-              { label: "High (>=2000)", value: "high" },
+             { label: t("ads.filters.lowPrice"), value: "low" },
+{ label: t("ads.filters.highPrice"), value: "high" },
             ],
           },
           {
             key: "isActive",
-            placeholder: "Active Status",
+           placeholder: t("ads.filters.activeStatus"),
             options: [
-              { label: "Active", value: "true" },
-              { label: "Inactive", value: "false" },
+              { label: t("ads.filters.active"), value: "true" },
+{ label: t("ads.filters.inactive"), value: "false" },
             ],
           },
         ]}
@@ -177,7 +180,7 @@ export default function AdsList() {
               onClose={handleClose}
               actions={[
                 {
-                  label: "View",
+                  label: t("ads.actions.view"),
                   icon: <VisibilityOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     setSelectedAdView(row);
@@ -186,7 +189,7 @@ export default function AdsList() {
                   },
                 },
                 {
-                  label: "Edit",
+                  label: t("ads.actions.edit"),
                   icon: <EditOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (!selectedRow) return;
@@ -198,7 +201,7 @@ export default function AdsList() {
                   },
                 },
                 {
-                  label: "Delete",
+                  label: t("ads.actions.delete"),
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (selectedRow) {
@@ -222,16 +225,27 @@ export default function AdsList() {
         slotProps={{ paper: { sx: { borderRadius: "16px", p: 1 } } }}
       >
         <DialogTitle sx={{ fontWeight: 700, fontSize: "28px", color: "#1F263E", position: "relative" }}>
-          {selectedAd ? "Update Ads" : "Ads"}
-          <IconButton onClick={() => setOpenModal(false)} sx={{ position: "absolute", right: 15, top: 15, color: "#D92D20" }}>
-            <CloseIcon />
-          </IconButton>
+         {selectedAd
+  ? t("ads.modal.updateTitle")
+  : t("ads.modal.createTitle")}
+         <IconButton
+  onClick={() => setOpenModal(false)}
+  sx={{
+    position: "absolute",
+    top: 15,
+    right: i18n.language === "ar" ? "auto" : 15,
+    left: i18n.language === "ar" ? 15 : "auto",
+    color: "#D92D20",
+  }}
+>
+  <CloseIcon />
+</IconButton>
         </DialogTitle>
         <DialogContent>
           {!selectedAd && (
             <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel>Room</InputLabel>
-              <Select label="Room" defaultValue="" {...register("room")}>
+              <InputLabel>{t("ads.modal.room")}</InputLabel>
+              <Select label={t("ads.modal.room")} defaultValue="" {...register("room")}>
                 {rooms.map((room) => (
                   <MenuItem key={room._id} value={room._id}>
                     {room.roomNumber}
@@ -242,17 +256,22 @@ export default function AdsList() {
           )}
           <TextField
             fullWidth
-            label="Discount"
-            placeholder="Discount"
+            label={t("ads.modal.discount")}
+placeholder={t("ads.modal.discount")}
             type="number"
             sx={{ mt: 2 }}
             {...register("discount", { valueAsNumber: true })}
           />
           <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel>Active</InputLabel>
-            <Select label="Active" defaultValue="" {...register("isActive")}>
-              <MenuItem value="true">Yes</MenuItem>
-              <MenuItem value="false">No</MenuItem>
+            <InputLabel>{t("ads.modal.active")}</InputLabel>
+            <Select label={t("ads.modal.active")} defaultValue="" {...register("isActive")}>
+             <MenuItem value="true">
+  {t("ads.common.yes")}
+</MenuItem>
+
+<MenuItem value="false">
+  {t("ads.common.no")}
+</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
@@ -267,23 +286,30 @@ export default function AdsList() {
             )}
             sx={{ backgroundColor: "#203FC7", textTransform: "none", borderRadius: "8px", px: 4 }}
           >
-            {selectedAd ? "Update" : "Save"}
+            {selectedAd
+  ? t("ads.modal.update")
+  : t("ads.modal.save")}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* مودال التأكيد على الحذف */}
       <DeleteConfirmation
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-        onConfirm={() => {
-          if (!rowToDeleteId) return;
-          handleDelete(rowToDeleteId);
-          setOpenDeleteModal(false);
-          setRowToDeleteId(null);
-        }}
-        itemName="Ads"
-      />
+  open={openDeleteModal}
+  onClose={() => setOpenDeleteModal(false)}
+  onConfirm={() => {
+    if (!rowToDeleteId) return;
+    handleDelete(rowToDeleteId);
+    setOpenDeleteModal(false);
+    setRowToDeleteId(null);
+  }}
+  itemName={t("ads.itemName")}
+  confirmText={t("deleteConfirmation.delete")}
+  title={t("deleteConfirmation.title", {
+    item: t("ads.itemName"),
+  })}
+  description={t("deleteConfirmation.description")}
+/>
 
       {/* مودال العرض */}
       <Dialog
@@ -294,47 +320,68 @@ export default function AdsList() {
         slotProps={{ paper: { sx: { borderRadius: "16px", p: 1 } } }}
       >
         <DialogTitle sx={{ fontWeight: 600, color: "#1F263E", fontSize: "18px", pb: 2, borderBottom: "1px solid #E2E5EB", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          Ads Details
-          <Chip label={selectedAdView?.isActive ? "Active" : "Inactive"} color={selectedAdView?.isActive ? "success" : "error"} size="small" sx={{ fontWeight: 600, borderRadius: "6px" }} />
+         {t("ads.view.title")}
+          <Chip label={selectedAdView?.isActive ? t("ads.filters.active") : t("ads.filters.inactive")} color={selectedAdView?.isActive ? "success" : "error"} size="small" sx={{ fontWeight: 600, borderRadius: "6px" }} />
         </DialogTitle>
         <DialogContent sx={{ mt: 3, pb: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2, mb: 4, backgroundColor: "#F8F9FB", p: 2, borderRadius: "12px" }}>
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 700, color: "#1F263E" }}>
-                Room #{selectedAdView?.room?.roomNumber || "N/A"}
+                {t("ads.view.room")} #{selectedAdView?.room?.roomNumber || t("ads.view.notAvailable")}
               </Typography>
               <Typography variant="body2" sx={{ color: "#718096" }}>
-                Capacity: {selectedAdView?.room?.capacity || 0}
+               {t("ads.view.capacity")}: {selectedAdView?.room?.capacity || 0}
               </Typography>
             </Box>
-            <Chip label={`${selectedAdView?.room?.price || 0} EGP`} sx={{ fontWeight: 600, backgroundColor: "#203FC7", color: "#fff" }} />
+            <Chip
+  label={`${selectedAdView?.room?.price || 0} ${t("ads.view.currency")}`}
+  sx={{
+    fontWeight: 600,
+    backgroundColor: "#203FC7",
+    color: "#fff",
+  }}
+/>
           </Box>
           <Grid container spacing={3}>
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>Price</Typography>
-              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.room?.price || 0} EGP</Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>
+  {t("ads.view.price")}
+</Typography>
+              <Typography sx={{ fontWeight: 600 }}>
+  {`${selectedAdView?.room?.price || 0} ${t("ads.view.currency")}`}
+</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>Discount</Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>
+  {t("ads.view.discount")}
+</Typography>
               <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.room?.discount || 0}%</Typography>
             </Grid>
             <Grid size={12}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>Active Status</Typography>
-              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.isActive ? "Yes" : "No"}</Typography>
+             <Typography sx={{ color: "#718096", fontSize: 13 }}>
+  {t("ads.view.activeStatus")}
+</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.isActive
+  ? t("ads.common.yes")
+  : t("ads.common.no")}</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>Created At</Typography>
-              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.createdAt ? new Date(selectedAdView.createdAt).toLocaleDateString("en-GB") : "N/A"}</Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>{t("ads.view.createdAt")}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.createdAt ? new Date(selectedAdView.createdAt).toLocaleDateString(
+  i18n.language === "ar" ? "ar-EG" : "en-GB"
+) :  t("ads.view.notAvailable")}</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: "#718096", fontSize: 13 }}>Updated At</Typography>
-              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.updatedAt ? new Date(selectedAdView.updatedAt).toLocaleDateString("en-GB") : "N/A"}</Typography>
+              <Typography sx={{ color: "#718096", fontSize: 13 }}>{t("ads.view.updatedAt")}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{selectedAdView?.updatedAt ? new Date(selectedAdView.updatedAt).toLocaleDateString(
+  i18n.language === "ar" ? "ar-EG" : "en-GB"
+) :  t("ads.view.notAvailable")}</Typography>
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions sx={{ p: 2, borderTop: "1px solid #F0F2F5", mt: 2 }}>
           <Button onClick={() => setOpenViewModal(false)} variant="contained" sx={{ backgroundColor: "#203FC7", color: "#fff", textTransform: "none", borderRadius: "8px", px: 4, "&:hover": { backgroundColor: "#1730A3" } }}>
-            Close
+            {t("ads.view.close")}
           </Button>
         </DialogActions>
       </Dialog>

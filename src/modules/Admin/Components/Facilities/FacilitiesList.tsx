@@ -19,8 +19,9 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import CrudHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
 import DeleteConfirmation from "../../../Shared/Components/DeleteConfirmation/DeleteConfirmation";
 import SharedFilter from "../../../Shared/Components/filter/filter";
-
+import { useTranslation } from "react-i18next";
 export default function FacilitiesList() {
+  const { t } = useTranslation("admin");
   const [openModal, setOpenModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<Facility | null>(null);
@@ -66,12 +67,12 @@ export default function FacilitiesList() {
       createdBy: facility.createdBy?.userName,
     }));
   }, [data]);
-  const columns = [
-    { field: "name", headerName: "Name", flex: 1 },
-    { field: "createdAt", headerName: "Created At", flex: 1 },
-    { field: "createdBy", headerName: "Created By", flex: 1 },
-    { field: "updatedAt", headerName: "Updated At", flex: 1 },
-  ];
+ const columns = [
+  { field: "name", headerName: t("facilities.columns.name"), flex: 1 },
+  { field: "createdAt", headerName: t("facilities.columns.createdAt"), flex: 1 },
+  { field: "createdBy", headerName: t("facilities.columns.createdBy"), flex: 1 },
+  { field: "updatedAt", headerName: t("facilities.columns.updatedAt"), flex: 1 },
+];
 
   const filteredRows = rows.filter((facility: any) => {
     const matchesSearch =
@@ -86,14 +87,14 @@ export default function FacilitiesList() {
       setSelectedFacility(null);
       reset({ name: "" });
     }
-  }, [openModal, reset]);
+  }, [openModal, reset, setSelectedFacility]);
 
   return (
     <>
       <CrudHeader
-        title="Facilities Table Details"
-        subtitle="You can check all details"
-        buttonText="Add New Facilities"
+        title={t("facilities.header.title")}
+subtitle={t("facilities.header.subtitle")}
+buttonText={t("facilities.header.addButton")}
         onClick={() => {
           setSelectedFacility(null);
           reset({
@@ -131,11 +132,11 @@ export default function FacilitiesList() {
               onClose={handleClose}
               actions={[
                 {
-                  label: "View",
+                  label: t("facilities.actions.view"),
                   icon: <VisibilityOutlinedIcon fontSize="small" />,
                 },
                 {
-                  label: "Edit",
+                 label: t("facilities.actions.edit"),
                   icon: <EditOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (!selectedRow) return;
@@ -150,7 +151,7 @@ export default function FacilitiesList() {
                   },
                 },
                 {
-                  label: "Delete",
+                  label: t("facilities.actions.delete"),
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
                   danger: true,
                   onClick: () => {
@@ -179,13 +180,15 @@ export default function FacilitiesList() {
             fontWeight: 600,
             color: "#1F263E",
           }}>
-          {selectedFacility ? "Update Facility" : "Add Facility"}
+          {selectedFacility
+  ? t("facilities.modal.updateTitle")
+  : t("facilities.modal.addTitle")}
         </DialogTitle>
 
         <DialogContent>
           <TextField
             fullWidth
-            label="Facility Name"
+           label={t("facilities.modal.facilityName")}
             sx={{
               mt: 2,
               backgroundColor: "#F8F9FB",
@@ -203,7 +206,7 @@ export default function FacilitiesList() {
               color: "#323C47",
               textTransform: "none",
             }}>
-            Close
+            {t("facilities.modal.close")}
           </Button>
 
           <Button
@@ -219,25 +222,32 @@ export default function FacilitiesList() {
               textTransform: "none",
               borderRadius: "8px",
             }}>
-            {selectedFacility ? "Update" : "Save"}
+            {selectedFacility
+ ? t("facilities.modal.update")
+ : t("facilities.modal.save")}
           </Button>
         </DialogActions>
       </Dialog>
 
-      <DeleteConfirmation
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-        onConfirm={() => {
-          if (!facilityToDelete) return;
+     <DeleteConfirmation
+  open={openDeleteModal}
+  onClose={() => setOpenDeleteModal(false)}
+  onConfirm={() => {
+    if (!facilityToDelete) return;
 
-          handleDelete(facilityToDelete._id);
+    handleDelete(facilityToDelete._id);
 
-          setFacilityToDelete(null);
+    setFacilityToDelete(null);
 
-          setOpenDeleteModal(false);
-        }}
-        itemName="Facility"
-      />
+    setOpenDeleteModal(false);
+  }}
+  itemName={t("facilities.itemName")}
+  confirmText={t("deleteConfirmation.delete")}
+  title={t("deleteConfirmation.title", {
+    item: t("facilities.itemName"),
+  })}
+  description={t("deleteConfirmation.description")}
+/>
     </>
   );
 }

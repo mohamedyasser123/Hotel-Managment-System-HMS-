@@ -13,7 +13,9 @@ import DeleteConfirmation from '../../../Shared/Components/DeleteConfirmation/De
 import { useNavigate } from 'react-router-dom';
 import SharedFilter from '../../../Shared/Components/filter/filter';
 import { useFacilities } from '../../../../hooks/useFacilities';
+import { useTranslation } from "react-i18next";
 export default function RoomsList() {
+  const { t } = useTranslation("admin");
   const { reset, data, setSelectedRoom, selectedRoom, handleDelete,loading,setPaginationModel,paginationModel,totalCount } = useRooms();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
@@ -43,17 +45,17 @@ const { data: facilities } = useFacilities();
     }));
   }, [data]);
  const columns = [
-  { field: "roomNumber", headerName: "Room Number", flex: 1 },
+  { field: "roomNumber", headerName: t("rooms.columns.roomNumber"), flex: 1 },
   { 
     field: "image", 
-    headerName: "Image", 
+    headerName: t("rooms.columns.image"),
     flex: 1,
     renderCell: (params: any) => {
       return params.value ? (
         <Box
           component="img"
           src={params.value}
-          alt="Room"
+          alt={t("rooms.itemName")}
           sx={{
             width: 50,      
             height: 50,   
@@ -64,14 +66,14 @@ const { data: facilities } = useFacilities();
           }}
         />
       ) : (
-        <span style={{ color: "#7E8299", fontSize: "12px" }}>No Image</span> 
+        <span style={{ color: "#7E8299", fontSize: "12px" }}>{t("rooms.common.noImage")}</span> 
       );
     }
   },
-  { field: "price", headerName: "Price", flex: 1 },
-  { field: "discount", headerName: "Discount", flex: 1 },
-  { field: "capacity", headerName: "Capacity", flex: 1 },
-  { field: "facilities", headerName: "Facilities", flex: 1.5 },
+  { field: "price", headerName: t("rooms.columns.price"), flex: 1 },
+  { field: "discount", headerName: t("rooms.columns.discount"), flex: 1 },
+  { field: "capacity", headerName: t("rooms.columns.capacity"), flex: 1 },
+  { field: "facilities",headerName: t("rooms.columns.facilities"), flex: 1.5 },
 ];
   const handleOpen = (event: React.MouseEvent<HTMLElement>, row: Room) => {
     setAnchorEl(event.currentTarget);
@@ -116,25 +118,25 @@ const { data: facilities } = useFacilities();
         maxWidth="sm"
       >
         <DialogTitle sx={{ fontWeight: 'bold', bgcolor: '#f5f5f5' }}>
-          Room Details: {selectedRoom?.roomNumber}
+         {t("rooms.view.title")}: {selectedRoom?.roomNumber}
         </DialogTitle>
         <DialogContent dividers sx={{ pt: 2 }}>
           <Grid container spacing={2}>
             <Grid size={6}>
-              <Typography variant="subtitle2" color="textSecondary">Room Number</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.roomNumber")}</Typography>
               <Typography variant="body1" sx={{ fontWeight: 500 }}>{selectedRoom?.roomNumber}</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography variant="subtitle2" color="textSecondary">Price per Night</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.pricePerNight")}</Typography>
               <Typography variant="body1" sx={{ fontWeight: 500 }}>${selectedRoom?.price}</Typography>
             </Grid>
 
             <Grid size={6}>
-              <Typography variant="subtitle2" color="textSecondary">Capacity</Typography>
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>{selectedRoom?.capacity} Persons</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.capacity")}</Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>{selectedRoom?.capacity} {t("rooms.view.persons")}</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography variant="subtitle2" color="textSecondary">Discount</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.discount")}</Typography>
               <Typography variant="body1" sx={{ fontWeight: 500 }} color="error.main">
                 {selectedRoom?.discount ? `${selectedRoom.discount}%` : '0%'}
               </Typography>
@@ -142,7 +144,7 @@ const { data: facilities } = useFacilities();
 
             {/* الـ Facilities */}
             <Grid size={12}>
-              <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 1 }}>Facilities</Typography>
+              <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 1 }}>{t("rooms.view.facilities")}</Typography>
               {selectedRoom?.facilities && selectedRoom.facilities.length > 0 ? (
                 <Grid container spacing={1}>
                   {selectedRoom.facilities.map((facility) => (
@@ -152,13 +154,13 @@ const { data: facilities } = useFacilities();
                   ))}
                 </Grid>
               ) : (
-                <Typography variant="body2" color="textSecondary">No Facilities available</Typography>
+                <Typography variant="body2" color="textSecondary">{t("rooms.common.noFacilitiesAvailable")}</Typography>
               )}
             </Grid>
 
             <Grid size={12}>
               <Typography variant="subtitle2" color="textSecondary" sx={{ mb: 1 }}>
-                Room Images
+                {t("rooms.view.roomImages")}
               </Typography>
 
               {selectedRoom?.images?.length ? (
@@ -176,7 +178,7 @@ const { data: facilities } = useFacilities();
                         key={index}
                         component="img"
                         src={img}
-                        alt={`Room ${index + 1}`}
+                       alt={`${t("rooms.itemName")} ${index + 1}`}
                         sx={{
                           width: 90,
                           height: 70,
@@ -191,7 +193,7 @@ const { data: facilities } = useFacilities();
                 </>
               ) : (
                 <Typography variant="body2" color="textSecondary">
-                  No Images available
+                  {t("rooms.common.noImagesAvailable")}
                 </Typography>
               )}
             </Grid>
@@ -201,11 +203,11 @@ const { data: facilities } = useFacilities();
             </Grid>
 
             <Grid size={12}>
-              <Typography variant="subtitle2" color="textSecondary">Created By</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.createdBy")}</Typography>
               <Typography variant="body2">{selectedRoom?.createdBy?.userName || 'Unknown'}</Typography>
             </Grid>
             <Grid size={12}>
-              <Typography variant="subtitle2" color="textSecondary">Created At</Typography>
+              <Typography variant="subtitle2" color="textSecondary">{t("rooms.view.createdAt")}</Typography>
               <Typography variant="body2">
                 {selectedRoom?.createdAt ? new Date(selectedRoom.createdAt).toLocaleDateString("en-GB") : ''}
               </Typography>
@@ -214,14 +216,14 @@ const { data: facilities } = useFacilities();
         </DialogContent>
         <DialogActions sx={{ p: 2, bgcolor: '#f5f5f5' }}>
           <Button variant="contained" onClick={() => { setOpenViewDialog(false); setSelectedRoom(null); }}>
-            Close
+           {t("rooms.view.close")}
           </Button>
         </DialogActions>
       </Dialog>
       <CrudHeader
-        title="Rooms Table Details"
-        subtitle="You can check all details"
-        buttonText="Add New Room"
+       title={t("rooms.header.title")}
+subtitle={t("rooms.header.subtitle")}
+buttonText={t("rooms.header.addButton")}
         onClick={() => {
           setSelectedRoom(null);
           reset({});
@@ -241,16 +243,16 @@ const { data: facilities } = useFacilities();
   filters={[
     {
   key: "price",
-  placeholder: "Price",
+ placeholder: t("rooms.filters.price"),
   options: [
-    { label: "Less than 1000", value: "1000" },
-    { label: "Less than 2000", value: "2000" },
-    { label: "Less than 3000", value: "3000" },
+    { label: t("rooms.filters.less1000"), value: "1000" },
+    { label: t("rooms.filters.less2000"), value: "2000" },
+    { label: t("rooms.filters.less3000"), value: "3000" },
   ],
 },
     {
       key: "facility",
-      placeholder: "Facilities",
+      placeholder: t("rooms.filters.facilities"),
       options: facilities.map((f) => ({
   label: f.name,
   value: f.name,
@@ -291,7 +293,7 @@ const { data: facilities } = useFacilities();
               onClose={handleClose}
               actions={[
                 {
-                  label: "View",
+                  label: t("rooms.actions.view"),
                   icon: <VisibilityOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (selectedRow) {
@@ -305,7 +307,7 @@ const { data: facilities } = useFacilities();
                   },
                 },
                 {
-                  label: "Edit",
+                  label: t("rooms.actions.edit"),
                   icon: <EditOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     if (selectedRow) {
@@ -319,7 +321,7 @@ const { data: facilities } = useFacilities();
                   },
                 },
                 {
-                  label: "Delete",
+                  label: t("rooms.actions.delete"),
                   icon: <DeleteOutlineOutlinedIcon fontSize="small" />,
                   danger: true,
                   onClick: () => {
@@ -339,23 +341,28 @@ const { data: facilities } = useFacilities();
         )}
       />
       <DeleteConfirmation
-        open={openDeleteModal}
-        onClose={() => {
-          setOpenDeleteModal(false);
-          setSelectedRoom(null);
-          setSelectedRow(null);
-        }}
-        onConfirm={() => {
-          const roomId = selectedRoom?._id || selectedRow?._id;
-          if (roomId) {
-            handleDelete(roomId);
-            setOpenDeleteModal(false);
-            setSelectedRoom(null);
-            setSelectedRow(null);
-          }
-        }}
-        itemName={`Room ${selectedRow?.roomNumber || ""}`}
-      />
+  open={openDeleteModal}
+  onClose={() => {
+    setOpenDeleteModal(false);
+    setSelectedRoom(null);
+    setSelectedRow(null);
+  }}
+  onConfirm={() => {
+    const roomId = selectedRoom?._id || selectedRow?._id;
+
+    if (roomId) {
+      handleDelete(roomId);
+      setOpenDeleteModal(false);
+      setSelectedRoom(null);
+      setSelectedRow(null);
+    }
+  }}
+  itemName={`${t("rooms.itemName")} ${selectedRow?.roomNumber || ""}`}
+  title={t("deleteConfirmation.title", {
+    item: `${t("rooms.itemName")} ${selectedRow?.roomNumber || ""}`,
+  })}
+  confirmText={t("deleteConfirmation.delete")}
+/>
     </>
   )
 }

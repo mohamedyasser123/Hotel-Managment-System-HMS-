@@ -15,8 +15,9 @@ import { useForm } from "react-hook-form";
 import { useFacilities } from "../../../../hooks/useFacilities";
 import { useEffect, useState } from "react";
 import type { RoomForm } from "../../../../types/roomTypes";
-
+import { useTranslation } from "react-i18next";
 export default function RoomsData() {
+  const { t } = useTranslation("admin");
   const { onSubmit, loading, selectedRoom ,setSelectedRoom,data} = useRooms();
   const navigate = useNavigate();
   const { data: facilitiesList, getFacilitiesList } = useFacilities();
@@ -128,12 +129,12 @@ useEffect(() => {
       {/* Room Number */}
       <TextField
         fullWidth
-        label="Room Number"
+        label={t("roomData.roomNumber")}
         slotProps={{
     inputLabel: { shrink: true }
   }}
         {...register("roomNumber", {
-          required: "Room number is required",
+         required: t("roomData.validation.roomNumberRequired"),
         })}
         error={!!errors.roomNumber}
         helperText={errors.roomNumber?.message as string}
@@ -144,12 +145,12 @@ useEffect(() => {
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
           fullWidth
-          label="Price"
+          label={t("roomData.price")}
           type="number"
           slotProps={{
     inputLabel: { shrink: true }
   }}
-          {...register("price", { required: "Price is required" })}
+          {...register("price", { required: t("roomData.validation.priceRequired") })}
           error={!!errors.price}
           helperText={errors.price?.message as string}
           sx={textFieldStyle}
@@ -157,10 +158,10 @@ useEffect(() => {
 
         <TextField
           fullWidth
-          label="Capacity"
+          label={t("roomData.capacity")}
           type="number"
           {...register("capacity", {
-            required: "Capacity is required",
+           required: t("roomData.validation.capacityRequired"),
           })}
           error={!!errors.capacity}
           helperText={errors.capacity?.message as string}
@@ -175,7 +176,7 @@ useEffect(() => {
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
           fullWidth
-          label="Discount"
+          label={t("roomData.discount")}
           type="number"
           slotProps={{
     inputLabel: { shrink: true }
@@ -185,7 +186,7 @@ useEffect(() => {
         />
 
         <FormControl fullWidth sx={textFieldStyle}>
-          <InputLabel>Facilities</InputLabel>
+          <InputLabel>{t("roomData.facilities")}</InputLabel>
           <Select
             multiple
             value={watchedFacilities || []}
@@ -241,13 +242,13 @@ onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 
         <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
 
-        <Typography>
-          Drag & Drop or Choose Images
-        </Typography>
+       <Typography>
+  {t("roomData.uploadImages")}
+</Typography>
 
         {filesLength > 0 && (
   <Typography sx={{ mt: 1, color: "green" }}>
-    {filesLength} new files selected
+    {filesLength} {t("roomData.newFilesSelected")}
   </Typography>
 )}
       </Box>
@@ -278,7 +279,7 @@ onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           variant="outlined"
           onClick={() => navigate("/admin/room-list")}
         >
-          Cancel
+         {t("roomData.cancel")}
         </Button>
 
         <Button
@@ -287,10 +288,10 @@ onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           disabled={loading}
         >
           {loading
-            ? "Saving..."
+            ? t("roomData.saving")
             : selectedRoom
-            ? "Update Room"
-            : "Save Room"}
+            ? t("roomData.updateRoom")
+            : t("roomData.saveRoom")}
         </Button>
       </Box>
     </Box>
