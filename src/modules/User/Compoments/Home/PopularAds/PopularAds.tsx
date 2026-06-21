@@ -84,7 +84,7 @@ export default function PopularAds() {
   );
 
   toast.success(
-    "Added to favorites"
+    "Successfully Added to favorites"
   );
 
           }
