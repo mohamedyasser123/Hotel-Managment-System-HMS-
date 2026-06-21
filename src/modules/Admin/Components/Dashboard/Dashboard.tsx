@@ -13,11 +13,12 @@ import CampaignIcon from "@mui/icons-material/Campaign";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useEffect, useState } from "react";
 import axiosClient from "../../../../api/axoisClient";
+import { useTranslation } from "react-i18next";
 
 export default function Dashboard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+const { t } = useTranslation("admin");
   const [stats, setStats] = useState({
     rooms: 0,
     facilities: 0,
@@ -34,17 +35,17 @@ export default function Dashboard() {
 
   const cards = [
     {
-      title: "Rooms",
+    title: t("rooms"),
       value: stats.rooms,
       icon: <PeopleIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
     {
-      title: "Facilities",
+    title: t("facilities"),
       value: stats.facilities,
       icon: <InventoryIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
     {
-      title: "Ads",
+    title: t("ads"),
       value: stats.ads,
       icon: <CampaignIcon sx={{ fontSize: 40, color: "#4C6FFF" }} />,
     },
@@ -165,13 +166,13 @@ export default function Dashboard() {
                     {
                       id: 0,
                       value: stats?.bookings?.pending,
-                      label: "pending",
+    label: t("pending"),
                       color: "#5368F0",
                     },
                     {
                       id: 1,
                       value: stats?.bookings?.completed,
-                      label: "completed",
+    label: t("completed"),
                       color: "#9D57D5",
                     },
                   ],
@@ -220,13 +221,13 @@ export default function Dashboard() {
                       {
                         id: 0,
                         value: stats?.users?.user,
-                        label: "Users",
+    label: t("users"),
                         color: "#4C6FFF",
                       },
                       {
                         id: 1,
                         value: stats?.users?.admin,
-                        label: "Admins",
+    label: t("admins"),
                         color: "#FFB020",
                       },
                     ],
@@ -256,7 +257,7 @@ export default function Dashboard() {
                   }}
                 />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Users: {stats?.users?.user ?? 0}
+  {t("users")}: {stats?.users?.user ?? 0}
                 </Typography>
               </Box>
 
@@ -270,7 +271,7 @@ export default function Dashboard() {
                   }}
                 />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                  Admins: {stats?.users?.admin ?? 0}
+  {t("admins")}: {stats?.users?.admin ?? 0}
                 </Typography>
               </Box>
             </Box>
