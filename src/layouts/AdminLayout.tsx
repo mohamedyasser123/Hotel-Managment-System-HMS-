@@ -2,10 +2,8 @@ import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Sidebar from '../modules/Shared/Components/Sidebar/Sidebar';
 import AdminHeader from '../modules/Shared/Components/AdminHeader/AdminHeader';
-import i18n from '../i18n';
 
 export default function AdminLayout() {
-  const isArabic = i18n.language === "ar";
   return (
     <Box
       sx={{

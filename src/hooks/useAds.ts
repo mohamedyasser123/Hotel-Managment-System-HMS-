@@ -23,8 +23,7 @@ export function useAds() {
   const [data, setData] = useState<Ads[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
-  const [adsTotalCount, setAdsTotalCount] = useState(0);
-const [roomsTotalCount, setRoomsTotalCount] = useState(0);
+
 
   const [selectedAd, setSelectedAd] =
     useState<Ads | null>(null);

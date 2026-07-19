@@ -35,7 +35,7 @@ const { t } = useTranslation("user");
   <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 2, sm: 3 } }}>
     {user ? (
       <Box
-        onClick={(e) => { }}
+       
         sx={{
           display: "flex",
           alignItems: "center",

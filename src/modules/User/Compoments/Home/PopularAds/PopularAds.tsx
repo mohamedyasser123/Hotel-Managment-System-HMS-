@@ -1,5 +1,5 @@
 import usePortalAds from "../../../../../hooks/portal/usePortalAds";
-import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
