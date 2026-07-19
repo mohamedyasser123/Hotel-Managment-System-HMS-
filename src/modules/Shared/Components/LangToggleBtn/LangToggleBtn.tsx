@@ -13,7 +13,11 @@ export default function LanguageToggle() {
 
     localStorage.setItem("lang", newLang);
 
-    document.body.dir = newLang === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir =
+  newLang === "ar" ? "rtl" : "ltr";
+
+document.documentElement.lang =
+  newLang;
   };
 
   return (

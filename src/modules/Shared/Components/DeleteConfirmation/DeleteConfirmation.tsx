@@ -7,6 +7,7 @@ import {
   Box,
 } from "@mui/material";
 import deleteImg from "../../../../assets/images/delete.png";
+import { useTranslation } from "react-i18next";
 interface DeleteConfirmationProps {
   open: boolean;
   onClose: () => void;
@@ -28,6 +29,7 @@ export default function DeleteConfirmation({
   description,
   confirmText = "Delete",
 }: DeleteConfirmationProps) {
+  const { t } = useTranslation("admin");
   return (
     <Dialog
       open={open}
@@ -51,7 +53,7 @@ export default function DeleteConfirmation({
         <Box
           component="img"
           src={image || deleteImg}
-          alt="delete"
+          alt={t("deleteConfirmation.delete")}
           sx={{
             width: 120,
             mx: "auto",
@@ -67,7 +69,7 @@ export default function DeleteConfirmation({
             color: "#1F263E",
             mb: 1,
           }}>
-         {title || `Delete This ${itemName} ?`}
+         {title || `${t("deleteConfirmation.title")} ${itemName} ?`}
         </Typography>
 
         {/* DESCRIPTION */}
@@ -79,7 +81,7 @@ export default function DeleteConfirmation({
             maxWidth: "320px",
             mx: "auto",
           }}>
-          {description || `Are you sure you want to delete this item ? If you are sure just click on delete it.`}
+         {description || t("deleteConfirmation.description")}
         </Typography>
       </DialogContent>
 
@@ -100,7 +102,7 @@ export default function DeleteConfirmation({
             py: 1.2,
             fontWeight: 600,
           }}>
-          Cancel
+         {t("deleteConfirmation.cancel")}
         </Button>
 
         <Button
@@ -120,7 +122,7 @@ export default function DeleteConfirmation({
               boxShadow: "none",
             },
           }}>
-          {confirmText}
+         {confirmText || t("deleteConfirmation.delete")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -11,39 +11,67 @@ import { toast } from 'react-toastify';
 import { addFavorite, removeFavorite } from '../../../../../api/modules/portal/favorites';
 import { useAuthContext } from '../../../../../context/AuthContext';
 import ReportProblemOutlinedIcon from "@mui/icons-material/ReportProblemOutlined";
+import { addNotification } from '../../../../../uitiltes/notification';
 export default function AdsSection() {
     const { ads, loading, error } = usePortalAds();
     const { t } = useTranslation("user");
     const { i18n } = useTranslation();
-    const navigate= useNavigate()
+    const navigate = useNavigate()
     const isRTL = i18n.language === "ar";
-      const { loginData } = useAuthContext();
-    
-      const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
-      const [openLoginModal, setOpenLoginModal] = useState(false);
-     const handleFavorite = async (e: React.MouseEvent, roomId: string) => {
+    const { loginData } = useAuthContext();
+
+    const [favoriteRooms, setFavoriteRooms] = useState<string[]>([]);
+    const [openLoginModal, setOpenLoginModal] = useState(false);
+    const handleFavorite = async (
+        e: React.MouseEvent,
+        roomId: string,
+        roomNumber: number) => {
         e.stopPropagation();
-    
+
         if (!loginData) {
-          setOpenLoginModal(true);
-          return;
+            setOpenLoginModal(true);
+            return;
         }
-    
+
         try {
-          const isFavorite = favoriteRooms.includes(roomId);
-          if (isFavorite) {
-            setFavoriteRooms((prev) => prev.filter((id) => id !== roomId));
-            await removeFavorite(roomId);
-            toast.success("Successfully removed from favorites");
-          } else {
-            setFavoriteRooms((prev) => [...prev, roomId]);
-            await addFavorite(roomId);
-            toast.success("Successfully added to favorites");
-          }
+            const isFavorite = favoriteRooms.includes(roomId);
+            if (isFavorite) {
+                setFavoriteRooms((prev) =>
+                    prev.filter((id) => id !== roomId)
+                );
+
+                await removeFavorite(roomId);
+
+                addNotification(
+                    "Removed From Favorites",
+                    `Room ${roomNumber} removed successfully`
+                );
+
+                toast.success(
+                    "Successfully removed from favorites"
+                );
+            } else {
+                setFavoriteRooms((prev) => [
+                    ...prev,
+                    roomId,
+                ]);
+
+                await addFavorite(roomId);
+
+                addNotification(
+                    "Added To Favorites",
+                    `Room ${roomNumber} added successfully`
+                );
+
+                toast.success(
+                    "Added to favorites"
+                );
+
+            }
         } catch (error: any) {
-          toast.error(error?.response?.data?.message || "Something went wrong");
+            toast.error(error?.response?.data?.message || "Something went wrong");
         }
-      };
+    };
     if (loading) {
         return (
             <Box
@@ -83,7 +111,7 @@ export default function AdsSection() {
             </Typography>
             <Swiper
                 modules={[Autoplay]}
-                  dir={isRTL ? "rtl" : "ltr"}
+                dir={isRTL ? "rtl" : "ltr"}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
@@ -156,8 +184,12 @@ export default function AdsSection() {
                                         zIndex: 2,
                                     }}
                                 >
-                                    <IconButton sx={{ color: "#fff" }} onClick={(e) => handleFavorite(e, ad.room._id)}
->
+                                    <IconButton sx={{ color: "#fff" }} onClick={(e) => handleFavorite(
+                                        e,
+                                        ad.room._id,
+                                        Number(ad.room.roomNumber)
+                                    )}
+                                    >
                                         <FavoriteIcon />
                                     </IconButton>
 
@@ -198,9 +230,9 @@ export default function AdsSection() {
                                     color: "#152C5B"
                                 }}
                             >
-                               {ad.room.roomNumber
-  ? `${t("room")} ${ad.room.roomNumber}`
-  : "Ocean Land"}
+                                {ad.room.roomNumber
+                                    ? `${t("room")} ${ad.room.roomNumber}`
+                                    : "Ocean Land"}
                             </Typography>
 
                             <Typography
@@ -217,100 +249,100 @@ export default function AdsSection() {
 
 
             </Swiper>
-  <Dialog
-        open={openLoginModal}
-        onClose={() => setOpenLoginModal(false)}
-        maxWidth="xs"
-        fullWidth
-        sx={{
-          "& .MuiDialog-paper": {
-            borderRadius: "24px",
-            padding: "16px",
-            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.08)",
-          },
-        }}>
-        <DialogContent sx={{ pb: 1 }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              mt: 2,
-            }}>
-            <Box
-              sx={{
-                width: "70px",
-                height: "70px",
-                borderRadius: "50%",
-                backgroundColor: "#f5a52344",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                mb: 3,
-                border: "1px solid #f5a52344",
-              }}>
-              <ReportProblemOutlinedIcon
-                sx={{ fontSize: "35px", color: "#F5A623" }}
-              />{" "}
-            </Box>
+            <Dialog
+                open={openLoginModal}
+                onClose={() => setOpenLoginModal(false)}
+                maxWidth="xs"
+                fullWidth
+                sx={{
+                    "& .MuiDialog-paper": {
+                        borderRadius: "24px",
+                        padding: "16px",
+                        boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.08)",
+                    },
+                }}>
+                <DialogContent sx={{ pb: 1 }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            textAlign: "center",
+                            mt: 2,
+                        }}>
+                        <Box
+                            sx={{
+                                width: "70px",
+                                height: "70px",
+                                borderRadius: "50%",
+                                backgroundColor: "#f5a52344",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                mb: 3,
+                                border: "1px solid #f5a52344",
+                            }}>
+                            <ReportProblemOutlinedIcon
+                                sx={{ fontSize: "35px", color: "#F5A623" }}
+                            />{" "}
+                        </Box>
 
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 700,
-                color: "#000",
-                mb: 1.5,
-                fontSize: "22px",
-              }}>
-              Login Required
-            </Typography>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: 700,
+                                color: "#000",
+                                mb: 1.5,
+                                fontSize: "22px",
+                            }}>
+                            Login Required
+                        </Typography>
 
-            <Typography
-              sx={{
-                color: "#B0B0B0", 
-                fontSize: "15px",
-                lineHeight: 1.6,
-                maxWidth: "85%",
-              }}>
-              You need to login first to unlock full access and add this room to
-              your favorites.
-            </Typography>
-          </Box>
-        </DialogContent>
+                        <Typography
+                            sx={{
+                                color: "#B0B0B0",
+                                fontSize: "15px",
+                                lineHeight: 1.6,
+                                maxWidth: "85%",
+                            }}>
+                            You need to login first to unlock full access and add this room to
+                            your favorites.
+                        </Typography>
+                    </Box>
+                </DialogContent>
 
-        <DialogActions
-          sx={{
-            justifyContent: "center",
-            gap: 2,
-            px: 3,
-            pb: 3,
-            pt: 2,
-          }}>
+                <DialogActions
+                    sx={{
+                        justifyContent: "center",
+                        gap: 2,
+                        px: 3,
+                        pb: 3,
+                        pt: 2,
+                    }}>
 
-          <Button
-            variant="contained"
-            onClick={() => {
-              setOpenLoginModal(false);
-            }}
-            sx={{
-              backgroundColor: "#3252DF", 
-              color: "#fff",
-              fontWeight: 600,
-              px: 5,
-              py: 1.2,
-              borderRadius: "12px",
-              textTransform: "none",
-              boxShadow: "0px 4px 12px rgba(50, 82, 223, 0.24)",
-              "&:hover": {
-                backgroundColor: "#2943B7",
-                boxShadow: "0px 6px 16px rgba(50, 82, 223, 0.35)",
-              },
-            }}>
-           Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setOpenLoginModal(false);
+                        }}
+                        sx={{
+                            backgroundColor: "#3252DF",
+                            color: "#fff",
+                            fontWeight: 600,
+                            px: 5,
+                            py: 1.2,
+                            borderRadius: "12px",
+                            textTransform: "none",
+                            boxShadow: "0px 4px 12px rgba(50, 82, 223, 0.24)",
+                            "&:hover": {
+                                backgroundColor: "#2943B7",
+                                boxShadow: "0px 6px 16px rgba(50, 82, 223, 0.35)",
+                            },
+                        }}>
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
 
         </Box>

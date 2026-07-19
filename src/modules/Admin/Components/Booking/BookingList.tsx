@@ -19,8 +19,9 @@ import CrudHeader from "../../../Shared/Components/CrudHeader/CrudHeader";
 import ActionsMenu from "../../../Shared/Components/CrudMenu/CrudMenu";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import SharedFilter from "../../../Shared/Components/filter/filter";
-
+import { useTranslation } from "react-i18next";
 export default function BookingList() {
+  const { t, i18n } = useTranslation("admin");
   const { data, loading, paginationModel, totalCount, setPaginationModel } =
     useBooking();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -48,48 +49,55 @@ export default function BookingList() {
 
       _id: booking._id,
 
-      roomNumber: booking.room?.roomNumber || "No Room",
+     roomNumber: booking.room?.roomNumber || "No Room",
 
       totalPrice: booking.totalPrice,
 
-      startDate: new Date(booking.startDate).toLocaleDateString("en-GB"),
+      startDate: new Date(booking.startDate).toLocaleDateString(
+  i18n.language === "ar" ? "ar-EG" : "en-GB"
+),
 
-      endDate: new Date(booking.endDate).toLocaleDateString("en-GB"),
+      endDate: new Date(booking.endDate).toLocaleDateString(
+  i18n.language === "ar" ? "ar-EG" : "en-GB"
+),
 
-      user: booking.user?.userName || "Unknown User",
+     user: booking.user?.userName || "Unknown User",
       status: booking.status,
     }));
-  }, [data]);
+ }, [data, i18n.language]);
 
-  const columns = [
-    { field: "roomNumber", headerName: "roomNumber", flex: 1 },
-
-    {
-      field: "totalPrice",
-      headerName: "Price",
-      flex: 1,
-    },
-
-    {
-      field: "startDate",
-      headerName: "Start Date",
-      flex: 1,
-    },
-
-    { field: "endDate", headerName: "End Date", flex: 1 },
-
-    {
-      field: "user",
-      headerName: " User",
-      flex: 1,
-    },
-
-    {
-      field: "status",
-      headerName: " Status",
-      flex: 1,
-    },
-  ];
+ const columns = [
+  {
+    field: "roomNumber",
+    headerName: t("booking.columns.roomNumber"),
+    flex: 1,
+  },
+  {
+    field: "totalPrice",
+    headerName: t("booking.columns.price"),
+    flex: 1,
+  },
+  {
+    field: "startDate",
+    headerName: t("booking.columns.startDate"),
+    flex: 1,
+  },
+  {
+    field: "endDate",
+    headerName: t("booking.columns.endDate"),
+    flex: 1,
+  },
+  {
+    field: "user",
+    headerName: t("booking.columns.user"),
+    flex: 1,
+  },
+  {
+    field: "status",
+    headerName: t("booking.columns.status"),
+    flex: 1,
+  },
+];
 
   const filteredRows = rows.filter((booking: any) => {
     const matchesSearch =
@@ -105,8 +113,8 @@ export default function BookingList() {
   return (
     <>
       <CrudHeader
-        title="Booking Table Details"
-        subtitle="You can check all details"
+        title={t("booking.header.title")}
+subtitle={t("booking.header.subtitle")}
       />
       <SharedFilter
         searchValue={searchValue}
@@ -114,11 +122,11 @@ export default function BookingList() {
         filters={[
           {
             key: "price",
-            placeholder: "Price",
+            placeholder: t("booking.filters.price"),
             options: [
-              { label: "Less than 1000", value: "1000" },
-              { label: "Less than 2000", value: "2000" },
-              { label: "Less than 3000", value: "3000" },
+             { label: t("booking.filters.less1000"), value: "1000" },
+{ label: t("booking.filters.less2000"), value: "2000" },
+{ label: t("booking.filters.less3000"), value: "3000" },
             ],
           },
         ]}
@@ -148,7 +156,7 @@ export default function BookingList() {
               onClose={handleClose}
               actions={[
                 {
-                  label: "View",
+                 label: t("booking.actions.view"),
                   icon: <VisibilityOutlinedIcon fontSize="small" />,
 
                   onClick: () => {
@@ -188,9 +196,9 @@ export default function BookingList() {
             alignItems: "center",
             justifyContent: "space-between",
           }}>
-          Booking Details
+          {t("booking.view.title")}
           <Chip
-            label={selectedBooking?.status || "Pending"}
+           label={selectedBooking?.status || "Pending"}
             color={
               selectedBooking?.status === "Completed" ||
               selectedBooking?.status === "Confirmed"
@@ -217,20 +225,20 @@ export default function BookingList() {
             }}>
             <Box>
               <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 700,
-                  color: "#1F263E",
-                  mb: 0.5,
-                  lineHeight: 1.2,
-                }}>
-                Room: {selectedBooking?.roomNumber || "No Room"}
-              </Typography>
+  variant="h6"
+  sx={{
+    fontWeight: 700,
+    color: "#1F263E",
+    mb: 0.5,
+    lineHeight: 1.2,
+  }}>
+  {t("booking.view.room")}: {selectedBooking?.roomNumber || "No Room"}
+</Typography>
               <Typography
-                variant="body2"
-                sx={{ color: "#718096", fontWeight: 500 }}>
-                Booked By: {selectedBooking?.user || "Unknown User"}
-              </Typography>
+  variant="body2"
+  sx={{ color: "#718096", fontWeight: 500 }}>
+  {t("booking.view.bookedBy")}: {selectedBooking?.user || "Unknown User"}
+</Typography>
             </Box>
           </Box>
 
@@ -239,12 +247,12 @@ export default function BookingList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Start Date
+                {t("booking.view.startDate")}
               </Typography>
               <Typography
                 variant="body1"
                 sx={{ fontWeight: 600, color: "#1F263E" }}>
-                {selectedBooking?.startDate || "N/A"}
+               {selectedBooking?.startDate || "N/A"}
               </Typography>
             </Grid>
 
@@ -252,7 +260,7 @@ export default function BookingList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                End Date
+                {t("booking.view.endDate")}
               </Typography>
               <Typography
                 variant="body1"
@@ -265,12 +273,12 @@ export default function BookingList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Total Price
+                {t("booking.view.totalPrice")}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ fontWeight: 700, color: "#203FC7" }}>
-                {selectedBooking?.totalPrice} EGP
+                {selectedBooking?.totalPrice} {t("booking.view.currency")}
               </Typography>
             </Grid>
           </Grid>
@@ -291,7 +299,7 @@ export default function BookingList() {
                 backgroundColor: "#1730A3",
               },
             }}>
-            Close
+           {t("booking.view.close")}
           </Button>
         </DialogActions>
       </Dialog>

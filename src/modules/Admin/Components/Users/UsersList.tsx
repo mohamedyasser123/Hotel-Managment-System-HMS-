@@ -19,8 +19,9 @@ import ActionsMenu from "../../../Shared/Components/CrudMenu/CrudMenu";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import SharedFilter from "../../../Shared/Components/filter/filter";
-
+import { useTranslation } from "react-i18next";
 export default function UsersList() {
+  const { t } = useTranslation("admin");
   const { data, loading, paginationModel, setPaginationModel, totalCount } =
     useUsers();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -49,16 +50,16 @@ export default function UsersList() {
   }, [data]);
 
   const columns = [
-    { field: "userName", headerName: "User Name", flex: 1 },
+    { field: "userName", headerName: t("users.columns.userName"), flex: 1 },
 
     {
       field: "profileImage",
-      headerName: "Profile Image",
+      headerName: t("users.columns.profileImage"),
       flex: 1,
       renderCell: (params: any) => (
         <Avatar
           src={params.value}
-          alt="user"
+          alt={t("users.common.user")}
           sx={{
             width: 45,
             height: 45,
@@ -74,7 +75,7 @@ export default function UsersList() {
 
     {
       field: "email",
-      headerName: "Email",
+     headerName: t("users.columns.email"),
       flex: 1,
     },
   ];
@@ -91,8 +92,8 @@ export default function UsersList() {
   return (
     <>
       <CrudHeader
-        title="Booking Table Details"
-        subtitle="You can check all details"
+        title={t("users.header.title")}
+subtitle={t("users.header.subtitle")}
       />
       <SharedFilter
         searchValue={searchValue}
@@ -119,7 +120,7 @@ export default function UsersList() {
               onClose={handleClose}
               actions={[
                 {
-                  label: "View",
+                  label: t("users.actions.view"),
                   icon: <VisibilityOutlinedIcon fontSize="small" />,
                   onClick: () => {
                     setSelectedUser(row);
@@ -150,9 +151,13 @@ export default function UsersList() {
             alignItems: "center",
             justifyContent: "space-between",
           }}>
-          User Details
+          {t("users.view.title")}
           <Chip
-            label={selectedUser?.verified ? "Verified" : "Not Verified"}
+            label={
+  selectedUser?.verified
+    ? t("users.view.verified")
+    : t("users.view.notVerified")
+}
             color={selectedUser?.verified ? "success" : "error"}
             size="small"
             sx={{ fontWeight: 600, borderRadius: "6px" }}
@@ -199,7 +204,7 @@ export default function UsersList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Email Address
+               {t("users.view.email")}
               </Typography>
               <Typography
                 variant="body1"
@@ -216,7 +221,7 @@ export default function UsersList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Phone Number
+                {t("users.view.phoneNumber")}
               </Typography>
               <Typography
                 variant="body1"
@@ -229,7 +234,7 @@ export default function UsersList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Country
+               {t("users.view.country")}
               </Typography>
               <Typography
                 variant="body1"
@@ -246,7 +251,7 @@ export default function UsersList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Joined At (Created)
+               {t("users.view.joinedAt")}
               </Typography>
               <Typography
                 variant="body1"
@@ -261,7 +266,7 @@ export default function UsersList() {
               <Typography
                 variant="body2"
                 sx={{ color: "#718096", mb: 0.5, fontWeight: 500 }}>
-                Last Updated
+                {t("users.view.lastUpdated")}
               </Typography>
               <Typography
                 variant="body1"
@@ -286,7 +291,7 @@ export default function UsersList() {
               px: 4,
               "&:hover": { backgroundColor: "#1730A3" },
             }}>
-            Close
+           {t("users.view.close")}
           </Button>
         </DialogActions>
       </Dialog>
