@@ -44,7 +44,7 @@ const { id } = useParams();
   const watchedFacilities = watch("facilities");
 const [previewImages, setPreviewImages] = useState<string[]>([]);
 const [newImages, setNewImages] = useState<File[]>([]);
-const [oldImages, setOldImages] = useState<string[]>([]);
+const [, setOldImages] = useState<string[]>([]);
 const filesLength = newImages.length;
 const onSubmitHandler = async (data: RoomForm) => {
   const formData = new FormData();
