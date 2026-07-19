@@ -8,7 +8,6 @@ import {
   IconButton,
   Chip,
   Box,
-  Avatar,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SharedTable from "../../../Shared/Components/CustomTable/CustomTable";

@@ -8,8 +8,8 @@ export function usePortalBooking(roomId?: string) {
 
   const [capacity, setCapacity] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
-  const [data, setData] = useState<any>(null);
+  const [error] = useState<any>(null);
+  const [ setData] = useState<any>(null);
 
   const increase = () => setCapacity((p) => p + 1);
   const decrease = () => setCapacity((p) => (p > 1 ? p - 1 : 1));

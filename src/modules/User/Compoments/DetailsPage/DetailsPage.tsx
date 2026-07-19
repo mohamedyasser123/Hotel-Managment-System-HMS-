@@ -12,7 +12,6 @@ import {
   Link as MuiLink,
   Divider,
   TextField,
-  Rating,
 } from "@mui/material";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
