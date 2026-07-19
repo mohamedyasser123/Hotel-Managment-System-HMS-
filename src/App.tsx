@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify';
 import Login from './modules/Authuntication/Components/Login/Login';
 import Register from './modules/Authuntication/Components/Register/Register';
 import ForgotPassword from './modules/Authuntication/Components/ForgetPassword/ForgotPassword';
-import VerifyAccount from './modules/Authuntication/Components/VerifyAccount/VerifyAccount';
 import ResetPassword from './modules/Authuntication/Components/RestPassword/ResetPassword';
 import ChangePassword from './modules/Authuntication/Components/ChangePassword/ChangePassword';
 import NotFound from './modules/Shared/Components/NotFound/NotFound';
@@ -47,7 +46,6 @@ function App() {
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-password", element: <ForgotPassword /> },
-        { path: "verify-account", element: <VerifyAccount /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "change-password", element: <ChangePassword /> },
       ],
